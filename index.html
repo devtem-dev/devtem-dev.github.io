@@ -1,13 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>devtemDesign · Declarative UI Engine</title>
-  <meta name="description" content="One configuration schema. Infinite animated synthesis. Lightweight zero-config page engine with glass-morphism and ambient motion.">
+  <title>devtemDesign.js - Declarative UI Engine for Animated Websites</title>
+
+<meta name="description" content="devtemDesign.js is a lightweight declarative UI engine that generates stunning animated websites from a single configuration object. Zero-config layouts, glassmorphism, motion effects, and adaptive themes.">
+
+<meta name="keywords" content="devtemDesign, JavaScript UI framework, declarative UI, website builder, frontend framework, UI engine, animated websites, glassmorphism, landing page generator, JavaScript library, web design framework, zero config UI, web components, FSCSS, DevTemple">
+
+<meta name="author" content="DevTemple">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#00ffff">
+
+<link rel="canonical" href="https://design.devtem.org/">
+
+<meta name="application-name" content="devtemDesign">
+<meta name="apple-mobile-web-app-title" content="devtemDesign">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="devtemDesign">
+<meta property="og:title" content="devtemDesign.js - Declarative UI Engine">
+<meta property="og:description" content="Build animated landing pages and modern interfaces using a single configuration object. Zero-config motion, adaptive themes, and immersive UI synthesis.">
+<meta property="og:url" content="https://design.devtem.org/">
+<meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="devtemDesign Declarative UI Engine">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="devtemDesign.js - Declarative UI Engine">
+<meta name="twitter:description" content="Generate beautiful animated websites from a single configuration schema.">
+<meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg">
+
+<!-- Search Engine Verification (optional) -->
+<meta name="googlebot" content="index,follow">
+
+<!-- Icons -->
+<link rel="icon" href="https://design.devtem.org/assets/images/logo.png">
+<link rel="apple-touch-icon" href="https://design.devtem.org/assets/images/logo.png">
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "devtemDesign",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web",
+    "url": "https://design.devtem.org/",
+    "image": "https://design.devtem.org/assets/images/og.jpg",
+    "description": "Declarative UI engine for creating animated websites from a single configuration object.",
+    "author": {
+      "@type": "Organization",
+      "name": "DevTemple"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+</script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/style.css">
-<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">
+<script src="//cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"></script>
   <style>
     /* Template switcher additional styles */
     .template-switcher {
@@ -92,10 +148,15 @@ let currentConfig = {
   logo: "https://fscss.devtem.org/assets/images/fscss.png", 
   
   logoName: "DEVTEM",
-  navLinks: ["Docs", "Sandbox", "Schema API", "npm Package"],
+  navLinks: [
+    { label: "Docs",       href: "/docs"    },
+    { label: "Sandbox",    href: "/sandbox" },
+    { label: "Schema API", href: "/api"     },
+    { label: "npm Package",href: "https://www.npmjs.com/package/devtemdesign" }
+  ],
   ctaText: "CDN →",
   
-  heroTag: "Core Framework Alpha // devtemDesign@0.0.1",
+  heroTag: "Core Framework Alpha // devtemdesign@0.0.2",
   heroTitleLine1: "Declarative UI,",
   heroTitleLine2: "Zero-Config Motion",
   heroSubtitle: "One configuration schema. Infinite animated synthesis. Stop building standard UI boilerplate- let the engine paint the viewport.",
@@ -104,7 +165,51 @@ let currentConfig = {
   secondaryBtnText: "Copy CDN",
   
   brandsSubtitle: "Engine Architecture Utilities & Dependencies",
-  footerCopy: "Figsh Labs • Open Source",
+  footerCopy: "© 2026 Figsh Digital. All rights reserved.",
+
+  footer: {
+    tagline: "Declarative UI engine for the modern web. Zero config. Full motion.",
+    columns: [
+      {
+        heading: "Product",
+        links: [
+          { label: "Documentation", href: "/docs"    },
+          { label: "Sandbox",       href: "/sandbox" },
+          { label: "Schema API",    href: "/api"     },
+          { label: "Changelog",     href: "https://github.com/devtem-dev/devtemDesign" }
+        ]
+      },
+      {
+        heading: "Resources",
+        links: [
+          { label: "npm Package",   href: "https://www.npmjs.com/package/devtemdesign" },
+          { label: "GitHub",        href: "https://github.com/devtem-dev" },
+          { label: "DevTemple",     href: "https://devtem.org"       },
+          { label: "FSCSS Engine",  href: "https://fscss.devtem.org" }
+        ]
+      },
+      {
+        heading: "Company",
+        links: [
+          { label: "About DevTemple",   href: "https://devtem.org"   },
+          { label: "Templates",          href: "https://devtem.org/home"    },
+          { label: "Contact",       href: "https://devtem.org/contact" }
+        ]
+      }
+    ],
+    social: [
+      { icon: "fab fa-github",   href: "https://github.com/devtem-dev/devtemDesign",       label: "GitHub"   },
+      { icon: "fab fa-twitter",  href: "https://twitter.com/fscss_ttr",  label: "Twitter"  },
+      { icon: "fab fa-npm",      href: "https://npmjs.com/package/devtemdesign", label: "npm" },
+      { icon: "fab fa-dev",      href: "https://dev.to/fscss",       label: "DEV"      }
+    ],
+    legal: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Use",   href: "/terms"   },
+      { label: "License (MIT)",  href: "/license" }
+    ],
+    copy: `© ${new Date().getFullYear()} Figsh Digital · devtemDesign is open source`
+  },
   brands: ["NPM", "FSCSS", "DEVTEMPLE", "ESBUILD", "CSS3", "HTML5", "WEBGL"],
   
   featuresSectionLabel: "<i class='fas fa-code-branch'></i> CORE ENGINE MECHANICS",
@@ -165,7 +270,7 @@ function attachButtonHandlers() {
   // Copy CDN functionality (both CSS and JS links)
   const copyCDN = (e) => {
     e.preventDefault();
-    const cdnLinks = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/style.css">\n<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"><\/script>`;
+    const cdnLinks = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">\n<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>`;
     navigator.clipboard.writeText(cdnLinks);
     
     const toast = document.getElementById('toast');
@@ -199,7 +304,7 @@ function attachButtonHandlers() {
   if (navCta) {
     navCta.addEventListener('click', (e) => {
       e.preventDefault();
-      const cdnJs = `<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"><\/script>`;
+      const cdnJs = `<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>`;
       navigator.clipboard.writeText(cdnJs);
       const toast = document.getElementById('toast');
       if (toast) {
