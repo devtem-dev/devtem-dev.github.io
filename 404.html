@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>404 · devtemDesign</title>
+  <meta name="description" content="Page not found — but the engine still runs.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"></script>
+  <style>
+    .template-switcher {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9997;
+      display: flex;
+      gap: 12px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(16px);
+      padding: 10px 20px;
+      border-radius: 60px;
+      border: 1px solid rgba(255,255,255,0.15);
+      font-family: monospace;
+      font-size: 0.75rem;
+    }
+    .template-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted, #aaa);
+      padding: 6px 14px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+    .template-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .template-btn.active {
+      background: var(--accent, #0ff);
+      color: #000;
+      font-weight: bold;
+    }
+    @media (max-width: 680px) {
+      .template-switcher { bottom: 16px; right: 16px; padding: 6px 12px; gap: 6px; }
+      .template-btn { padding: 4px 10px; font-size: 0.6rem; }
+    }
+    .error-404-custom {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 80px 32px;
+    }
+    .error-code {
+      font-size: clamp(8rem, 20vw, 14rem);
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+    .error-title {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .error-desc {
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 36px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--accent);
+      backdrop-filter: blur(12px);
+      color: var(--text);
+      border-radius: 60px;
+      font-weight: 500;
+      transition: 0.25s;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .home-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(122, 244, 255, 0.2);
+      background: rgba(255,255,255,0.08);
+    }
+    /* Override engine to hide features/panels sections */
+    .features, .panels-section, .marquee-section {
+      display: none !important;
+    }
+    .hero {
+      min-height: 80vh;
+      padding: 100px 32px 60px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app-root"></div>
+<div class="template-switcher">
+  <span style="color: #888; margin-right: 4px;"><i class="fas fa-palette"></i></span>
+  <button class="template-btn" data-template="figsh">FIGSH</button>
+  <button class="template-btn" data-template="cyber">CYBER</button>
+  <button class="template-btn" data-template="aurora">AURORA</button>
+  <button class="template-btn" data-template="monochrome">MONO</button>
+</div>
+
+<script>
+// 404-specific config — no features, no panels, no marquee
+let currentConfig = {
+  template: "cyber",
+  logoName: "DEVTEM",
+  navLinks: ["Docs", "Sandbox", "Schema API", "npm Package"],
+  ctaText: "CDN →",
+  
+  heroTag: "⚡ 404 • Lost in Space",
+  heroTitleLine1: "Page Not",
+  heroTitleLine2: "Found",
+  heroSubtitle: "The path you requested doesn't exist — but the engine is still running. Navigate back to solid ground.",
+  
+  primaryBtnText: "← Back Home",
+  secondaryBtnText: "Copy CDN",
+  
+  brandsSubtitle: "Even errors look good with glass-morphism",
+  footerCopy: "Figsh Labs • 404 Engine",
+  brands: ["RESILIENT", "GLASS", "MOTION", "ZERO-CONFIG", "404", "CSS"],
+  
+  // Empty arrays to hide sections
+  features: [],
+  panels: []
+};
+
+// Function to re-render with new template
+function renderWithTemplate(templateName) {
+  currentConfig.template = templateName;
+  
+  if (typeof devtemDesign === 'function') {
+    devtemDesign("app-root", currentConfig);
+    setTimeout(() => {
+      attach404Handlers();
+      highlightActiveTemplate(templateName);
+      // Hide any potential empty sections that might appear
+      hideEmptySections();
+    }, 100);
+  }
+}
+
+function hideEmptySections() {
+  // Additional safety: hide features/panels if they somehow appear
+  const sections = document.querySelectorAll('.features, .panels-section, .marquee-section');
+  sections.forEach(section => {
+    if (section) section.style.display = 'none';
+  });
+}
+
+function attach404Handlers() {
+  // Home button redirect
+  const homeHandler = (e) => {
+    e.preventDefault();
+    window.location.href = '/';
+  };
+  
+  // Copy CDN functionality
+  const copyCDN = (e) => {
+    e.preventDefault();
+    const cdnLinks = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/style.css">\n<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"><\/script>`;
+    navigator.clipboard.writeText(cdnLinks);
+    
+    if (e.target.classList && e.target.classList.contains('btn-ghost')) {
+      const original = e.target.innerHTML;
+      e.target.innerHTML = "✓ Copied!";
+      setTimeout(() => { e.target.innerHTML = original; }, 1500);
+    }
+  };
+  
+  const primaryBtn = document.querySelector('.btn-primary');
+  const secondaryBtn = document.querySelector('.btn-ghost');
+  const navCta = document.querySelector('.nav-cta');
+  
+  if (primaryBtn) {
+    // Replace with home navigation
+    const newPrimary = primaryBtn.cloneNode(true);
+    primaryBtn.parentNode.replaceChild(newPrimary, primaryBtn);
+    newPrimary.addEventListener('click', homeHandler);
+  }
+  
+  if (secondaryBtn) secondaryBtn.addEventListener('click', copyCDN);
+  
+  if (navCta) {
+    navCta.addEventListener('click', (e) => {
+      e.preventDefault();
+      const cdnJs = `<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"><\/script>`;
+      navigator.clipboard.writeText(cdnJs);
+      const original = navCta.innerHTML;
+      navCta.innerHTML = "✓ Copied!";
+      setTimeout(() => { navCta.innerHTML = original; }, 1500);
+    });
+  }
+  
+  // Docs links → home (since docs might not exist in 404 context)
+  const docLinks = document.querySelectorAll('.nav-links a');
+  docLinks.forEach(link => {
+    if (link.innerText.toLowerCase() === 'docs') {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = '/';
+      });
+    }
+  });
+}
+
+function highlightActiveTemplate(template) {
+  const btns = document.querySelectorAll('.template-btn');
+  btns.forEach(btn => {
+    if (btn.getAttribute('data-template') === template) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function initTemplateSwitcher() {
+  const btns = document.querySelectorAll('.template-btn');
+  btns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const newTemplate = btn.getAttribute('data-template');
+      renderWithTemplate(newTemplate);
+    });
+  });
+}
+
+// Inject custom 404 display after engine renders
+function inject404Content() {
+  // Wait for hero to render, then append 404-specific elements
+  setTimeout(() => {
+    const heroSection = document.querySelector('.hero');
+    if (heroSection && !document.querySelector('.error-404-custom')) {
+      // Add floating 404 visual enhancement
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-404-custom';
+      errorDiv.innerHTML = `
+        <div class="error-code">404</div>
+        <div class="error-title">Lost in the void?</div>
+        <div class="error-desc">The URL you requested doesn't exist. But hey — at least the animations are smooth.</div>
+        <a href="/" class="home-btn"><i class="fas fa-arrow-left"></i> Return to Home</a>
+      `;
+      heroSection.appendChild(errorDiv);
+      
+      // Also style the hero title differently for 404
+      const heroTitle = heroSection.querySelector('.hero-title');
+      if (heroTitle) {
+        heroTitle.style.marginBottom = '0px';
+      }
+    }
+    hideEmptySections();
+  }, 200);
+}
+
+// Wait for DOM and engine
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    if (typeof devtemDesign === 'function') {
+      devtemDesign("app-root", currentConfig);
+      setTimeout(() => {
+        attach404Handlers();
+        initTemplateSwitcher();
+        highlightActiveTemplate('cyber');
+        inject404Content();
+        hideEmptySections();
+      }, 150);
+    } else {
+      console.error("devtemDesign engine not found");
+      // Fallback manual display
+      document.getElementById('app-root').innerHTML = `
+        <div style="text-align:center; padding:100px; min-height:100vh;">
+          <h1 style="font-size:6rem;">404</h1>
+          <p>Page not found</p>
+          <a href="/" style="color:var(--accent);">Go Home</a>
+        </div>
+      `;
+    }
+  }, 50);
+});
+</script>
+</body>
+</html>
