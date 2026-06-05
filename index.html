@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>devtemDesign · Declarative UI Engine</title>
+  <meta name="description" content="One configuration schema. Infinite animated synthesis. Lightweight zero-config page engine with glass-morphism and ambient motion.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/style.css">
+<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"></script>
+  <style>
+    /* Template switcher additional styles */
+    .template-switcher {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9997;
+      display: flex;
+      gap: 12px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(16px);
+      padding: 10px 20px;
+      border-radius: 60px;
+      border: 1px solid rgba(255,255,255,0.15);
+      font-family: monospace;
+      font-size: 0.75rem;
+    }
+    .template-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted, #aaa);
+      padding: 6px 14px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+    .template-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .template-btn.active {
+      background: var(--accent, #0ff);
+      color: #000;
+      font-weight: bold;
+    }
+    @media (max-width: 680px) {
+      .template-switcher { bottom: 16px; right: 16px; padding: 6px 12px; gap: 6px; }
+      .template-btn { padding: 4px 10px; font-size: 0.6rem; }
+    }
+    .toast-notification {
+      position: fixed;
+      bottom: 100px;
+      right: 24px;
+      background: var(--accent);
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      font-family: monospace;
+    }
+    .toast-notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div id="app-root"></div>
+<div class="template-switcher">
+  <span style="color: #888; margin-right: 4px;"><i class="fas fa-palette"></i></span>
+  <button class="template-btn" data-template="figsh">FIGSH</button>
+  <button class="template-btn" data-template="cyber">CYBER</button>
+  <button class="template-btn" data-template="aurora">AURORA</button>
+  <button class="template-btn" data-template="monochrome">MONO</button>
+</div>
+<div id="toast" class="toast-notification">✓ Copied to clipboard</div>
+
+<script>
+// Current config storage
+let currentConfig = {
+  template: "cyber",
+  logo: "https://fscss.devtem.org/assets/images/fscss.png", 
+  
+  logoName: "DEVTEM",
+  navLinks: ["Docs", "Sandbox", "Schema API", "npm Package"],
+  ctaText: "CDN →",
+  
+  heroTag: "Core Framework Alpha // devtemDesign@0.0.1",
+  heroTitleLine1: "Declarative UI,",
+  heroTitleLine2: "Zero-Config Motion",
+  heroSubtitle: "One configuration schema. Infinite animated synthesis. Stop building standard UI boilerplate- let the engine paint the viewport.",
+  
+  primaryBtnText: "Read Docs",
+  secondaryBtnText: "Copy CDN",
+  
+  brandsSubtitle: "Engine Architecture Utilities & Dependencies",
+  footerCopy: "Figsh Labs • Open Source",
+  brands: ["NPM", "FSCSS", "DEVTEMPLE", "ESBUILD", "CSS3", "HTML5", "WEBGL"],
+  
+  featuresSectionLabel: "<i class='fas fa-code-branch'></i> CORE ENGINE MECHANICS",
+  featuresSectionTitle: "Pass raw structural data. The canvas resolves itself dynamically.",
+  
+  features: [
+    { 
+      title: "Deterministic Engine Schema", 
+      desc: "Strict object parsing map transforms simple titles, tags, and matrices into hardware-accelerated layouts without HTML creation workflows.", 
+      icon: "<i class='fas fa-cube'></i>" 
+    },
+    { 
+      title: "Ambient Micro-Interactions", 
+      desc: "Integrated magnet-ring cursor captures, fluid DOM reactive parallax, and canvas physics triggers ship bundled out-of-the-box.", 
+      icon: "<i class='fas fa-magic'></i>" 
+    },
+    { 
+      title: "Adaptive Theme Synthesis", 
+      desc: "Switch between tokens dynamically. The runtime morphs variables across glassmorphic layers, backdrops, and active neon elements.", 
+      icon: "<i class='fas fa-palette'></i>" 
+    }
+  ],
+  
+  panels: [
+    { 
+      tag: "FRAMEWORK API", 
+      title: "devtemDesign(container, config)", 
+      desc: "The entire UI ecosystem initialized directly through a singular operational handler. Complete layout decoupling." 
+    },
+    { 
+      tag: "PERFORMANCE LAYER", 
+      title: "Passive Inertia Transforms", 
+      desc: "No bulky execution bundles. Native multi-threaded Intersection Observers decouple scrolling routines from render cycles." 
+    }
+  ]
+};
+
+// Function to re-render the page with new template
+function renderWithTemplate(templateName) {
+  currentConfig.template = templateName;
+  
+  // Re-call the engine with updated config
+  if (typeof devtemDesign === 'function') {
+    devtemDesign("app-root", currentConfig);
+    
+    // Re-attach event listeners after re-render
+    setTimeout(() => {
+      attachButtonHandlers();
+      highlightActiveTemplate(templateName);
+    }, 100);
+  } else {
+    console.warn("devtemDesign engine not loaded yet");
+  }
+}
+
+// Attach copy and navigation handlers
+function attachButtonHandlers() {
+  // Copy CDN functionality (both CSS and JS links)
+  const copyCDN = (e) => {
+    e.preventDefault();
+    const cdnLinks = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/style.css">\n<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"><\/script>`;
+    navigator.clipboard.writeText(cdnLinks);
+    
+    const toast = document.getElementById('toast');
+    if (toast) {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+    
+    // Temporary button text feedback
+    if (e.target.classList && e.target.classList.contains('btn-ghost')) {
+      const original = e.target.innerHTML;
+      e.target.innerHTML = "✓ Copied!";
+      setTimeout(() => { e.target.innerHTML = original; }, 1500);
+    }
+  };
+  
+  // Primary button -> navigate to /docs
+  const docsHandler = (e) => {
+    e.preventDefault();
+    window.location.href = '/docs';
+  };
+  
+  const primaryBtn = document.querySelector('.btn-primary');
+  const secondaryBtn = document.querySelector('.btn-ghost');
+  const navCta = document.querySelector('.nav-cta');
+  
+  if (primaryBtn) primaryBtn.addEventListener('click', docsHandler);
+  if (secondaryBtn) secondaryBtn.addEventListener('click', copyCDN);
+  
+  // Nav CTA button (CDN)
+  if (navCta) {
+    navCta.addEventListener('click', (e) => {
+      e.preventDefault();
+      const cdnJs = `<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.1/script.js"><\/script>`;
+      navigator.clipboard.writeText(cdnJs);
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+      const original = navCta.innerHTML;
+      navCta.innerHTML = "✓ Copied!";
+      setTimeout(() => { navCta.innerHTML = original; }, 1500);
+    });
+  }
+  
+  // Also handle any nav links pointing to /docs
+  const docLinks = document.querySelectorAll('.nav-links a');
+  docLinks.forEach(link => {
+    if (link.innerText.toLowerCase() === 'docs') {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = '/docs';
+      });
+    }
+  });
+}
+
+function highlightActiveTemplate(template) {
+  const btns = document.querySelectorAll('.template-btn');
+  btns.forEach(btn => {
+    if (btn.getAttribute('data-template') === template) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+// Template switcher event listeners
+function initTemplateSwitcher() {
+  const btns = document.querySelectorAll('.template-btn');
+  btns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const newTemplate = btn.getAttribute('data-template');
+      renderWithTemplate(newTemplate);
+    });
+  });
+}
+
+// Wait for DOM and engine
+document.addEventListener("DOMContentLoaded", () => {
+  // Small delay to ensure engine is ready
+  setTimeout(() => {
+    if (typeof devtemDesign === 'function') {
+      devtemDesign("app-root", currentConfig);
+      setTimeout(() => {
+        attachButtonHandlers();
+        initTemplateSwitcher();
+        highlightActiveTemplate('cyber');
+      }, 150);
+    } else {
+      console.error("devtemDesign engine not found. Make sure /js/dev.js is loaded.");
+    }
+  }, 50);
+});
+</script>
+</body>
+</html>
