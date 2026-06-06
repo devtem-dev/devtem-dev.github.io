@@ -487,7 +487,9 @@ devtemDesign("app-root", {
     copy: `© ${new Date().getFullYear()} Figsh Digital · devtemDesign is open source`
   }
 });
-
+document.querySelector(".nav-logo").onclick = () =>{
+    location.href = "/";
+}
 // Inject API page content into hero shell after engine renders
 setTimeout(() => {
   const hero = document.querySelector('.hero');
