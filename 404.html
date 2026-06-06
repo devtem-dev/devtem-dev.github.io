@@ -359,7 +359,9 @@ function render(template) {
     setActiveBtn(template);
   }, 80);
 }
-
+document.querySelector(".nav-logo").onclick = () =>{
+    location.href = "/";
+  }
 // ── 404 BLOCK ────────────────────────────────────────────────────
 function inject404Block() {
   if (document.querySelector('.e404')) return; // already injected
