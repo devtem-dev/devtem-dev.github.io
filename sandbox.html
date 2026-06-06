@@ -367,7 +367,9 @@ devtemDesign("app-root", {
   heroSubtitle: "", primaryBtnText: "", secondaryBtnText: "",
   brands: [], features: [], panels: []
 });
-
+document.querySelector(".nav-logo").onclick = () =>{
+    location.href = "/";
+}
 // ── DEFAULT CONFIG ───────────────────────────────────────────────
 const DEFAULT_CONFIG = `devtemDesign("app-root", {
   template: "cyber",
