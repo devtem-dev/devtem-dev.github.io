@@ -3,474 +3,672 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>devtemDesign · Interactive Sandbox</title>
-  <meta name="description" content="Live playground for devtemDesign — experiment with config and see instant results.">
+  <title>Sandbox · devtemDesign</title>
+  <meta name="description" content="Interactive config playground for devtemDesign — edit the schema, see the page render live.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"></script>
-  
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* ── SUPPRESS ENGINE HERO ────────────────────────────────── */
+    .hero-tag, .hero-title, .hero-sub,
+    .hero-buttons, .hero-inline-brands,
+    .features, .panels-section, .marquee-section { display: none !important; }
+    .hero { min-height: unset; padding: 0; }
+    footer { display: none !important; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
-      background: #0a0c15;
-      overflow-x: hidden;
+    /* ── FONT OVERRIDE ───────────────────────────────────────── */
+    body, textarea, input, select, button {
+      font-family: 'JetBrains Mono', monospace;
     }
+    h1, h2, h3 { font-family: 'Syne', sans-serif; }
 
-    /* Sandbox layout */
-    .sandbox-container {
-      display: flex;
+    /* ── SANDBOX SHELL ───────────────────────────────────────── */
+    .sandbox {
+      position: relative;
+      z-index: 2;
+      padding-top: 64px; /* nav */
       height: 100vh;
-      overflow: hidden;
-    }
-
-    /* Editor panel */
-    .editor-panel {
-      width: 45%;
-      background: #0f111a;
-      border-right: 1px solid rgba(255,255,255,0.1);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      z-index: 10;
     }
 
-    .editor-header {
-      padding: 1rem 1.25rem;
-      background: rgba(0,0,0,0.4);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      font-family: monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      color: var(--accent, #0ff);
+    /* ── TOP BAR ─────────────────────────────────────────────── */
+    .sb-topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 48px;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(4,6,16,0.7);
+      backdrop-filter: blur(16px);
+      flex-shrink: 0;
+      gap: 12px;
       flex-wrap: wrap;
+    }
+    .sb-topbar-left {
+      display: flex;
+      align-items: center;
       gap: 10px;
     }
-
-    .editor-header h3 {
-      font-size: 0.85rem;
+    .sb-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
       font-weight: 600;
     }
-
-    .editor-actions {
+    .sb-version {
+      font-size: 0.6rem;
+      color: var(--muted);
+      border: 1px solid var(--glass-border);
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    .sb-topbar-right {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      gap: 8px;
     }
 
-    .editor-actions button {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #ccc;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: monospace;
+    /* Template pill buttons */
+    .tpl-pills {
+      display: flex;
+      gap: 4px;
     }
-
-    .editor-actions button:hover {
-      background: var(--accent, #0ff);
-      color: #000;
-      border-color: var(--accent);
-    }
-
-    .editor-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.25rem;
-    }
-
-    .config-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .config-group label {
-      display: block;
-      font-size: 0.7rem;
-      text-transform: uppercase;
+    .tpl-pill {
+      padding: 4px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--glass-border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.6rem;
       letter-spacing: 0.1em;
-      color: #888;
-      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'JetBrains Mono', monospace;
     }
+    .tpl-pill:hover  { color: white; border-color: rgba(255,255,255,0.3); }
+    .tpl-pill.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
 
-    .config-group input, 
-    .config-group select, 
-    .config-group textarea {
-      width: 100%;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,0.1);
+    /* Action buttons */
+    .sb-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
       border-radius: 8px;
-      padding: 8px 12px;
-      color: #e2e8f0;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.8rem;
-    }
-
-    .config-group input:focus, 
-    .config-group select:focus, 
-    .config-group textarea:focus {
-      outline: none;
-      border-color: var(--accent, #0ff);
-    }
-
-    .config-group textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
-
-    .config-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .array-item {
+      border: 1px solid var(--glass-border);
       background: rgba(255,255,255,0.03);
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .sb-btn:hover  { color: white; border-color: rgba(255,255,255,0.3); }
+    .sb-btn.run    { border-color: var(--accent); color: var(--accent); }
+    .sb-btn.run:hover { background: var(--accent); color: #000; }
+    .sb-btn.active-view { background: rgba(255,255,255,0.07); color: white; }
+
+    /* ── MAIN SPLIT ──────────────────────────────────────────── */
+    .sb-split {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      flex: 1;
+      overflow: hidden;
     }
 
-    .badge-code {
-      font-family: monospace;
-      font-size: 0.7rem;
-      background: rgba(0,255,255,0.1);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: var(--accent);
+    /* ── EDITOR PANE ─────────────────────────────────────────── */
+    .sb-editor {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--glass-border);
+      background: rgba(4,6,14,0.85);
+      overflow: hidden;
+    }
+    .pane-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      height: 36px;
+      border-bottom: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+    .pane-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .pane-label i { color: var(--accent2); font-size: 0.6rem; }
+    .pane-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%,100%{ opacity:1; } 50%{ opacity:0.3; }
     }
 
-    /* Preview panel */
-    .preview-panel {
+    /* Textarea editor */
+    .sb-textarea {
+      flex: 1;
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      color: #c9d1d9;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      line-height: 1.85;
+      padding: 20px 20px 20px 56px;
+      caret-color: var(--accent);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+      tab-size: 2;
+    }
+    .sb-textarea::selection { background: rgba(122,244,255,0.15); }
+
+    /* Line number gutter */
+    .editor-wrap {
       flex: 1;
       position: relative;
-      background: var(--bg-deep, #050b14);
-      overflow-y: auto;
+      overflow: hidden;
     }
-
-    .preview-header {
+    .gutter {
       position: absolute;
-      top: 16px;
-      right: 20px;
-      z-index: 100;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(12px);
-      padding: 6px 16px;
-      border-radius: 40px;
-      font-size: 0.7rem;
-      font-family: monospace;
-      color: var(--accent);
-      border: 1px solid rgba(255,255,255,0.1);
+      top: 0; left: 0;
+      width: 40px;
+      height: 100%;
+      background: rgba(0,0,0,0.2);
+      border-right: 1px solid rgba(255,255,255,0.04);
+      padding-top: 20px;
+      overflow: hidden;
       pointer-events: none;
+      z-index: 1;
+    }
+    .gutter-line {
+      display: block;
+      text-align: right;
+      padding-right: 8px;
+      font-size: 0.68rem;
+      line-height: 1.85;
+      color: rgba(255,255,255,0.12);
+      font-family: 'JetBrains Mono', monospace;
+      height: calc(0.76rem * 1.85);
     }
 
-    #app-root {
-      min-height: 100vh;
+    /* Error bar */
+    .sb-error {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      background: rgba(255,50,80,0.1);
+      border-top: 1px solid rgba(255,50,80,0.3);
+      color: #ff6080;
+      font-size: 0.68rem;
+      flex-shrink: 0;
+    }
+    .sb-error.visible { display: flex; }
+
+    /* ── PREVIEW PANE ────────────────────────────────────────── */
+    .sb-preview {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #020407;
+    }
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      height: 36px;
+      border-bottom: 1px solid var(--glass-border);
+      flex-shrink: 0;
+    }
+    .preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .preview-frame-wrap {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    #preview-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #020407;
     }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      .sandbox-container {
-        flex-direction: column;
-        height: auto;
+    /* Loading overlay */
+    .preview-loading {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(2,4,7,0.8);
+      backdrop-filter: blur(4px);
+      z-index: 10;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      gap: 10px;
+    }
+    .preview-loading.visible { display: flex; }
+    .spin {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(122,244,255,0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── STATUS BAR ──────────────────────────────────────────── */
+    .sb-statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 28px;
+      border-top: 1px solid var(--glass-border);
+      background: rgba(4,6,16,0.9);
+      flex-shrink: 0;
+      gap: 20px;
+    }
+    .sb-status-left, .sb-status-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .sb-stat {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .sb-stat i { font-size: 0.55rem; }
+    .sb-stat.ok  i,
+    .sb-stat.ok    { color: #22c55e; }
+    .sb-stat.err   { color: #ff6080; }
+    .sb-stat.warn  { color: #ffaa00; }
+
+    /* ── MOBILE ──────────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      .sb-split {
+        grid-template-columns: 1fr;
+        grid-template-rows: 50% 50%;
       }
-      .editor-panel {
-        width: 100%;
-        max-height: 50vh;
-      }
-      .preview-panel {
-        min-height: 50vh;
-      }
+      .sb-editor { border-right: none; border-bottom: 1px solid var(--glass-border); }
+      .tpl-pills { display: none; }
     }
-
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.05);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent, #0ff);
-      border-radius: 4px;
-    }
-
-    .reset-default {
-      color: #ff6b6b;
-      border-color: #ff6b6b !important;
-    }
-    .reset-default:hover {
-      background: #ff6b6b !important;
-      color: #fff !important;
+    @media (max-width: 520px) {
+      .sb-topbar { height: auto; padding: 8px 12px; }
+      .sb-title  { display: none; }
     }
   </style>
 </head>
 <body>
-
-<div class="sandbox-container">
-  <!-- Left: Config Editor -->
-  <div class="editor-panel">
-    <div class="editor-header">
-      <h3><i class="fas fa-code"></i> live configuration</h3>
-      <div class="editor-actions">
-        <button id="applyBtn"><i class="fas fa-play"></i> Apply</button>
-        <button id="resetBtn" class="reset-default"><i class="fas fa-undo-alt"></i> Reset</button>
-        <button id="exportBtn"><i class="fas fa-download"></i> Export</button>
-      </div>
-    </div>
-    <div class="editor-content">
-      <div class="config-group">
-        <label><i class="fas fa-palette"></i> template</label>
-        <select id="templateSelect">
-          <option value="cyber">CYBER (neon)</option>
-          <option value="figsh">FIGSH (glass)</option>
-          <option value="aurora">AURORA (nature)</option>
-          <option value="monochrome">MONOCHROME (minimal)</option>
-        </select>
-      </div>
-
-      <div class="config-row">
-        <div class="config-group">
-          <label>logo name</label>
-          <input type="text" id="logoName" value="DEVTEM">
-        </div>
-        <div class="config-group">
-          <label>cta text</label>
-          <input type="text" id="ctaText" value="CDN →">
-        </div>
-      </div>
-
-      <div class="config-group">
-        <label>nav links (comma separated, or label:href)</label>
-        <textarea id="navLinks" placeholder="Docs:/docs, Sandbox:/sandbox, GitHub:https://github.com">Docs:/docs, Sandbox:/sandbox, Schema API:/api, npm Package:https://www.npmjs.com/package/devtemdesign</textarea>
-        <small style="color:#666; font-size:0.65rem;">Format: "Label" or "Label:URL" — separate with commas</small>
-      </div>
-
-      <div class="config-group">
-        <label>hero title line 1 & line 2</label>
-        <div class="config-row">
-          <input type="text" id="heroLine1" value="Declarative UI,">
-          <input type="text" id="heroLine2" value="Zero-Config Motion">
-        </div>
-      </div>
-
-      <div class="config-group">
-        <label>hero subtitle</label>
-        <textarea id="heroSubtitle">One configuration schema. Infinite animated synthesis. Stop building standard UI boilerplate—let the engine paint the viewport.</textarea>
-      </div>
-
-      <div class="config-row">
-        <div class="config-group">
-          <label>primary button text</label>
-          <input type="text" id="primaryBtn" value="Read Docs">
-        </div>
-        <div class="config-group">
-          <label>secondary button text</label>
-          <input type="text" id="secondaryBtn" value="Copy CDN">
-        </div>
-      </div>
-
-      <div class="config-group">
-        <label>brands (comma separated)</label>
-        <input type="text" id="brands" value="NPM, FSCSS, DEVTEMPLE, ESBUILD, CSS3, HTML5, WEBGL">
-      </div>
-
-      <div class="config-group">
-        <label>footer copy</label>
-        <input type="text" id="footerCopy" value="Figsh Labs • Open Source">
-      </div>
-
-      <div class="config-group">
-        <label>features (JSON array — optional)</label>
-        <textarea id="featuresJson" placeholder='[{"title":"Feature 1","desc":"Description","icon":"<i class=\"fas fa-cube\"></i>"}]'></textarea>
-        <small style="color:#666;">Leave empty to hide features section</small>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right: Live Preview -->
-  <div class="preview-panel">
-    <div class="preview-header">
-      <i class="fas fa-eye"></i> live preview • engine running
-    </div>
-    <div id="app-root"></div>
-  </div>
-</div>
+<div id="app-root"></div>
 
 <script>
-  // Default config
-  const DEFAULT_CONFIG = {
-    template: "cyber",
-    logoName: "DEVTEM",
-    navLinks: [
-      { label: "Docs", href: "/docs" },
-      { label: "Sandbox", href: "/sandbox" },
-      { label: "Schema API", href: "/api" },
-      { label: "npm Package", href: "https://www.npmjs.com/package/devtemdesign" }
-    ],
-    ctaText: "CDN →",
-    heroTag: "Interactive Sandbox // devtemDesign@0.0.2",
-    heroTitleLine1: "Declarative UI,",
-    heroTitleLine2: "Zero-Config Motion",
-    heroSubtitle: "One configuration schema. Infinite animated synthesis. Edit the config on the left — see the result instantly.",
-    primaryBtnText: "Read Docs",
-    secondaryBtnText: "Copy CDN",
-    brandsSubtitle: "Live configuration playground",
-    footerCopy: "Figsh Labs • Open Source",
-    brands: ["NPM", "FSCSS", "DEVTEMPLE", "ESBUILD", "CSS3", "HTML5", "WEBGL"],
-    featuresSectionLabel: "<i class='fas fa-code-branch'></i> TRY IT LIVE",
-    featuresSectionTitle: "Edit config → Instant preview",
-    features: [
-      { title: "Real-time Updates", desc: "Change any value and click Apply — the engine re-renders instantly.", icon: "<i class='fas fa-bolt'></i>" },
-      { title: "All Templates Available", desc: "Switch between cyber, figsh, aurora, and monochrome themes.", icon: "<i class='fas fa-palette'></i>" },
-      { title: "Copy & Export", desc: "Export your config as JSON to use in your own projects.", icon: "<i class='fas fa-download'></i>" }
-    ],
-    panels: [
-      { tag: "SANDBOX MODE", title: "Experiment Freely", desc: "All changes stay in your browser. No server, no saves — just pure exploration." },
-      { tag: "CDN READY", title: "Use Anywhere", desc: "Copy the configuration export and paste it into any HTML page with devtemDesign included." }
-    ]
-  };
+// ── ENGINE SHELL ─────────────────────────────────────────────────
+devtemDesign("app-root", {
+  template: "figsh",
+  logoName: "DEVTEM",
+  logo: "https://fscss.devtem.org/assets/images/fscss.png",
+  navLinks: [
+    { label: "Docs",       href: "/docs"    },
+    { label: "Sandbox",    href: "/sandbox" },
+    { label: "Schema API", href: "/api"     },
+    { label: "npm",        href: "https://www.npmjs.com/package/devtemdesign" }
+  ],
+  ctaText: "CDN →",
+  heroTag: "", heroTitleLine1: "", heroTitleLine2: "",
+  heroSubtitle: "", primaryBtnText: "", secondaryBtnText: "",
+  brands: [], features: [], panels: []
+});
 
-  // Parse navLinks from string (supports "Label" or "Label:URL")
-  function parseNavLinks(str) {
-    if (!str.trim()) return [];
-    return str.split(',').map(item => {
-      const trimmed = item.trim();
-      if (trimmed.includes(':')) {
-        const [label, href] = trimmed.split(':');
-        return { label: label.trim(), href: href.trim() };
+// ── DEFAULT CONFIG ───────────────────────────────────────────────
+const DEFAULT_CONFIG = `devtemDesign("app-root", {
+  template: "cyber",
+  logoName: "SANDBOX",
+  logo: "https://fscss.devtem.org/assets/images/fscss.png",
+
+  navLinks: [
+    { label: "Docs",    href: "/docs"    },
+    { label: "API",     href: "/api"     },
+    { label: "GitHub",  href: "#"        }
+  ],
+  ctaText: "Get Started →",
+
+  heroTag:          "✦ Live Preview",
+  heroTitleLine1:   "Edit the config.",
+  heroTitleLine2:   "See it render.",
+  heroSubtitle:     "Modify the schema on the left. Hit Run or press Ctrl+Enter to update the preview.",
+  primaryBtnText:   "<i class='fas fa-bolt'></i> Explore",
+  secondaryBtnText: "Docs →",
+
+  brands: ["DEVTEMPLE", "FSCSS", "FIGSH", "ESBUILD"],
+  brandsSubtitle: "built with open source",
+
+  featuresSectionLabel: "core mechanics",
+  featuresSectionTitle: "Pass data. The engine paints itself.",
+  features: [
+    {
+      title: "Declarative Schema",
+      desc:  "Map a config object to hardware-accelerated layouts.",
+      icon:  "<i class='fas fa-cube'></i>"
+    },
+    {
+      title: "4 Live Themes",
+      desc:  "Switch figsh, cyber, aurora, monochrome with one token.",
+      icon:  "<i class='fas fa-palette'></i>"
+    },
+    {
+      title: "Zero Bundles",
+      desc:  "Pure CSS + JS. No framework. No build step.",
+      icon:  "<i class='fas fa-feather'></i>"
+    }
+  ],
+
+  panels: [
+    { tag: "API",  title: "devtemDesign({…})", desc: "One function call. Complete animated layout." },
+    { tag: "PERF", title: "Passive Inertia",   desc: "IntersectionObserver + CSS custom properties." }
+  ],
+
+  footer: {
+    tagline: "Declarative UI engine for the modern web.",
+    columns: [
+      {
+        heading: "Product",
+        links: [
+          { label: "Documentation", href: "/docs"    },
+          { label: "Sandbox",       href: "/sandbox" },
+          { label: "Schema API",    href: "/api"     }
+        ]
       }
-      return { label: trimmed, href: '#' };
+    ],
+    social: [
+      { icon: "fab fa-github",  href: "#", label: "GitHub"  },
+      { icon: "fab fa-twitter", href: "#", label: "Twitter" }
+    ],
+    legal: [
+      { label: "MIT License", href: "/license" }
+    ],
+    copy: "© 2026 Figsh Digital · devtemDesign"
+  }
+});`;
+
+// ── IFRAME TEMPLATE ──────────────────────────────────────────────
+function buildIframeSrc(code) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">
+<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>
+<style>body{cursor:auto;}</style>
+</head>
+<body>
+<div id="app-root"></div>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    ${code}
+    window.parent.postMessage({ type: 'render-ok' }, '*');
+  } catch(e) {
+    window.parent.postMessage({ type: 'render-err', msg: e.message }, '*');
+  }
+});
+<\/script>
+</body>
+</html>`;
+}
+
+// ── SANDBOX INJECTION ────────────────────────────────────────────
+setTimeout(() => {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  hero.insertAdjacentHTML('afterend', `
+  <div class="sandbox">
+
+    <!-- TOP BAR -->
+    <div class="sb-topbar">
+      <div class="sb-topbar-left">
+        <span class="sb-title"><i class="fas fa-flask"></i> Sandbox</span>
+        <span class="sb-version">v0.0.2</span>
+        <div class="tpl-pills">
+          <button class="tpl-pill" data-tpl="figsh">FIGSH</button>
+          <button class="tpl-pill active" data-tpl="cyber">CYBER</button>
+          <button class="tpl-pill" data-tpl="aurora">AURORA</button>
+          <button class="tpl-pill" data-tpl="monochrome">MONO</button>
+        </div>
+      </div>
+      <div class="sb-topbar-right">
+        <button class="sb-btn" id="resetBtn"><i class="fas fa-rotate-left"></i> Reset</button>
+        <button class="sb-btn" id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+        <button class="sb-btn run" id="runBtn"><i class="fas fa-play"></i> Run <kbd style="opacity:0.5;font-size:0.55rem;">Ctrl+↵</kbd></button>
+      </div>
+    </div>
+
+    <!-- SPLIT -->
+    <div class="sb-split">
+
+      <!-- EDITOR -->
+      <div class="sb-editor">
+        <div class="pane-header">
+          <span class="pane-label"><i class="fas fa-code"></i> config.js</span>
+          <span class="pane-dot"></span>
+        </div>
+        <div class="editor-wrap">
+          <div class="gutter" id="gutter"></div>
+          <textarea class="sb-textarea" id="editor" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+        <div class="sb-error" id="errorBar">
+          <i class="fas fa-triangle-exclamation"></i>
+          <span id="errorMsg">Syntax error</span>
+        </div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="sb-preview">
+        <div class="preview-toolbar">
+          <span class="preview-dot" style="background:#ff5f57;"></span>
+          <span class="preview-dot" style="background:#febc2e;"></span>
+          <span class="preview-dot" style="background:#28c840;"></span>
+          <span style="flex:1;"></span>
+          <span style="font-size:0.6rem;color:rgba(255,255,255,0.2);letter-spacing:0.1em;">LIVE PREVIEW</span>
+        </div>
+        <div class="preview-frame-wrap">
+          <div class="preview-loading" id="previewLoading">
+            <span class="spin"></span> RENDERING
+          </div>
+          <iframe id="preview-iframe" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STATUS BAR -->
+    <div class="sb-statusbar">
+      <div class="sb-status-left">
+        <span class="sb-stat" id="statStatus"><i class="fas fa-circle"></i> <span id="statText">Ready</span></span>
+        <span class="sb-stat" id="statLines"><i class="fas fa-lines-leaning"></i> <span id="lineCount">-</span> lines</span>
+      </div>
+      <div class="sb-status-right">
+        <span class="sb-stat"><i class="fas fa-cube"></i> devtemdesign@0.0.2</span>
+        <span class="sb-stat"><i class="fab fa-js"></i> Vanilla JS</span>
+      </div>
+    </div>
+
+  </div>
+  `);
+
+  const editor      = document.getElementById('editor');
+  const iframe      = document.getElementById('preview-iframe');
+  const errorBar    = document.getElementById('errorBar');
+  const errorMsg    = document.getElementById('errorMsg');
+  const loading     = document.getElementById('previewLoading');
+  const statStatus  = document.getElementById('statStatus');
+  const statText    = document.getElementById('statText');
+  const lineCount   = document.getElementById('lineCount');
+  const gutter      = document.getElementById('gutter');
+
+  // Hoisted — must be declared before runPreview() is called below
+  let renderTimer = null;
+
+  // Set default code
+  editor.value = DEFAULT_CONFIG;
+  updateGutter();
+  updateLineCount();
+
+  // Run on load
+  runPreview();
+
+  // ── GUTTER ─────────────────────────────────────────────────
+  function updateGutter() {
+    const lines = editor.value.split('\n').length;
+    let html = '';
+    for (let i = 1; i <= lines; i++) {
+      html += `<span class="gutter-line">${i}</span>`;
+    }
+    gutter.innerHTML = html;
+    // Sync scroll
+    gutter.scrollTop = editor.scrollTop;
+  }
+
+  editor.addEventListener('input', () => { updateGutter(); updateLineCount(); });
+  editor.addEventListener('scroll', () => { gutter.scrollTop = editor.scrollTop; });
+
+  // Tab key support
+  editor.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = editor.selectionStart;
+      const end   = editor.selectionEnd;
+      editor.value = editor.value.substring(0, start) + '  ' + editor.value.substring(end);
+      editor.selectionStart = editor.selectionEnd = start + 2;
+      updateGutter();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      runPreview();
+    }
+  });
+
+  function updateLineCount() {
+    lineCount.textContent = editor.value.split('\n').length;
+  }
+
+  // ── RUN PREVIEW ────────────────────────────────────────────
+  function runPreview() {
+    clearTimeout(renderTimer);
+    loading.classList.add('visible');
+    setStatus('running', 'Rendering…');
+    errorBar.classList.remove('visible');
+
+    renderTimer = setTimeout(() => {
+      const code = editor.value.trim();
+      const html = buildIframeSrc(code);
+      const blob = new Blob([html], { type: 'text/html' });
+      const url  = URL.createObjectURL(blob);
+      iframe.src = url;
+    }, 100);
+  }
+
+  // ── LISTEN TO IFRAME MESSAGES ───────────────────────────────
+  window.addEventListener('message', (e) => {
+    loading.classList.remove('visible');
+    if (e.data.type === 'render-ok') {
+      setStatus('ok', 'Rendered');
+      errorBar.classList.remove('visible');
+    } else if (e.data.type === 'render-err') {
+      setStatus('err', 'Error');
+      errorMsg.textContent = e.data.msg;
+      errorBar.classList.add('visible');
+    }
+  });
+
+  // Fallback hide loading after 4s
+  iframe.addEventListener('load', () => {
+    setTimeout(() => loading.classList.remove('visible'), 400);
+  });
+
+  // ── STATUS HELPERS ──────────────────────────────────────────
+  function setStatus(type, text) {
+    statStatus.className = 'sb-stat ' + type;
+    statText.textContent = text;
+    const icon = statStatus.querySelector('i');
+    if (icon) {
+      icon.className = type === 'ok'  ? 'fas fa-circle-check' :
+                       type === 'err' ? 'fas fa-circle-xmark' :
+                                        'fas fa-circle-notch fa-spin';
+    }
+  }
+
+  // ── TEMPLATE PILLS ──────────────────────────────────────────
+  document.querySelectorAll('.tpl-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.tpl-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const tpl = pill.dataset.tpl;
+      // Swap template token in editor
+      editor.value = editor.value.replace(
+        /template:\s*["'][a-z]+["']/,
+        `template: "${tpl}"`
+      );
+      updateGutter();
+      runPreview();
     });
-  }
-
-  // Parse brands from comma string
-  function parseBrands(str) {
-    if (!str.trim()) return [];
-    return str.split(',').map(s => s.trim()).filter(s => s);
-  }
-
-  // Parse features JSON
-  function parseFeatures(jsonStr) {
-    if (!jsonStr.trim()) return [];
-    try {
-      const parsed = JSON.parse(jsonStr);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch(e) {
-      return [];
-    }
-  }
-
-  // Build config from form inputs
-  function getConfigFromForm() {
-    const navLinksStr = document.getElementById('navLinks').value;
-    const brandsStr = document.getElementById('brands').value;
-    const featuresStr = document.getElementById('featuresJson').value;
-    
-    return {
-      template: document.getElementById('templateSelect').value,
-      logoName: document.getElementById('logoName').value || "DEVTEM",
-      navLinks: parseNavLinks(navLinksStr),
-      ctaText: document.getElementById('ctaText').value,
-      heroTag: "⚡ Interactive Sandbox // devtemDesign@0.0.2",
-      heroTitleLine1: document.getElementById('heroLine1').value,
-      heroTitleLine2: document.getElementById('heroLine2').value,
-      heroSubtitle: document.getElementById('heroSubtitle').value,
-      primaryBtnText: document.getElementById('primaryBtn').value,
-      secondaryBtnText: document.getElementById('secondaryBtn').value,
-      brandsSubtitle: "Live configuration playground",
-      footerCopy: document.getElementById('footerCopy').value,
-      brands: parseBrands(brandsStr),
-      featuresSectionLabel: "<i class='fas fa-code-branch'></i> TRY IT LIVE",
-      featuresSectionTitle: "Edit config → Instant preview",
-      features: parseFeatures(featuresStr).length ? parseFeatures(featuresStr) : DEFAULT_CONFIG.features,
-      panels: DEFAULT_CONFIG.panels  // keep panels as default for sandbox demo
-    };
-  }
-
-  // Render the page
-  let currentRenderTimeout = null;
-  function renderSandbox() {
-    const config = getConfigFromForm();
-    if (typeof devtemDesign === 'function') {
-      devtemDesign("app-root", config);
-      
-      // Re-attach CDN copy handler for demo purposes
-      setTimeout(() => {
-        const secondaryBtn = document.querySelector('.btn-ghost');
-        if (secondaryBtn) {
-          secondaryBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const cdnSnippet = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">\n<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>`;
-            navigator.clipboard.writeText(cdnSnippet);
-            const original = secondaryBtn.innerHTML;
-            secondaryBtn.innerHTML = "✓ Copied!";
-            setTimeout(() => { secondaryBtn.innerHTML = original; }, 1500);
-          });
-        }
-        
-        const primaryBtn = document.querySelector('.btn-primary');
-        if (primaryBtn) {
-          primaryBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = '/docs';
-          });
-        }
-      }, 100);
-    } else {
-      console.warn("devtemDesign engine not ready");
-    }
-  }
-
-  // Apply button handler
-  document.getElementById('applyBtn').addEventListener('click', () => {
-    renderSandbox();
   });
 
-  // Reset button
+  // ── RUN / RESET / COPY BUTTONS ──────────────────────────────
+  document.getElementById('runBtn').addEventListener('click', runPreview);
+
   document.getElementById('resetBtn').addEventListener('click', () => {
-    document.getElementById('templateSelect').value = DEFAULT_CONFIG.template;
-    document.getElementById('logoName').value = DEFAULT_CONFIG.logoName;
-    document.getElementById('ctaText').value = DEFAULT_CONFIG.ctaText;
-    document.getElementById('navLinks').value = "Docs:/docs, Sandbox:/sandbox, Schema API:/api, npm Package:https://www.npmjs.com/package/devtemdesign";
-    document.getElementById('heroLine1').value = DEFAULT_CONFIG.heroTitleLine1;
-    document.getElementById('heroLine2').value = DEFAULT_CONFIG.heroTitleLine2;
-    document.getElementById('heroSubtitle').value = DEFAULT_CONFIG.heroSubtitle;
-    document.getElementById('primaryBtn').value = DEFAULT_CONFIG.primaryBtnText;
-    document.getElementById('secondaryBtn').value = DEFAULT_CONFIG.secondaryBtnText;
-    document.getElementById('brands').value = DEFAULT_CONFIG.brands.join(', ');
-    document.getElementById('footerCopy').value = DEFAULT_CONFIG.footerCopy;
-    document.getElementById('featuresJson').value = JSON.stringify(DEFAULT_CONFIG.features, null, 2);
-    renderSandbox();
+    editor.value = DEFAULT_CONFIG;
+    updateGutter();
+    updateLineCount();
+    // Reset template pills to cyber
+    document.querySelectorAll('.tpl-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.tpl === 'cyber');
+    });
+    runPreview();
   });
 
-  // Export config as JSON
-  document.getElementById('exportBtn').addEventListener('click', () => {
-    const config = getConfigFromForm();
-    const jsonStr = JSON.stringify(config, null, 2);
-    navigator.clipboard.writeText(jsonStr);
-    const exportBtn = document.getElementById('exportBtn');
-    const originalText = exportBtn.innerHTML;
-    exportBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-    setTimeout(() => { exportBtn.innerHTML = originalText; }, 1500);
+  document.getElementById('copyBtn').addEventListener('click', function() {
+    navigator.clipboard.writeText(editor.value).then(() => {
+      const orig = this.innerHTML;
+      this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      setTimeout(() => { this.innerHTML = orig; }, 1500);
+    });
   });
 
-  // Initial render
-  document.addEventListener('DOMContentLoaded', () => {
-    // Set default features JSON in textarea
-    document.getElementById('featuresJson').value = JSON.stringify(DEFAULT_CONFIG.features, null, 2);
-    renderSandbox();
-  });
+}, 80);
 </script>
 </body>
 </html>
+
