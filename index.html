@@ -318,7 +318,9 @@ function attachButtonHandlers() {
       setTimeout(() => { navCta.innerHTML = original; }, 1500);
     });
   }
-  
+  document.querySelector(".nav-logo").onclick = () =>{
+    location.href = "/";
+  }
   // Also handle any nav links pointing to /docs
   const docLinks = document.querySelectorAll('.nav-links a');
   docLinks.forEach(link => {
