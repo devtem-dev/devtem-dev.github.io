@@ -359,9 +359,7 @@ function render(template) {
     setActiveBtn(template);
   }, 80);
 }
-document.querySelector(".nav-logo").onclick = () =>{
-    location.href = "/";
-  }
+
 // ── 404 BLOCK ────────────────────────────────────────────────────
 function inject404Block() {
   if (document.querySelector('.e404')) return; // already injected
@@ -400,6 +398,9 @@ function inject404Block() {
 
   hero.appendChild(block);
 
+  document.querySelector(".nav-logo").onclick = () =>{
+    location.href = "/";
+  }
   // Copy CDN button
   document.getElementById('copyCdnBtn').addEventListener('click', function() {
     navigator.clipboard.writeText(CDN_SNIPPET).then(() => {
