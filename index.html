@@ -164,7 +164,7 @@ let currentConfig = {
   heroTitleLine2: "Zero-Config Motion",
   heroSubtitle: "One configuration schema. Infinite animated synthesis. Stop building standard UI boilerplate- let the engine paint the viewport.",
   
-  primaryBtnText: "Read Docs",
+  primaryBtnText: "Try Without Code",
   secondaryBtnText: "Copy CDN",
   
   brandsSubtitle: "Engine Architecture Utilities & Dependencies",
@@ -187,7 +187,7 @@ let currentConfig = {
         links: [
           { label: "npm Package",   href: "https://www.npmjs.com/package/devtemdesign" },
           { label: "GitHub",        href: "https://github.com/devtem-dev" },
-          { label: "DevTemple",     href: "https://devtem.org"       },
+          { label: "DevTemple",     href: "https://devtem.org/home?q=@devtemDesign"       },
           { label: "FSCSS Engine",  href: "https://fscss.devtem.org" }
         ]
       },
@@ -195,8 +195,8 @@ let currentConfig = {
         heading: "Company",
         links: [
           { label: "About DevTemple",   href: "https://devtem.org"   },
-          { label: "Templates",          href: "https://devtem.org/home"    },
-          { label: "Contact",       href: "https://devtem.org/contact" }
+          { label: "Templates",          href: "https://devtem.org/home?q=@devtemDesign"    },
+          { label: "Subscribe",       href: "https://devtem.org/s?s=@devtemDesign" }
         ]
       }
     ],
@@ -293,7 +293,7 @@ function attachButtonHandlers() {
   // Primary button -> navigate to /docs
   const docsHandler = (e) => {
     e.preventDefault();
-    window.location.href = '/docs';
+    window.location.href = '/builder';
   };
   
   const primaryBtn = document.querySelector('.btn-primary');
