@@ -47,7 +47,7 @@
     _modalCfg = cfg; _modalId = id;
     modalTitle.textContent = name;
     modalFrame.srcdoc = buildHTML(cfg);
-    modalEditBtn.href = 'index.html?id=' + id;
+    modalEditBtn.href = '/builder?id=' + id;
     previewModal.classList.add('open');
   }
   modalClose.addEventListener('click', function () {
