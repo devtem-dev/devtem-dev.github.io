@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>devtemDesign · Projects</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/projects.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <a class="brand" href="index.html"><i class="fas fa-cube"></i> devtemDesign</a>
+  <span class="sep">/</span>
+  <span class="sub">Projects</span>
+  <div class="header-right">
+    <div class="header-links">
+      <a href="https://design.devtem.org/docs" target="_blank" rel="noreferrer" title="Docs"><i class="fas fa-book"></i></a>
+      <a href="https://devtem.org" target="_blank" rel="noreferrer" title="DevTemple"><i class="fas fa-store"></i></a>
+    </div>
+    <div class="theme-toggle">
+      <button class="theme-btn active" id="btn-dark" title="Dark"><i class="fas fa-moon"></i></button>
+      <button class="theme-btn" id="btn-light" title="Light"><i class="fas fa-sun"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <div class="page-top">
+    <h1><i class="fas fa-folder-open"></i> Projects <span class="proj-count-badge" id="count-badge">0</span></h1>
+    <a class="new-btn" href="/builder"><i class="fas fa-plus"></i> New page</a>
+  </div>
+
+  <div class="search-bar">
+    <i class="fas fa-magnifying-glass"></i>
+    <input type="text" id="search-input" placeholder="Search projects…">
+  </div>
+
+  <div id="empty-state" class="empty-state" style="display:none;">
+    <i class="fas fa-folder"></i>
+    <h2>No projects yet</h2>
+    <p>Generate and save a page in the builder to see it here.</p>
+    <a class="new-btn" href="/builder"><i class="fas fa-rocket"></i> Open Builder</a>
+  </div>
+
+  <div class="projects-grid" id="projects-grid"></div>
+</main>
+
+<!-- PREVIEW MODAL -->
+<div class="preview-modal" id="preview-modal">
+  <div class="modal-bar">
+    <span class="modal-title" id="modal-title">Preview</span>
+    <a class="modal-edit-btn" id="modal-edit-btn" href="#"><i class="fas fa-pen"></i> Edit</a>
+    <button class="modal-export-btn" id="modal-export-btn"><i class="fas fa-download"></i> Export</button>
+    <button class="modal-close" id="modal-close"><i class="fas fa-times"></i> Close</button>
+  </div>
+  <iframe id="modal-frame" sandbox="allow-scripts allow-same-origin" title="Preview"></iframe>
+</div>
+
+<!-- FOOTER -->
+<footer class="app-footer">
+  <a href="/builder"><i class="fas fa-arrow-left"></i> Builder</a>
+  <span class="fsep">·</span>
+  <a href="https://design.devtem.org/docs" target="_blank" rel="noreferrer"><i class="fas fa-book"></i> docs</a>
+  <span class="fsep">·</span>
+  <a href="https://devtem.org" target="_blank" rel="noreferrer"><i class="fas fa-store"></i> DevTemple</a>
+</footer>
+
+<script src="/js/projects.js"></script>
+</body>
+</html>
+
