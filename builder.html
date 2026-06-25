@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Builder | devtemDesign Visual Page Builder</title><meta name="description" content="Create landing pages, portfolios, SaaS websites, documentation sites, and custom layouts visually with devtemDesign Builder. Design, preview, customize, and export production-ready configurations and code."><meta name="keywords" content="devtemDesign builder, visual page builder, landing page builder, portfolio website builder, website generator, frontend builder, configuration builder, UI builder, website designer, export HTML, export configuration, no code builder, low code website builder"><meta name="author" content="DevTemple">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#00ffff"><link rel="canonical" href="https://design.devtem.org/builder"><!-- Open Graph --><meta property="og:type" content="website">
+<meta property="og:site_name" content="devtemDesign">
+<meta property="og:title" content="Builder | devtemDesign Visual Page Builder">
+<meta property="og:description" content="Design landing pages, portfolios, SaaS websites, and custom layouts visually. Export production-ready configurations and code instantly.">
+<meta property="og:url" content="https://design.devtem.org/builder">
+<meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg"><!-- Twitter --><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Builder | devtemDesign">
+<meta name="twitter:description" content="Visual builder for creating landing pages, portfolios, documentation sites, and custom web experiences.">
+<meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg"><!-- Structured Data --><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "devtemDesign Builder",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web",
+  "url": "https://design.devtem.org/builder",
+  "image": "https://design.devtem.org/assets/images/og.jpg",
+  "description": "Visual page builder for generating landing pages, portfolios, SaaS websites, and exportable devtemDesign configurations.",
+  "creator": {
+    "@type": "Organization",
+    "name": "DevTemple"
+  }
+}
+</script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/builder.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="brand"><i class="fas fa-cube" aria-hidden="true"></i> devtemDesign</div>
+  <span class="sep">/</span>
+  <span class="sub">Builder</span>
+  <div class="header-right">
+    <div class="header-links">
+      <a href="https://design.devtem.org/docs" target="_blank" rel="noreferrer" title="Docs"><i class="fas fa-book"></i></a>
+      <a href="https://www.npmjs.com/package/devtemdesign" target="_blank" rel="noreferrer" title="npm"><i class="fab fa-npm"></i></a>
+      <a href="https://github.com/devtem-dev/devtemDesign" target="_blank" rel="noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://devtem.org" target="_blank" rel="noreferrer" title="DevTemple"><i class="fas fa-store"></i></a>
+    </div>
+    <div class="theme-toggle" role="group" aria-label="Theme">
+      <button class="theme-btn active" id="btn-dark" title="Dark mode"><i class="fas fa-moon"></i></button>
+      <button class="theme-btn" id="btn-light" title="Light mode"><i class="fas fa-sun"></i></button>
+    </div>
+  </div>
+</header>
+
+<!-- GENERATE BAR -->
+<div class="gen-bar">
+  <div>
+    <div class="field-label"><i class="fas fa-pen-fancy"></i> Description</div>
+    <textarea id="desc" rows="2" placeholder="e.g. I'm a freelance UI designer specializing in SaaS dashboards…"></textarea>
+  </div>
+  <div>
+    <div class="field-label"><i class="fas fa-file-alt"></i> Page type</div>
+    <div class="toggle-group">
+      <button class="toggle-btn active" data-type="landing"><i class="fas fa-landmark"></i> Landing</button>
+      <button class="toggle-btn" data-type="portfolio"><i class="fas fa-briefcase"></i> Portfolio</button>
+    </div>
+  </div>
+  <div>
+    <div class="field-label"><i class="fas fa-palette"></i> Template</div>
+    <div class="template-grid">
+      <button class="tpl-btn active" data-tpl="figsh"><span class="tpl-name">Figsh</span><span class="tpl-desc">Glass · cyan/purple</span></button>
+      <button class="tpl-btn" data-tpl="cyber"><span class="tpl-name">Cyber</span><span class="tpl-desc">Neon · cyan/magenta</span></button>
+      <button class="tpl-btn" data-tpl="aurora"><span class="tpl-name">Aurora</span><span class="tpl-desc">Organic · emerald/violet</span></button>
+      <button class="tpl-btn" data-tpl="monochrome"><span class="tpl-name">Mono</span><span class="tpl-desc">Minimal grayscale</span></button>
+    </div>
+  </div>
+  <div class="gen-btn-wrap">
+    <button id="generate-btn" disabled>
+      <i class="fas fa-rocket"></i> Generate page
+    </button>
+  </div>
+</div>
+
+<!-- ERROR -->
+<div id="error-box" role="alert"><i class="fas fa-circle-exclamation"></i><span id="error-text"></span></div>
+
+<!-- APP BODY: sidebar + preview -->
+<div class="app-body">
+
+  <!-- EDITOR SIDEBAR -->
+  <div class="editor-sidebar" id="editor-sidebar">
+    <div class="sidebar-placeholder" id="sidebar-placeholder">
+      <i class="fas fa-wand-magic-sparkles"></i>
+      <span>Generate a page to start editing</span>
+    </div>
+    <div class="editor-scroll" id="editor-scroll" style="display:none;">
+
+      <!-- HERO -->
+      <div class="ed-section open" id="sec-hero">
+        <div class="ed-head" data-sec="hero">
+          <div class="ed-title"><i class="fas fa-display"></i> Hero</div>
+          <i class="fas fa-chevron-down ed-chevron"></i>
+        </div>
+        <div class="ed-body">
+          <div class="f-row"><label>Logo name</label><input id="e-logoName" type="text"></div>
+          <div class="f-row"><label>Logo image URL</label><input id="e-logoUrl" type="text" placeholder="https://..."></div>
+          <div class="f-row"><label>Tagline</label><input id="e-heroTag" type="text"></div>
+          <div class="f-row"><label>Title line 1</label><input id="e-heroLine1" type="text"></div>
+          <div class="f-row"><label>Title line 2</label><input id="e-heroLine2" type="text"></div>
+          <div class="f-row"><label>Subtitle</label><textarea id="e-heroSubtitle" rows="2"></textarea></div>
+          <div class="f-row"><label>Primary button</label><input id="e-primaryBtn" type="text"></div>
+          <div class="f-row"><label>Secondary button</label><input id="e-secondaryBtn" type="text"></div>
+          <div class="f-row"><label>Nav CTA text</label><input id="e-ctaText" type="text"></div>
+        </div>
+      </div>
+
+      <!-- BRANDS -->
+      <div class="ed-section" id="sec-brands">
+        <div class="ed-head" data-sec="brands">
+          <div class="ed-title"><i class="fas fa-building"></i> Brands</div>
+          <i class="fas fa-chevron-down ed-chevron"></i>
+        </div>
+        <div class="ed-body">
+          <div class="f-row"><label>Ticker subtitle</label><input id="e-brandsSubtitle" type="text"></div>
+          <div class="f-row">
+            <label>Brand names <span class="f-hint">(click name to edit)</span></label>
+            <div class="list-wrap" id="brandsList"></div>
+            <button class="btn-add" id="addBrandBtn"><i class="fas fa-plus"></i> Add brand</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURES -->
+      <div class="ed-section" id="sec-features">
+        <div class="ed-head" data-sec="features">
+          <div class="ed-title"><i class="fas fa-star"></i> Features / Cards</div>
+          <i class="fas fa-chevron-down ed-chevron"></i>
+        </div>
+        <div class="ed-body">
+          <div class="f-row"><label>Section label</label><input id="e-featuresLabel" type="text"></div>
+          <div class="f-row"><label>Section title</label><input id="e-featuresTitle" type="text"></div>
+          <div class="f-row">
+            <label>Cards</label>
+            <div class="list-wrap" id="featuresList"></div>
+            <button class="btn-add" id="addFeatureBtn"><i class="fas fa-plus"></i> Add card</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANELS -->
+      <div class="ed-section" id="sec-panels">
+        <div class="ed-head" data-sec="panels">
+          <div class="ed-title"><i class="fas fa-layer-group"></i> Panels</div>
+          <i class="fas fa-chevron-down ed-chevron"></i>
+        </div>
+        <div class="ed-body">
+          <div class="list-wrap" id="panelsList"></div>
+          <button class="btn-add" id="addPanelBtn"><i class="fas fa-plus"></i> Add panel</button>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="ed-section" id="sec-footer">
+        <div class="ed-head" data-sec="footer">
+          <div class="ed-title"><i class="fas fa-print"></i> Footer</div>
+          <i class="fas fa-chevron-down ed-chevron"></i>
+        </div>
+        <div class="ed-body">
+          <div class="f-row"><label>Tagline</label><input id="e-footerTagline" type="text"></div>
+          <div class="f-row"><label>Copyright</label><input id="e-footerCopy" type="text"></div>
+          <div class="f-row">
+            <label>Columns</label>
+            <div class="list-wrap" id="footerColumnsList"></div>
+            <button class="btn-add" id="addColumnBtn"><i class="fas fa-plus"></i> Add column</button>
+          </div>
+          <div class="f-row">
+            <label>Social links</label>
+            <div class="list-wrap" id="socialLinksList"></div>
+            <button class="btn-add" id="addSocialBtn"><i class="fas fa-plus"></i> Add social</button>
+          </div>
+          <div class="f-row">
+            <label>Legal links</label>
+            <div class="list-wrap" id="legalLinksList"></div>
+            <button class="btn-add" id="addLegalBtn"><i class="fas fa-plus"></i> Add legal link</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /editor-scroll -->
+  </div><!-- /editor-sidebar -->
+
+  <!-- PREVIEW PANE -->
+  <div class="preview-pane">
+    <div class="preview-toolbar">
+      <span class="pt-label"><i class="fas fa-eye"></i> Live preview</span>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-ghost" id="copy-btn"><i class="fas fa-copy"></i> Copy HTML</button>
+        <button class="btn-solid" id="export-btn"><i class="fas fa-download"></i> Export HTML</button>
+      </div>
+    </div>
+    <div class="preview-empty" id="preview-empty">
+      <i class="fas fa-display"></i>
+      <span>Your page will appear here</span>
+      <span class="pe-hint">Fill in the description above and hit Generate page</span>
+    </div>
+    <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin" title="Live preview" style="display:none;"></iframe>
+  </div>
+
+</div><!-- /app-body -->
+
+<!-- FOOTER -->
+<footer class="app-footer">
+  <a href="https://design.devtem.org/docs" target="_blank" rel="noreferrer"><i class="fas fa-book"></i> docs</a>
+  <span class="fsep">·</span>
+  <a href="https://www.npmjs.com/package/devtemdesign" target="_blank" rel="noreferrer"><i class="fab fa-npm"></i> npm</a>
+  <span class="fsep">·</span>
+  <a href="https://github.com/devtem-dev/devtemDesign" target="_blank" rel="noreferrer"><i class="fab fa-github"></i> GitHub</a>
+  <span class="fsep">·</span>
+  <a href="https://devtem.org" target="_blank" rel="noreferrer"><i class="fas fa-store"></i> DevTemple</a>
+  <span class="fsep">·</span>
+  <span style="color:var(--border)">MIT</span>
+</footer>
+
+<script src="/js/builder.js"></script>
+</body>
+</html>
