@@ -477,6 +477,11 @@ textarea:focus, input[type=text]:focus {
   height: 100%;
   min-height: 0;
 }
+@media (max-width: 900px){
+ .preview-pane{
+   min-height: 550px;
+ }
+}
 .preview-toolbar {
   padding: 10px 14px; 
   border-bottom: 1px solid var(--border);
