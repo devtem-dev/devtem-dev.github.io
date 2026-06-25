@@ -1,14 +1,17 @@
 (function () {
   'use strict';
 
-  // ── STATE ──────────────────────────────────────────────────────────
-  var cfg = null;
-  var pageType = 'landing';
-  var template = 'figsh';
-  // debounce timer for preview refresh
+  /* ── STATE ────────────────────────────────────────────────────── */
+  var cfg          = null;      // active config object
+  var activeId     = null;      // localStorage project id being edited (null = unsaved)
+  var pageType     = 'landing';
+  var template     = 'figsh';
   var previewTimer = null;
+  var wired        = false;     // simple inputs wired flag
 
-  // ── DOM ────────────────────────────────────────────────────────────
+  var LS_KEY = 'dtd_projects'; // localStorage key
+
+  /* ── DOM ──────────────────────────────────────────────────────── */
   var descEl         = document.getElementById('desc');
   var generateBtn    = document.getElementById('generate-btn');
   var errorBox       = document.getElementById('error-box');
@@ -17,10 +20,132 @@
   var previewEmpty   = document.getElementById('preview-empty');
   var editorScroll   = document.getElementById('editor-scroll');
   var sidebarPH      = document.getElementById('sidebar-placeholder');
+  var saveBtn        = document.getElementById('save-btn');
   var copyBtn        = document.getElementById('copy-btn');
   var exportBtn      = document.getElementById('export-btn');
 
-  // ── THEME ──────────────────────────────────────────────────────────
+  var projCount      = document.getElementById('proj-count');
+
+  var previewModal   = document.getElementById('preview-modal');
+  var modalTitle     = document.getElementById('modal-title');
+  var modalFrame     = document.getElementById('modal-frame');
+  var modalClose     = document.getElementById('modal-close');
+  var modalExport    = document.getElementById('modal-export-btn');
+
+  var saveDialog     = document.getElementById('save-dialog');
+  var saveNameInput  = document.getElementById('save-name-input');
+  var saveCancel     = document.getElementById('save-cancel');
+  var saveConfirm    = document.getElementById('save-confirm');
+
+  /* ── LOCALSTORAGE HELPERS ─────────────────────────────────────── */
+  function loadProjects() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }
+    catch (e) { return []; }
+  }
+  function saveProjects(arr) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch (e) {}
+  }
+  function uid() {
+    return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+  function fmt(ts) {
+    var d = new Date(ts);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
+           ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  }
+
+  /* ── PROJECTS UI ──────────────────────────────────────────────── */
+  function updateProjCount() {
+    var n = loadProjects().length;
+    projCount.textContent = n;
+  }
+
+  /* ── SAVE FLOW ────────────────────────────────────────────────── */
+  saveBtn.addEventListener('click', function () {
+    if (!cfg) return;
+    if (activeId) {
+      var list = loadProjects();
+      var p = list.find(function (x) { return x.id === activeId; });
+      if (p) {
+        p.config = JSON.parse(JSON.stringify(cfg));
+        p.updatedAt = Date.now();
+        saveProjects(list);
+        updateProjCount();
+        flashSaveBtn();
+        return;
+      }
+    }
+    saveNameInput.value = cfg.logoName || '';
+    saveDialog.classList.add('open');
+    saveNameInput.focus(); saveNameInput.select();
+  });
+
+  saveConfirm.addEventListener('click', function () {
+    var name = saveNameInput.value.trim();
+    if (!name) { saveNameInput.focus(); return; }
+    var list = loadProjects();
+    var id = uid();
+    list.push({ id: id, name: name, config: JSON.parse(JSON.stringify(cfg)), updatedAt: Date.now() });
+    saveProjects(list);
+    activeId = id;
+    // Update URL so subsequent saves know the ID without re-saving
+    window.history.replaceState(null, '', '?id=' + id);
+    saveDialog.classList.remove('open');
+    updateProjCount();
+    flashSaveBtn();
+  });
+
+  saveCancel.addEventListener('click', function () { saveDialog.classList.remove('open'); });
+  saveNameInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') saveConfirm.click();
+    if (e.key === 'Escape') saveDialog.classList.remove('open');
+  });
+
+  function flashSaveBtn() {
+    var orig = saveBtn.innerHTML;
+    saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+    saveBtn.style.borderColor = 'var(--success)'; saveBtn.style.color = 'var(--success)';
+    setTimeout(function () {
+      saveBtn.innerHTML = orig;
+      saveBtn.style.borderColor = ''; saveBtn.style.color = '';
+    }, 1800);
+  }
+
+  /* ── PREVIEW MODAL ────────────────────────────────────────────── */
+  function openPreviewModal(name, c) {
+    modalTitle.textContent = name || 'Preview';
+    modalFrame.srcdoc = buildHTML(c);
+    previewModal.classList.add('open');
+    // store config for export
+    modalFrame._cfg = c;
+  }
+  modalClose.addEventListener('click', function () {
+    previewModal.classList.remove('open');
+    modalFrame.srcdoc = '';
+  });
+  modalExport.addEventListener('click', function () {
+    var c = modalFrame._cfg;
+    if (!c) return;
+    var html = buildHTML(c);
+    var name = (c.logoName || 'page').toLowerCase().replace(/\s+/g, '-');
+    var blob = new Blob([html], { type: 'text/html' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name + '.html'; a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  // close modal on backdrop click
+  previewModal.addEventListener('click', function (e) {
+    if (e.target === previewModal) modalClose.click();
+  });
+  // ESC closes modal or dialog
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (previewModal.classList.contains('open')) modalClose.click();
+      if (saveDialog.classList.contains('open')) saveDialog.classList.remove('open');
+    }
+  });
+
+  /* ── THEME ────────────────────────────────────────────────────── */
   document.getElementById('btn-dark').addEventListener('click', function () {
     document.documentElement.removeAttribute('data-theme');
     document.getElementById('btn-dark').classList.add('active');
@@ -32,7 +157,7 @@
     document.getElementById('btn-dark').classList.remove('active');
   });
 
-  // ── TOGGLES ────────────────────────────────────────────────────────
+  /* ── TOGGLES ──────────────────────────────────────────────────── */
   document.querySelectorAll('.toggle-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       btn.closest('.toggle-group').querySelectorAll('.toggle-btn').forEach(function (b) { b.classList.remove('active'); });
@@ -48,26 +173,20 @@
       if (cfg) { cfg.template = template; schedulePreview(); }
     });
   });
-
   descEl.addEventListener('input', function () {
     generateBtn.disabled = descEl.value.trim().length < 10;
   });
 
-  // ── ACCORDION ──────────────────────────────────────────────────────
+  /* ── ACCORDION ────────────────────────────────────────────────── */
   document.querySelectorAll('.ed-head').forEach(function (head) {
-    head.addEventListener('click', function () {
-      var sec = head.closest('.ed-section');
-      sec.classList.toggle('open');
-    });
+    head.addEventListener('click', function () { head.closest('.ed-section').classList.toggle('open'); });
   });
 
-  // ── PREVIEW ────────────────────────────────────────────────────────
-  // Debounced so fast typing doesn't hammer the iframe
+  /* ── PREVIEW ──────────────────────────────────────────────────── */
   function schedulePreview() {
     clearTimeout(previewTimer);
-    previewTimer = setTimeout(doPreview, 300);
+    previewTimer = setTimeout(doPreview, 280);
   }
-
   function doPreview() {
     if (!cfg) return;
     previewFrame.srcdoc = buildHTML(cfg);
@@ -75,8 +194,7 @@
     previewFrame.style.display = 'block';
   }
 
-  // ── WIRE SIMPLE INPUTS ─────────────────────────────────────────────
-  // Called ONCE after generate. No re-wiring, no rebuilding.
+  /* ── WIRE SIMPLE INPUTS (once) ────────────────────────────────── */
   function wireSimpleInputs() {
     function w(id, path) {
       var el = document.getElementById(id);
@@ -109,13 +227,9 @@
     w('e-footerCopy',     'footer.copy');
   }
 
-  // ── SYNC VALUES INTO INPUTS ────────────────────────────────────────
-  // Only sets .value, does NOT re-wire.
+  /* ── SYNC VALUES INTO INPUTS ──────────────────────────────────── */
   function syncValues() {
-    function sv(id, val) {
-      var el = document.getElementById(id);
-      if (el) el.value = val || '';
-    }
+    function sv(id, val) { var el = document.getElementById(id); if (el) el.value = val || ''; }
     sv('e-logoName',       cfg.logoName);
     sv('e-logoUrl',        cfg.logo);
     sv('e-heroTag',        cfg.heroTag);
@@ -132,40 +246,31 @@
     sv('e-footerCopy',     cfg.footer && cfg.footer.copy);
   }
 
-  // ── HTML ESCAPE ────────────────────────────────────────────────────
+  /* ── HTML ESCAPE ──────────────────────────────────────────────── */
   function esc(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  // ── RENDER LISTS ───────────────────────────────────────────────────
-  // These rebuild dynamic list HTML. They are called after generate
-  // and after any add/remove action. Inputs inside fire schedulePreview.
-
+  /* ── RENDER LISTS ─────────────────────────────────────────────── */
   function renderBrands() {
     var el = document.getElementById('brandsList');
     if (!el || !cfg) return;
     el.innerHTML = (cfg.brands || []).map(function (b, i) {
-      return '<div class="list-item"><div class="li-fields"><input type="text" value="' + esc(b) + '" data-bi="' + i + '" placeholder="Brand"></div><button class="btn-rm" data-rb="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div>';
+      return '<div class="list-item"><div class="li-row"><input type="text" value="' + esc(b) + '" data-bi="' + i + '" placeholder="Brand"><button class="btn-rm" data-rb="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div></div>';
     }).join('');
-    el.querySelectorAll('[data-bi]').forEach(function (inp) {
-      inp.addEventListener('input', function () { cfg.brands[+inp.dataset.bi] = inp.value; schedulePreview(); });
-    });
-    el.querySelectorAll('[data-rb]').forEach(function (btn) {
-      btn.addEventListener('click', function () { cfg.brands.splice(+btn.dataset.rb, 1); renderBrands(); schedulePreview(); });
-    });
+    el.querySelectorAll('[data-bi]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.brands[+inp.dataset.bi] = inp.value; schedulePreview(); }); });
+    el.querySelectorAll('[data-rb]').forEach(function (btn) { btn.addEventListener('click', function () { cfg.brands.splice(+btn.dataset.rb, 1); renderBrands(); schedulePreview(); }); });
   }
 
   function renderFeatures() {
     var el = document.getElementById('featuresList');
     if (!el || !cfg) return;
     el.innerHTML = (cfg.features || []).map(function (f, i) {
-      return '<div class="list-item" style="flex-direction:column;align-items:stretch;gap:4px;">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-        '<span style="font-size:10px;color:var(--muted);text-transform:uppercase;">Card ' + (i+1) + '</span>' +
-        '<button class="btn-rm" data-rf="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div>' +
-        '<input type="text" value="' + esc(f.title) + '" data-ft="' + i + '" placeholder="Title">' +
-        '<input type="text" value="' + esc(f.desc) + '" data-fd="' + i + '" placeholder="Description">' +
-        '<input type="text" value="' + esc(f.icon) + '" data-fi="' + i + '" placeholder="Icon HTML e.g. &lt;i class=\'fas fa-star\'&gt;&lt;/i&gt;">' +
+      return '<div class="list-item">' +
+        '<div class="li-row"><span class="item-num">Card ' + (i+1) + '</span><button class="btn-rm" data-rf="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div>' +
+        '<div class="li-row"><input type="text" value="' + esc(f.title) + '" data-ft="' + i + '" placeholder="Title"></div>' +
+        '<div class="li-row"><input type="text" value="' + esc(f.desc)  + '" data-fd="' + i + '" placeholder="Description"></div>' +
+        '<div class="li-row"><input type="text" value="' + esc(f.icon)  + '" data-fi="' + i + '" placeholder="Icon HTML"></div>' +
         '</div>';
     }).join('');
     el.querySelectorAll('[data-ft]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.features[+inp.dataset.ft].title = inp.value; schedulePreview(); }); });
@@ -178,13 +283,11 @@
     var el = document.getElementById('panelsList');
     if (!el || !cfg) return;
     el.innerHTML = (cfg.panels || []).map(function (p, i) {
-      return '<div class="list-item" style="flex-direction:column;align-items:stretch;gap:4px;">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-        '<span style="font-size:10px;color:var(--muted);text-transform:uppercase;">Panel ' + (i+1) + '</span>' +
-        '<button class="btn-rm" data-rp="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div>' +
-        '<input type="text" value="' + esc(p.tag)   + '" data-ptag="' + i + '" placeholder="Tag">' +
-        '<input type="text" value="' + esc(p.title) + '" data-ptit="' + i + '" placeholder="Title">' +
-        '<input type="text" value="' + esc(p.desc)  + '" data-pds="'  + i + '" placeholder="Description">' +
+      return '<div class="list-item">' +
+        '<div class="li-row"><span class="item-num">Panel ' + (i+1) + '</span><button class="btn-rm" data-rp="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div>' +
+        '<div class="li-row"><input type="text" value="' + esc(p.tag)   + '" data-ptag="' + i + '" placeholder="Tag"></div>' +
+        '<div class="li-row"><input type="text" value="' + esc(p.title) + '" data-ptit="' + i + '" placeholder="Title"></div>' +
+        '<div class="li-row"><input type="text" value="' + esc(p.desc)  + '" data-pds="'  + i + '" placeholder="Description"></div>' +
         '</div>';
     }).join('');
     el.querySelectorAll('[data-ptag]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.panels[+inp.dataset.ptag].tag   = inp.value; schedulePreview(); }); });
@@ -198,83 +301,80 @@
     if (!el || !cfg || !cfg.footer) return;
     el.innerHTML = (cfg.footer.columns || []).map(function (col, ci) {
       var linksHtml = (col.links || []).map(function (lnk, li) {
-        return '<div class="fcol-link-row">' +
-          '<input type="text" value="' + esc(lnk.label) + '" data-fll="' + ci + '-' + li + '" placeholder="Label">' +
+        return '<div class="li-row">' +
+          '<input type="text" value="' + esc(lnk.label) + '" data-fll="' + ci + '-' + li + '" placeholder="Label" style="flex:1.1;">' +
           '<input type="text" value="' + esc(lnk.href)  + '" data-flh="' + ci + '-' + li + '" placeholder="URL">' +
           '<button class="btn-rm" data-rfl="' + ci + '-' + li + '" title="Remove link"><i class="fas fa-times"></i></button></div>';
       }).join('');
-      return '<div class="list-item" style="flex-direction:column;align-items:stretch;gap:5px;">' +
-        '<div style="display:flex;gap:5px;align-items:center;">' +
-        '<input type="text" value="' + esc(col.heading) + '" data-fch="' + ci + '" placeholder="Column heading" style="flex:1;">' +
+      return '<div class="list-item">' +
+        '<div class="li-row"><input type="text" value="' + esc(col.heading) + '" data-fch="' + ci + '" placeholder="Heading" style="flex:1;">' +
         '<button class="btn-rm" data-rfc="' + ci + '" title="Remove column"><i class="fas fa-times"></i></button></div>' +
         '<div class="fcol-links">' + linksHtml +
-        '<button class="btn-add" data-afl="' + ci + '" style="font-size:10px;padding:3px 8px;"><i class="fas fa-plus"></i> link</button>' +
-        '</div></div>';
+        '<button class="btn-add" data-afl="' + ci + '" style="font-size:10px;padding:3px 8px;"><i class="fas fa-plus"></i> link</button></div>' +
+        '</div>';
     }).join('');
     el.querySelectorAll('[data-fch]').forEach(function (inp)  { inp.addEventListener('input', function () { cfg.footer.columns[+inp.dataset.fch].heading = inp.value; schedulePreview(); }); });
-    el.querySelectorAll('[data-fll]').forEach(function (inp)  { inp.addEventListener('input', function () { var p = inp.dataset.fll.split('-'); cfg.footer.columns[+p[0]].links[+p[1]].label = inp.value; schedulePreview(); }); });
-    el.querySelectorAll('[data-flh]').forEach(function (inp)  { inp.addEventListener('input', function () { var p = inp.dataset.flh.split('-'); cfg.footer.columns[+p[0]].links[+p[1]].href  = inp.value; schedulePreview(); }); });
+    el.querySelectorAll('[data-fll]').forEach(function (inp)  { inp.addEventListener('input', function () { var p=inp.dataset.fll.split('-'); cfg.footer.columns[+p[0]].links[+p[1]].label = inp.value; schedulePreview(); }); });
+    el.querySelectorAll('[data-flh]').forEach(function (inp)  { inp.addEventListener('input', function () { var p=inp.dataset.flh.split('-'); cfg.footer.columns[+p[0]].links[+p[1]].href  = inp.value; schedulePreview(); }); });
     el.querySelectorAll('[data-rfc]').forEach(function (btn)  { btn.addEventListener('click', function () { cfg.footer.columns.splice(+btn.dataset.rfc, 1); renderFooterCols(); schedulePreview(); }); });
-    el.querySelectorAll('[data-rfl]').forEach(function (btn)  { btn.addEventListener('click', function () { var p = btn.dataset.rfl.split('-'); cfg.footer.columns[+p[0]].links.splice(+p[1], 1); renderFooterCols(); schedulePreview(); }); });
-    el.querySelectorAll('[data-afl]').forEach(function (btn)  { btn.addEventListener('click', function () { cfg.footer.columns[+btn.dataset.afl].links.push({ label: 'Link', href: '#' }); renderFooterCols(); schedulePreview(); }); });
+    el.querySelectorAll('[data-rfl]').forEach(function (btn)  { btn.addEventListener('click', function () { var p=btn.dataset.rfl.split('-'); cfg.footer.columns[+p[0]].links.splice(+p[1],1); renderFooterCols(); schedulePreview(); }); });
+    el.querySelectorAll('[data-afl]').forEach(function (btn)  { btn.addEventListener('click', function () { cfg.footer.columns[+btn.dataset.afl].links.push({label:'Link',href:'#'}); renderFooterCols(); schedulePreview(); }); });
   }
 
   function renderSocial() {
     var el = document.getElementById('socialLinksList');
     if (!el || !cfg || !cfg.footer) return;
     el.innerHTML = (cfg.footer.social || []).map(function (s, i) {
-      return '<div class="list-item"><div class="li-fields">' +
-        '<input type="text" value="' + esc(s.icon)  + '" data-si="'  + i + '" placeholder="fab fa-github" style="flex:.9;">' +
-        '<input type="text" value="' + esc(s.href)  + '" data-sh="'  + i + '" placeholder="URL">' +
-        '<input type="text" value="' + esc(s.label) + '" data-sl="'  + i + '" placeholder="Label">' +
-        '</div><button class="btn-rm" data-rs="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div>';
+      return '<div class="list-item"><div class="li-row">' +
+        '<input type="text" value="' + esc(s.icon)  + '" data-si="' + i + '" placeholder="fab fa-github" style="flex:.9;">' +
+        '<input type="text" value="' + esc(s.href)  + '" data-sh="' + i + '" placeholder="URL">' +
+        '<input type="text" value="' + esc(s.label) + '" data-sl="' + i + '" placeholder="Label">' +
+        '<button class="btn-rm" data-rs="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div></div>';
     }).join('');
     el.querySelectorAll('[data-si]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.footer.social[+inp.dataset.si].icon  = inp.value; schedulePreview(); }); });
     el.querySelectorAll('[data-sh]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.footer.social[+inp.dataset.sh].href  = inp.value; schedulePreview(); }); });
     el.querySelectorAll('[data-sl]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.footer.social[+inp.dataset.sl].label = inp.value; schedulePreview(); }); });
-    el.querySelectorAll('[data-rs]').forEach(function (btn) { btn.addEventListener('click', function () { cfg.footer.social.splice(+btn.dataset.rs, 1); renderSocial(); schedulePreview(); }); });
+    el.querySelectorAll('[data-rs]').forEach(function (btn) { btn.addEventListener('click', function () { cfg.footer.social.splice(+btn.dataset.rs,1); renderSocial(); schedulePreview(); }); });
   }
 
   function renderLegal() {
     var el = document.getElementById('legalLinksList');
     if (!el || !cfg || !cfg.footer) return;
     el.innerHTML = (cfg.footer.legal || []).map(function (l, i) {
-      return '<div class="list-item"><div class="li-fields">' +
+      return '<div class="list-item"><div class="li-row">' +
         '<input type="text" value="' + esc(l.label) + '" data-ll="' + i + '" placeholder="Label">' +
         '<input type="text" value="' + esc(l.href)  + '" data-lh="' + i + '" placeholder="URL">' +
-        '</div><button class="btn-rm" data-rl="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div>';
+        '<button class="btn-rm" data-rl="' + i + '" title="Remove"><i class="fas fa-times"></i></button></div></div>';
     }).join('');
     el.querySelectorAll('[data-ll]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.footer.legal[+inp.dataset.ll].label = inp.value; schedulePreview(); }); });
     el.querySelectorAll('[data-lh]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.footer.legal[+inp.dataset.lh].href  = inp.value; schedulePreview(); }); });
-    el.querySelectorAll('[data-rl]').forEach(function (btn) { btn.addEventListener('click', function () { cfg.footer.legal.splice(+btn.dataset.rl, 1); renderLegal(); schedulePreview(); }); });
+    el.querySelectorAll('[data-rl]').forEach(function (btn) { btn.addEventListener('click', function () { cfg.footer.legal.splice(+btn.dataset.rl,1); renderLegal(); schedulePreview(); }); });
   }
 
-  function renderAllLists() {
-    renderBrands(); renderFeatures(); renderPanels();
-    renderFooterCols(); renderSocial(); renderLegal();
-  }
+  function renderAllLists() { renderBrands(); renderFeatures(); renderPanels(); renderFooterCols(); renderSocial(); renderLegal(); }
 
-  // ── ADD BUTTONS ────────────────────────────────────────────────────
-  document.getElementById('addBrandBtn').addEventListener('click',  function () { if (!cfg) return; cfg.brands.push('New Brand'); renderBrands(); schedulePreview(); });
+  /* ── ADD BUTTONS ──────────────────────────────────────────────── */
+  document.getElementById('addBrandBtn').addEventListener('click',   function () { if (!cfg) return; cfg.brands.push('New Brand'); renderBrands(); schedulePreview(); });
   document.getElementById('addFeatureBtn').addEventListener('click', function () { if (!cfg) return; cfg.features.push({ title: 'New Feature', desc: 'Description', icon: "<i class='fas fa-star'></i>" }); renderFeatures(); schedulePreview(); });
   document.getElementById('addPanelBtn').addEventListener('click',   function () { if (!cfg) return; cfg.panels.push({ tag: 'New', title: 'Panel', desc: 'Description' }); renderPanels(); schedulePreview(); });
   document.getElementById('addColumnBtn').addEventListener('click',  function () { if (!cfg) return; cfg.footer.columns.push({ heading: 'Column', links: [{ label: 'Link', href: '#' }] }); renderFooterCols(); schedulePreview(); });
   document.getElementById('addSocialBtn').addEventListener('click',  function () { if (!cfg) return; cfg.footer.social.push({ icon: 'fab fa-github', href: '#', label: 'GitHub' }); renderSocial(); schedulePreview(); });
   document.getElementById('addLegalBtn').addEventListener('click',   function () { if (!cfg) return; cfg.footer.legal.push({ label: 'Legal', href: '#' }); renderLegal(); schedulePreview(); });
 
-  // ── OPEN EDITOR (called once after generate) ───────────────────────
-  var wired = false;
-  function openEditor() {
+  /* ── OPEN EDITOR ──────────────────────────────────────────────── */
+  function openEditor(fromLoad) {
     sidebarPH.style.display = 'none';
     editorScroll.style.display = 'flex';
+    saveBtn.style.display = 'flex';
     syncValues();
     renderAllLists();
-    if (!wired) { wireSimpleInputs(); wired = false; } // wire once
-    wired = true;
+    if (!wired) { wireSimpleInputs(); wired = true; }
     doPreview();
+    if (!fromLoad) { activeId = null; } // new generate clears saved link
+    updateProjCount();
   }
 
-  // ── CONFIG GENERATOR ──────────────────────────────────────────────
+  /* ── CONFIG GENERATOR ─────────────────────────────────────────── */
   function generateConfig(desc, tmpl, ptype) {
     var words = desc.split(/\s+/).filter(function (w) { return w.length > 2; });
     var brand = words.slice(0, 2).join(' ').toUpperCase() || 'STUDIO';
@@ -283,8 +383,7 @@
     var features, panels, brands, heroTag, heroLine1, heroLine2;
 
     if (lower.includes('design') || lower.includes('ui') || lower.includes('ux')) {
-      heroLine1 = 'Design'; heroLine2 = 'Driven';
-      heroTag = 'design · prototype · deliver';
+      heroLine1 = 'Design'; heroLine2 = 'Driven'; heroTag = 'design · prototype · deliver';
       brands = ['Figma', 'Adobe', 'Sketch', 'InVision', 'Zeplin', 'Miro'];
       features = [
         { title: 'UI/UX Design',   desc: 'Human-centered interfaces that delight.',  icon: "<i class='fas fa-pencil-ruler'></i>" },
@@ -300,8 +399,7 @@
         { tag: 'Deliver', title: 'Pixel-Perfect',   desc: 'Handoff ready for development.' }
       ];
     } else if (lower.includes('develop') || lower.includes('code') || lower.includes('software') || lower.includes('fullstack') || lower.includes('fscss') || lower.includes('devtemdesign')) {
-      heroLine1 = 'Build'; heroLine2 = 'the Future';
-      heroTag = 'code · build · ship';
+      heroLine1 = 'Build'; heroLine2 = 'the Future'; heroTag = 'code · build · ship';
       brands = ['React', 'Node', 'Python', 'Supabase', 'Netlify', 'AWS'];
       features = [
         { title: 'Web Development', desc: 'Fast, scalable apps with modern stacks.',  icon: "<i class='fas fa-code'></i>" },
@@ -317,8 +415,7 @@
         { tag: 'Quality', title: 'Code Review',   desc: 'Peer reviews and best practices.' }
       ];
     } else if (lower.includes('market') || lower.includes('brand') || lower.includes('content')) {
-      heroLine1 = 'Amplify'; heroLine2 = 'Your Message';
-      heroTag = 'market · engage · convert';
+      heroLine1 = 'Amplify'; heroLine2 = 'Your Message'; heroTag = 'market · engage · convert';
       brands = ['Google', 'Meta', 'HubSpot', 'Mailchimp', 'SEMrush', 'Ahrefs'];
       features = [
         { title: 'Content Strategy', desc: 'Engage your audience with compelling stories.', icon: "<i class='fas fa-newspaper'></i>" },
@@ -334,16 +431,15 @@
         { tag: 'Analytics', title: 'Measurement',        desc: 'Track and optimise every campaign.' }
       ];
     } else {
-      heroLine1 = 'Shape'; heroLine2 = 'Tomorrow';
-      heroTag = 'vision · impact · excellence';
+      heroLine1 = 'Shape'; heroLine2 = 'Tomorrow'; heroTag = 'vision · impact · excellence';
       brands = ['Google', 'Microsoft', 'Amazon', 'Apple', 'Meta', 'Netflix'];
       features = [
-        { title: 'Strategy',      desc: 'Define clear goals and roadmaps.',         icon: "<i class='fas fa-chess'></i>" },
-        { title: 'Execution',     desc: 'Turn ideas into reality with precision.',   icon: "<i class='fas fa-cogs'></i>" },
-        { title: 'Innovation',    desc: 'Stay ahead with creative solutions.',       icon: "<i class='fas fa-lightbulb'></i>" },
-        { title: 'Collaboration', desc: 'Work closely with your team.',              icon: "<i class='fas fa-users'></i>" },
-        { title: 'Growth',        desc: 'Scale your impact sustainably.',            icon: "<i class='fas fa-arrow-up'></i>" },
-        { title: 'Support',       desc: 'Ongoing guidance and partnership.',         icon: "<i class='fas fa-handshake'></i>" }
+        { title: 'Strategy',      desc: 'Define clear goals and roadmaps.',        icon: "<i class='fas fa-chess'></i>" },
+        { title: 'Execution',     desc: 'Turn ideas into reality with precision.',  icon: "<i class='fas fa-cogs'></i>" },
+        { title: 'Innovation',    desc: 'Stay ahead with creative solutions.',      icon: "<i class='fas fa-lightbulb'></i>" },
+        { title: 'Collaboration', desc: 'Work closely with your team.',             icon: "<i class='fas fa-users'></i>" },
+        { title: 'Growth',        desc: 'Scale your impact sustainably.',           icon: "<i class='fas fa-arrow-up'></i>" },
+        { title: 'Support',       desc: 'Ongoing guidance and partnership.',        icon: "<i class='fas fa-handshake'></i>" }
       ];
       panels = [
         { tag: 'Approach', title: 'Holistic',  desc: 'We consider the whole picture.' },
@@ -351,52 +447,33 @@
         { tag: 'Vision',   title: 'Long-term', desc: 'Building for lasting success.' }
       ];
     }
-
     return {
-      template: tmpl,
-      logo: 'https://fscss.devtem.org/assets/images/fscss.png',
-      logoName: brand,
-      navLinks: [
-        { label: 'Work', href: '#work' }, { label: 'Services', href: '#services' },
-        { label: 'About', href: '#about' }, { label: 'Contact', href: '#contact' }
-      ],
-      ctaText: 'Get started',
-      heroTag: heroTag,
-      heroTitleLine1: heroLine1,
-      heroTitleLine2: heroLine2,
-      heroSubtitle: short,
-      primaryBtnText: 'Learn more',
-      secondaryBtnText: 'Contact us',
-      brands: brands,
-      brandsSubtitle: 'technologies & platforms I work with daily',
-      featuresSectionLabel: 'capabilities',
-      featuresSectionTitle: 'What we do',
-      features: features,
-      panels: panels,
+      template: tmpl, logo: 'https://fscss.devtem.org/assets/images/fscss.png', logoName: brand,
+      navLinks: [{ label: 'Work', href: '#work' }, { label: 'Services', href: '#services' }, { label: 'About', href: '#about' }, { label: 'Contact', href: '#contact' }],
+      ctaText: 'Get started', heroTag: heroTag, heroTitleLine1: heroLine1, heroTitleLine2: heroLine2,
+      heroSubtitle: short, primaryBtnText: 'Learn more', secondaryBtnText: 'Contact us',
+      brands: brands, brandsSubtitle: 'technologies & platforms I work with daily',
+      featuresSectionLabel: 'capabilities', featuresSectionTitle: 'What we do',
+      features: features, panels: panels,
       footer: {
-        tagline: 'Built with devtemDesign.',
-        copy: '© 2026 ' + brand + '. MIT License.',
+        tagline: 'Built with devtemDesign.', copy: '© 2026 ' + brand + '. MIT License.',
         columns: [
           { heading: 'Product',   links: [{ label: 'Features', href: '#' }, { label: 'Pricing', href: '#' }, { label: 'Docs', href: '#' }] },
           { heading: 'Company',   links: [{ label: 'About', href: '#' }, { label: 'Blog', href: '#' }, { label: 'Careers', href: '#' }] },
           { heading: 'Resources', links: [{ label: 'GitHub', href: '#' }, { label: 'DevTemple', href: 'https://devtem.org' }, { label: 'LinkedIn', href: '#' }] }
         ],
-        social: [
-          { icon: 'fab fa-github',   href: '#', label: 'GitHub' },
-          { icon: 'fab fa-twitter',  href: '#', label: 'Twitter' },
-          { icon: 'fab fa-linkedin', href: '#', label: 'LinkedIn' }
-        ],
+        social: [{ icon: 'fab fa-github', href: '#', label: 'GitHub' }, { icon: 'fab fa-twitter', href: '#', label: 'Twitter' }, { icon: 'fab fa-linkedin', href: '#', label: 'LinkedIn' }],
         legal: [{ label: 'Privacy', href: '#' }, { label: 'Terms', href: '#' }]
       }
     };
   }
 
-  // ── BUILD HTML ─────────────────────────────────────────────────────
+  /* ── BUILD HTML ───────────────────────────────────────────────── */
   function buildHTML(c) {
     return '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>' + (c.logoName || 'devtem') + '</title>\n  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">\n  <script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>\n</head>\n<body>\n  <div id="app"></div>\n  <script>devtemDesign("app", ' + JSON.stringify(c, null, 2) + ');<\/script>\n</body>\n</html>';
   }
 
-  // ── GENERATE ───────────────────────────────────────────────────────
+  /* ── GENERATE ─────────────────────────────────────────────────── */
   generateBtn.addEventListener('click', function () {
     var desc = descEl.value.trim();
     if (!desc) return;
@@ -406,7 +483,7 @@
     setTimeout(function () {
       try {
         cfg = generateConfig(desc, template, pageType);
-        openEditor();
+        openEditor(false);
         generateBtn.innerHTML = '<i class="fas fa-rotate"></i> Regenerate';
         generateBtn.disabled = false;
       } catch (err) {
@@ -419,22 +496,20 @@
     }, 400);
   });
 
-  // ── COPY ───────────────────────────────────────────────────────────
+  /* ── COPY ─────────────────────────────────────────────────────── */
   copyBtn.addEventListener('click', function () {
     if (!cfg) return;
     var html = buildHTML(cfg);
     navigator.clipboard.writeText(html).then(function () {
-      copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-      copyBtn.classList.add('ok');
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!'; copyBtn.classList.add('ok');
       setTimeout(function () { copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy HTML'; copyBtn.classList.remove('ok'); }, 2000);
     }).catch(function () {
-      var ta = document.createElement('textarea');
-      ta.value = html; document.body.appendChild(ta); ta.select();
-      document.execCommand('copy'); ta.remove();
+      var ta = document.createElement('textarea'); ta.value = html;
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
     });
   });
 
-  // ── EXPORT ─────────────────────────────────────────────────────────
+  /* ── EXPORT ───────────────────────────────────────────────────── */
   exportBtn.addEventListener('click', function () {
     if (!cfg) return;
     var html = buildHTML(cfg);
@@ -444,5 +519,31 @@
     a.href = URL.createObjectURL(blob); a.download = name + '.html'; a.click();
     URL.revokeObjectURL(a.href);
   });
+
+  /* ── INIT: URL PARAM LOAD ─────────────────────────────────────── */
+  (function () {
+    updateProjCount();
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('id');
+    if (!id) return;
+    var list = loadProjects();
+    var p = list.find(function (x) { return x.id === id; });
+    if (!p) return;
+    // Load the project into editor
+    activeId = p.id;
+    cfg = JSON.parse(JSON.stringify(p.config));
+    template = cfg.template || 'figsh';
+    // Sync template buttons
+    document.querySelectorAll('.tpl-btn').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.tpl === template);
+    });
+    // Update generate btn label
+    generateBtn.innerHTML = '<i class="fas fa-rotate"></i> Regenerate';
+    generateBtn.disabled = false;
+    // Open editor
+    openEditor(true);
+    // Update browser title
+    document.title = 'Editing: ' + p.name + ' · devtemDesign';
+  }());
 
 })();
