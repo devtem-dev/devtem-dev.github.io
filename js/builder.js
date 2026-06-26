@@ -252,6 +252,34 @@
   }
 
   /* ── RENDER LISTS ─────────────────────────────────────────────── */
+  function renderNavLinks() {
+  var el = document.getElementById('navLinksList');
+  if (!el || !cfg) return;
+  el.innerHTML = (cfg.navLinks || []).map(function (lnk, i) {
+    return '<div class="list-item"><div class="li-row">' +
+      '<input type="text" value="' + esc(lnk.label) + '" data-nll="' + i + '" placeholder="Label">' +
+      '<input type="text" value="' + esc(lnk.href)  + '" data-nlh="' + i + '" placeholder="#section">' +
+      '<button class="btn-rm" data-rnl="' + i + '" title="Remove"><i class="fas fa-times"></i></button>' +
+      '</div></div>';
+  }).join('');
+  el.querySelectorAll('[data-nll]').forEach(function (inp) {
+    inp.addEventListener('input', function () { cfg.navLinks[+inp.dataset.nll].label = inp.value; schedulePreview(); });
+  });
+  el.querySelectorAll('[data-nlh]').forEach(function (inp) {
+    inp.addEventListener('input', function () { cfg.navLinks[+inp.dataset.nlh].href = inp.value; schedulePreview(); });
+  });
+  el.querySelectorAll('[data-rnl]').forEach(function (btn) {
+    btn.addEventListener('click', function () { cfg.navLinks.splice(+btn.dataset.rnl, 1); renderNavLinks(); schedulePreview(); });
+  });
+}
+  
+  document.getElementById('addNavLinkBtn').addEventListener('click', function () {
+  if (!cfg) return;
+  cfg.navLinks.push({ label: 'New link', href: '#' });
+  renderNavLinks();
+  schedulePreview();
+});
+
   function renderBrands() {
     var el = document.getElementById('brandsList');
     if (!el || !cfg) return;
@@ -273,6 +301,7 @@
         '<div class="li-row"><input type="text" value="' + esc(f.icon)  + '" data-fi="' + i + '" placeholder="Icon HTML"></div>' +
         '</div>';
     }).join('');
+    
     el.querySelectorAll('[data-ft]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.features[+inp.dataset.ft].title = inp.value; schedulePreview(); }); });
     el.querySelectorAll('[data-fd]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.features[+inp.dataset.fd].desc  = inp.value; schedulePreview(); }); });
     el.querySelectorAll('[data-fi]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.features[+inp.dataset.fi].icon  = inp.value; schedulePreview(); }); });
@@ -351,7 +380,17 @@
     el.querySelectorAll('[data-rl]').forEach(function (btn) { btn.addEventListener('click', function () { cfg.footer.legal.splice(+btn.dataset.rl,1); renderLegal(); schedulePreview(); }); });
   }
 
-  function renderAllLists() { renderBrands(); renderFeatures(); renderPanels(); renderFooterCols(); renderSocial(); renderLegal(); }
+
+
+  function renderAllLists() {
+  renderNavLinks(); // added
+  renderBrands();
+  renderFeatures();
+  renderPanels();
+  renderFooterCols();
+  renderSocial();
+  renderLegal();
+}
 
   /* ── ADD BUTTONS ──────────────────────────────────────────────── */
   document.getElementById('addBrandBtn').addEventListener('click',   function () { if (!cfg) return; cfg.brands.push('New Brand'); renderBrands(); schedulePreview(); });
