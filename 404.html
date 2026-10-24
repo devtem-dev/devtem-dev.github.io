@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>404 · devtemDesign</title>
   <meta name="description" content="Page not found — but the engine still runs.">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/style.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/script.min.js"></script>
 
   <style>
     /* ── TEMPLATE SWITCHER ─────────────────────────────────────── */
@@ -54,14 +54,15 @@
     /* ── 404 HERO OVERRIDE ─────────────────────────────────────── */
 
     /* Collapse the engine's default hero content to near-zero */
-    .hero-tag,
+    .hero-badge,
     .hero-title,
     .hero-sub,
-    .hero-buttons,
-    .hero-inline-brands,
-    .features,
-    .panels-section,
-    .marquee-section { display: none !important; }
+    .hero-actions,
+    .hero-brands,
+    .features-grid,
+    .panels-grid,
+    .marquee-section,
+    .section:not(.cta-sec) { display: none !important; }
 
     .hero {
       min-height: 100vh;
@@ -284,15 +285,15 @@ const BASE_CONFIG = {
   logoName: "DEVTEM",
   logo: "https://fscss.devtem.org/assets/images/fscss.png",
   navLinks: [
-    { label: "Docs",       href: "/docs"    },
-    { label: "Sandbox",    href: "/sandbox" },
-    { label: "Schema API", href: "/api"     },
-    { label: "npm Package",href: "https://www.npmjs.com/package/devtemdesign" }, 
-    { label: "templates", href: "https://devtem.org/home?q=@devtemDesign"}
-  ],
-  ctaText: "CDN →",
+  { label: "Docs", href: "/docs" },
+  { label: "Sandbox", href: "/sandbox" },
+  { label: "Schema API", href: "/api" },
+  { label: "npm Package", href: "https://www.npmjs.com/package/devtemdesign" },
+  { label: "templates", href: "https://devtem.org/s?s=@devtemDesign" }
+],
+  ctaText: "CDN",
   // Hero content hidden via CSS; these just prevent engine defaults showing through
-  heroTag:         "404",
+  heroBadge:       "404",
   heroTitleLine1:  "",
   heroTitleLine2:  "",
   heroSubtitle:    "",
@@ -342,13 +343,13 @@ const BASE_CONFIG = {
       { label: "Terms of Use",   href: "/terms"   },
       { label: "License (MIT)",  href: "/license" }
     ],
-    copy: `© ${new Date().getFullYear()} Figsh Digital · devtemDesign is open source`
+    copy: `© ${new Date().getFullYear()} Figsh / DevTemple · devtemDesign is open source`
   }
 };
 
 const CDN_SNIPPET =
-  `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">\n` +
-  `<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>`;
+  `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/style.min.css">\n` +
+  `<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/script.min.js"><\/script>`;
 
 // ── RENDER ───────────────────────────────────────────────────────
 function render(template) {
@@ -399,9 +400,9 @@ function inject404Block() {
 
   hero.appendChild(block);
 
-  document.querySelector(".nav-logo").onclick = () =>{
-    location.href = "/";
-  }
+document.querySelector(".nav-logo").onclick = () => {
+  location.href = "/";
+}
   // Copy CDN button
   document.getElementById('copyCdnBtn').addEventListener('click', function() {
     navigator.clipboard.writeText(CDN_SNIPPET).then(() => {
@@ -426,6 +427,7 @@ function bindCTAHandlers() {
     });
   }
 }
+
 
 // ── TEMPLATE SWITCHER ────────────────────────────────────────────
 function setActiveBtn(template) {
@@ -461,4 +463,3 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
-
