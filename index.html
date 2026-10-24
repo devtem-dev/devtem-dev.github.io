@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>devtemDesign.js | Build Animated Landing Pages & Websites with JavaScript</title><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="description" content="Build stunning landing pages, portfolios, SaaS websites, documentation sites, and marketing pages with devtemDesign.js. Generate beautiful animated interfaces from a single configuration object."><meta name="keywords" content="devtemDesign, landing page builder, animated website framework, JavaScript UI framework, portfolio website builder, website generator, frontend framework, glassmorphism UI, SaaS website template, JavaScript website builder, web design framework, responsive website generator, DevTemple"><meta name="author" content="DevTemple">
+<head>
+<title>devtemDesign.js | Build Animated Landing Pages & Websites with JavaScript</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Build stunning landing pages, portfolios, SaaS websites, documentation sites, and marketing pages with devtemDesign.js. Generate beautiful animated interfaces from a single configuration object.">
+<meta name="keywords" content="devtemDesign, landing page builder, animated website framework, JavaScript UI framework, portfolio website builder, website generator, frontend framework, glassmorphism UI, SaaS website template, JavaScript website builder, web design framework, responsive website generator, DevTemple">
+<meta name="author" content="DevTemple">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="theme-color" content="#00ffff"><link rel="canonical" href="https://design.devtem.org/"><meta name="application-name" content="devtemDesign">
+<meta name="theme-color" content="#01000c">
+<link rel="canonical" href="https://design.devtem.org/">
+<meta name="application-name" content="devtemDesign">
 <meta name="apple-mobile-web-app-title" content="devtemDesign">
-<meta name="apple-mobile-web-app-capable" content="yes"><!-- Open Graph --><meta property="og:type" content="website">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
 <meta property="og:site_name" content="devtemDesign">
 <meta property="og:title" content="devtemDesign.js | Animated Website Framework">
 <meta property="og:description" content="Create landing pages, portfolios, SaaS websites, and documentation sites from a single configuration object.">
@@ -14,11 +23,18 @@
 <meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="devtemDesign Website Builder and UI Framework"><!-- Twitter --><meta name="twitter:card" content="summary_large_image">
+<meta property="og:image:alt" content="devtemDesign Website Builder and UI Framework">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="devtemDesign.js | Animated Website Framework">
 <meta name="twitter:description" content="Build landing pages, portfolios, SaaS websites, and modern web experiences with a single configuration object.">
-<meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg"><meta name="googlebot" content="index,follow"><link rel="icon" href="https://design.devtem.org/assets/images/logo.png">
-<link rel="apple-touch-icon" href="https://design.devtem.org/assets/images/logo.png"><script type="application/ld+json">
+<meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg">
+<meta name="googlebot" content="index,follow">
+<link rel="icon" href="https://design.devtem.org/assets/images/logo.png">
+<link rel="apple-touch-icon" href="https://design.devtem.org/assets/images/logo.png">
+
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -28,325 +44,205 @@
   "url": "https://design.devtem.org/",
   "image": "https://design.devtem.org/assets/images/og.jpg",
   "description": "JavaScript framework for building animated landing pages, portfolios, SaaS websites, and documentation sites from a single configuration object.",
-  "author": {
-    "@type": "Organization",
-    "name": "DevTemple"
-  },
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  }
+  "author": { "@type": "Organization", "name": "DevTemple" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 }
 </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">
-<script src="//cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"></script>
-  <style>
-    /* Template switcher additional styles */
-    .template-switcher {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9997;
-      display: flex;
-      gap: 12px;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(16px);
-      padding: 10px 20px;
-      border-radius: 60px;
-      border: 1px solid rgba(255,255,255,0.15);
-      font-family: monospace;
-      font-size: 0.75rem;
-    }
-    .template-btn {
-      background: transparent;
-      border: none;
-      color: var(--muted, #aaa);
-      padding: 6px 14px;
-      border-radius: 40px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.05em;
-    }
-    .template-btn:hover {
-      background: rgba(255,255,255,0.1);
-      color: white;
-    }
-    .template-btn.active {
-      background: var(--accent, #0ff);
-      color: #000;
-      font-weight: bold;
-    }
-    @media (max-width: 680px) {
-      .template-switcher { bottom: 16px; right: 16px; padding: 6px 12px; gap: 6px; }
-      .template-btn { padding: 4px 10px; font-size: 0.6rem; }
-    }
-    .toast-notification {
-      position: fixed;
-      bottom: 100px;
-      right: 24px;
-      background: var(--accent);
-      color: #000;
-      padding: 10px 20px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      z-index: 9999;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-      pointer-events: none;
-      font-family: monospace;
-    }
-    .toast-notification.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/style.min.css">
+<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/script.min.js"></script>
+
+<style>
+  /* Template switcher: follows the active theme tokens */
+  .template-switcher {
+    position: fixed; bottom: 16px; left: 16px; z-index: 95;
+    max-width: calc(100vw - 92px);
+    display: flex; align-items: center; gap: 4px; padding: 6px 10px;
+    border-radius: 60px; border: 1px solid var(--glass-border);
+    background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    font-family: monospace; overflow-x: auto; scrollbar-width: none;
+  }
+  .template-switcher::-webkit-scrollbar { display: none; }
+  .template-switcher .ico { color: var(--muted); margin: 0 6px 0 2px; flex: none; }
+  .template-btn {
+    flex: none; padding: 6px 12px; border-radius: 40px;
+    color: var(--muted); font-family: monospace; font-size: 0.7rem; letter-spacing: 0.05em;
+    transition: background 0.2s, color 0.2s;
+  }
+  .template-btn:hover { background: var(--surface); color: var(--text); }
+  .template-btn.active { background: var(--accent); color: var(--bg-deep); font-weight: 700; }
+
+  .toast-notification {
+    position: fixed; bottom: 72px; left: 16px; z-index: 9999;
+    background: var(--accent); color: var(--bg-deep);
+    padding: 10px 20px; border-radius: 40px; font: 600 0.8rem monospace;
+    opacity: 0; transform: translateY(20px); transition: all 0.3s ease; pointer-events: none;
+  }
+  .toast-notification.show { opacity: 1; transform: none; }
+
+  @media (max-width: 680px) {
+    .template-switcher { bottom: 14px; left: 14px; padding: 4px 8px; }
+    .template-btn { padding: 5px 10px; font-size: 0.62rem; }
+    .toast-notification { bottom: 64px; left: 14px; }
+  }
+</style>
 </head>
 <body>
 
 <div id="app-root"></div>
-<div class="template-switcher">
-  <span style="color: #888; margin-right: 4px;"><i class="fas fa-palette"></i></span>
-  <button class="template-btn" data-template="figsh">FIGSH</button>
-  <button class="template-btn" data-template="cyber">CYBER</button>
-  <button class="template-btn" data-template="aurora">AURORA</button>
-  <button class="template-btn" data-template="monochrome">MONO</button>
+
+<div class="template-switcher" id="template-switcher" role="group" aria-label="Template switcher">
+  <span class="ico" aria-hidden="true"><i class="fas fa-palette"></i></span>
 </div>
-<div id="toast" class="toast-notification">✓ Copied to clipboard</div>
+<div id="toast" class="toast-notification" role="status" aria-live="polite">✓ Copied to clipboard</div>
 
 <script>
-// Current config storage
-let currentConfig = {
+const CDN_CSS = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/style.min.css">';
+const CDN_JS  = '<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/script.min.js"><\/script>';
+
+const config = {
   template: "cyber",
-  logo: "https://fscss.devtem.org/assets/images/fscss.png", 
-  
+  logo: "https://fscss.devtem.org/assets/images/fscss.png",
   logoName: "DEVTEM",
   navLinks: [
-    { label: "Docs",       href: "/docs"    },
-    { label: "Sandbox",    href: "/sandbox" },
-    { label: "Schema API", href: "/api"     },
-    { label: "npm Package",href: "https://www.npmjs.com/package/devtemdesign" }, 
-    { label: "templates", href: "https://devtem.org/home?q=@devtemDesign"}
+    { label: "Docs",        href: "/docs" },
+    { label: "Sandbox",     href: "/sandbox" },
+    { label: "Schema API",  href: "/api" },
+    { label: "npm Package", href: "https://www.npmjs.com/package/devtemdesign" },
+    { label: "Templates",   href: "https://devtem.org/home?q=@devtemDesign" }
   ],
-  ctaText: "CDN →",
-  
-  heroTag: "Core Framework Alpha // devtemdesign@0.0.2",
+  ctaText: "CDN",
+
+  heroBadge: "Core Framework // devtemdesign@0.1.0",
   heroTitleLine1: "Declarative UI,",
   heroTitleLine2: "Zero-Config Motion",
-  heroSubtitle: "One configuration schema. Infinite animated synthesis. Stop building standard UI boilerplate- let the engine paint the viewport.",
-  
+  heroSubtitle: "One configuration schema. Infinite animated synthesis. Stop building standard UI boilerplate. Let the engine paint the viewport.",
   primaryBtnText: "Try Without Code",
+  primaryBtnHref: "/builder",
   secondaryBtnText: "Copy CDN",
-  
+  secondaryBtnHref: "#",
+
+  brands: ["NPM", "FSCSS", "DEVTEMPLE", "ESBUILD", "CSS3", "HTML5", "WEBGL"],
   brandsSubtitle: "Engine Architecture Utilities & Dependencies",
-  footerCopy: "© 2026 Figsh Digital. All rights reserved.",
+
+  featuresLabel: "<i class='fas fa-code-branch'></i> CORE ENGINE MECHANICS",
+  featuresTitle: "Pass raw structural data. The canvas resolves itself dynamically.",
+  features: [
+    {
+      title: "Deterministic Engine Schema",
+      desc: "Strict object parsing transforms simple titles, tags, and matrices into hardware-accelerated layouts without HTML creation workflows.",
+      icon: "<i class='fas fa-cube'></i>"
+    },
+    {
+      title: "Ambient Micro-Interactions",
+      desc: "Integrated magnet-ring cursor, click ripples, card spotlight, and scroll reveal ship bundled out of the box.",
+      icon: "<i class='fas fa-magic'></i>"
+    },
+    {
+      title: "Adaptive Theme Synthesis",
+      desc: "Switch between 7 templates at runtime. The engine morphs tokens across glass layers, backdrops, and neon accents.",
+      icon: "<i class='fas fa-palette'></i>"
+    }
+  ],
+
+  panels: [
+    {
+      tag: "FRAMEWORK API",
+      title: "devtemDesign(container, config)",
+      desc: "The entire UI initialized through a single handler. It returns setTemplate() and destroy() for runtime control."
+    },
+    {
+      tag: "PERFORMANCE LAYER",
+      title: "Passive Inertia Transforms",
+      desc: "No bulky execution bundles. Native Intersection Observers decouple scrolling routines from render cycles."
+    }
+  ],
 
   footer: {
     tagline: "Declarative UI engine for the modern web. Zero config. Full motion.",
     columns: [
-      {
-        heading: "Product",
-        links: [
-          { label: "Documentation", href: "/docs"    },
-          { label: "Sandbox",       href: "/sandbox" },
-          { label: "Schema API",    href: "/api"     },
-          { label: "Changelog",     href: "https://github.com/devtem-dev/devtemDesign" }
-        ]
-      },
-      {
-        heading: "Resources",
-        links: [
-          { label: "npm Package",   href: "https://www.npmjs.com/package/devtemdesign" },
-          { label: "GitHub",        href: "https://github.com/devtem-dev" },
-          { label: "DevTemple",     href: "https://devtem.org/home?q=@devtemDesign"       },
-          { label: "FSCSS Engine",  href: "https://fscss.devtem.org" }
-        ]
-      },
-      {
-        heading: "Company",
-        links: [
-          { label: "About DevTemple",   href: "https://devtem.org"   },
-          { label: "Templates",          href: "https://devtem.org/home?q=@devtemDesign"    },
-          { label: "Subscribe",       href: "https://devtem.org/s?s=@devtemDesign" }
-        ]
-      }
+      { heading: "Product", links: [
+        { label: "Documentation", href: "/docs" },
+        { label: "Sandbox",       href: "/sandbox" },
+        { label: "Schema API",    href: "/api" },
+        { label: "Changelog",     href: "https://github.com/devtem-dev/devtemDesign" }
+      ]},
+      { heading: "Resources", links: [
+        { label: "npm Package",  href: "https://www.npmjs.com/package/devtemdesign" },
+        { label: "GitHub",       href: "https://github.com/devtem-dev" },
+        { label: "DevTemple",    href: "https://devtem.org/home?q=@devtemDesign" },
+        { label: "FSCSS Engine", href: "https://fscss.devtem.org" }
+      ]},
+      { heading: "Company", links: [
+        { label: "About DevTemple", href: "https://devtem.org" },
+        { label: "Templates",       href: "https://devtem.org/home?q=@devtemDesign" },
+        { label: "Subscribe",       href: "https://devtem.org/s?s=@devtemDesign" }
+      ]}
     ],
     social: [
-      { icon: "fab fa-github",   href: "https://github.com/devtem-dev/devtemDesign",       label: "GitHub"   },
-      { icon: "fab fa-twitter",  href: "https://twitter.com/fscss_ttr",  label: "Twitter"  },
-      { icon: "fab fa-npm",      href: "https://npmjs.com/package/devtemdesign", label: "npm" },
-      { icon: "fab fa-dev",      href: "https://dev.to/fscss",       label: "DEV"      }
+      { icon: "fab fa-github",  href: "https://github.com/devtem-dev/devtemDesign", label: "GitHub" },
+      { icon: "fab fa-twitter", href: "https://twitter.com/fscss_ttr", label: "Twitter" },
+      { icon: "fab fa-npm",     href: "https://npmjs.com/package/devtemdesign", label: "npm" },
+      { icon: "fab fa-dev",     href: "https://dev.to/fscss", label: "DEV" }
     ],
     legal: [
       { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Use",   href: "/terms"   },
+      { label: "Terms of Use",   href: "/terms" },
       { label: "License (MIT)",  href: "/license" }
     ],
-    copy: `© ${new Date().getFullYear()} Figsh Digital · devtemDesign is open source`
-  },
-  brands: ["NPM", "FSCSS", "DEVTEMPLE", "ESBUILD", "CSS3", "HTML5", "WEBGL"],
-  
-  featuresSectionLabel: "<i class='fas fa-code-branch'></i> CORE ENGINE MECHANICS",
-  featuresSectionTitle: "Pass raw structural data. The canvas resolves itself dynamically.",
-  
-  features: [
-    { 
-      title: "Deterministic Engine Schema", 
-      desc: "Strict object parsing map transforms simple titles, tags, and matrices into hardware-accelerated layouts without HTML creation workflows.", 
-      icon: "<i class='fas fa-cube'></i>" 
-    },
-    { 
-      title: "Ambient Micro-Interactions", 
-      desc: "Integrated magnet-ring cursor captures, fluid DOM reactive parallax, and canvas physics triggers ship bundled out-of-the-box.", 
-      icon: "<i class='fas fa-magic'></i>" 
-    },
-    { 
-      title: "Adaptive Theme Synthesis", 
-      desc: "Switch between tokens dynamically. The runtime morphs variables across glassmorphic layers, backdrops, and active neon elements.", 
-      icon: "<i class='fas fa-palette'></i>" 
-    }
-  ],
-  
-  panels: [
-    { 
-      tag: "FRAMEWORK API", 
-      title: "devtemDesign(container, config)", 
-      desc: "The entire UI ecosystem initialized directly through a singular operational handler. Complete layout decoupling." 
-    },
-    { 
-      tag: "PERFORMANCE LAYER", 
-      title: "Passive Inertia Transforms", 
-      desc: "No bulky execution bundles. Native multi-threaded Intersection Observers decouple scrolling routines from render cycles." 
-    }
-  ]
+    copy: `© ${new Date().getFullYear()} Figsh / DevTemple · devtemDesign is open source`
+  }
 };
 
-// Function to re-render the page with new template
-function renderWithTemplate(templateName) {
-  currentConfig.template = templateName;
-  
-  // Re-call the engine with updated config
-  if (typeof devtemDesign === 'function') {
-    devtemDesign("app-root", currentConfig);
-    
-    // Re-attach event listeners after re-render
-    setTimeout(() => {
-      attachButtonHandlers();
-      highlightActiveTemplate(templateName);
-    }, 100);
-  } else {
-    console.warn("devtemDesign engine not loaded yet");
+/* ---------- render once; theme changes use setTemplate (no re-render) ---------- */
+const page = devtemDesign("app-root", config);
+
+/* ---------- template switcher, built from the engine's own list ---------- */
+const bar = document.getElementById("template-switcher");
+const LABELS = { monochrome: "MONO" };
+devtemDesign.templates.forEach(name => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "template-btn" + (name === config.template ? " active" : "");
+  b.dataset.template = name;
+  b.textContent = LABELS[name] || name.toUpperCase();
+  bar.appendChild(b);
+});
+bar.addEventListener("click", e => {
+  const b = e.target.closest(".template-btn");
+  if (!b) return;
+  page.setTemplate(b.dataset.template);
+  bar.querySelectorAll(".template-btn").forEach(x => x.classList.toggle("active", x === b));
+});
+
+/* ---------- copy CDN (delegated, so it survives any re-render) ---------- */
+const toast = document.getElementById("toast");
+let toastTimer;
+document.addEventListener("click", async e => {
+  const a = e.target.closest(".hero-actions .btn-ghost, .nav-cta");
+  if (!a) return;
+  e.preventDefault();
+
+  const text = a.classList.contains("nav-cta") ? CDN_JS : CDN_CSS + "\n" + CDN_JS;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    toast.textContent = "Copy failed. Select the text manually.";
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+    return;
   }
-}
 
-// Attach copy and navigation handlers
-function attachButtonHandlers() {
-  // Copy CDN functionality (both CSS and JS links)
-  const copyCDN = (e) => {
-    e.preventDefault();
-    const cdnLinks = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">\n<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>`;
-    navigator.clipboard.writeText(cdnLinks);
-    
-    const toast = document.getElementById('toast');
-    if (toast) {
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
-    }
-    
-    // Temporary button text feedback
-    if (e.target.classList && e.target.classList.contains('btn-ghost')) {
-      const original = e.target.innerHTML;
-      e.target.innerHTML = "✓ Copied!";
-      setTimeout(() => { e.target.innerHTML = original; }, 1500);
-    }
-  };
-  
-  // Primary button -> navigate to /docs
-  const docsHandler = (e) => {
-    e.preventDefault();
-    window.location.href = '/builder';
-  };
-  
-  const primaryBtn = document.querySelector('.btn-primary');
-  const secondaryBtn = document.querySelector('.btn-ghost');
-  const navCta = document.querySelector('.nav-cta');
-  
-  if (primaryBtn) primaryBtn.addEventListener('click', docsHandler);
-  if (secondaryBtn) secondaryBtn.addEventListener('click', copyCDN);
-  
-  // Nav CTA button (CDN)
-  if (navCta) {
-    navCta.addEventListener('click', (e) => {
-      e.preventDefault();
-      const cdnJs = `<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>`;
-      navigator.clipboard.writeText(cdnJs);
-      const toast = document.getElementById('toast');
-      if (toast) {
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
-      }
-      const original = navCta.innerHTML;
-      navCta.innerHTML = "✓ Copied!";
-      setTimeout(() => { navCta.innerHTML = original; }, 1500);
-    });
-  }
-  document.querySelector(".nav-logo").onclick = () =>{
-    location.href = "/";
-  }
-  // Also handle any nav links pointing to /docs
-  const docLinks = document.querySelectorAll('.nav-links a');
-  docLinks.forEach(link => {
-    if (link.innerText.toLowerCase() === 'docs') {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.location.href = '/docs';
-      });
-    }
-  });
-}
+  toast.textContent = "✓ Copied to clipboard";
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2000);
 
-function highlightActiveTemplate(template) {
-  const btns = document.querySelectorAll('.template-btn');
-  btns.forEach(btn => {
-    if (btn.getAttribute('data-template') === template) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-}
-
-// Template switcher event listeners
-function initTemplateSwitcher() {
-  const btns = document.querySelectorAll('.template-btn');
-  btns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const newTemplate = btn.getAttribute('data-template');
-      renderWithTemplate(newTemplate);
-    });
-  });
-}
-
-// Wait for DOM and engine
-document.addEventListener("DOMContentLoaded", () => {
-  // Small delay to ensure engine is ready
-  setTimeout(() => {
-    if (typeof devtemDesign === 'function') {
-      devtemDesign("app-root", currentConfig);
-      setTimeout(() => {
-        attachButtonHandlers();
-        initTemplateSwitcher();
-        highlightActiveTemplate('cyber');
-      }, 150);
-    } else {
-      console.error("devtemDesign engine not found. Make sure /js/dev.js is loaded.");
-    }
-  }, 50);
+  if (!a.dataset.orig) a.dataset.orig = a.innerHTML;
+  a.textContent = "✓ Copied!";
+  setTimeout(() => { a.innerHTML = a.dataset.orig; delete a.dataset.orig; }, 1500);
 });
 </script>
 </body>
