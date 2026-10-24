@@ -1,6 +1,9 @@
 (function () {
   'use strict';
 
+  /* Shared helpers (/js/shared.js): 0.1.0 output, old-key migration, safe embedding */
+  var buildHTML = DTD.buildHTML;
+
   /* ── STATE ────────────────────────────────────────────────────── */
   var cfg          = null;      // active config object
   var activeId     = null;      // localStorage project id being edited (null = unsaved)
@@ -23,6 +26,7 @@
   var saveBtn        = document.getElementById('save-btn');
   var copyBtn        = document.getElementById('copy-btn');
   var exportBtn      = document.getElementById('export-btn');
+  var deviceBtn      = document.getElementById('device-btn');
 
   var projCount      = document.getElementById('proj-count');
 
@@ -48,16 +52,10 @@
   function uid() {
     return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
   }
-  function fmt(ts) {
-    var d = new Date(ts);
-    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
-           ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-  }
 
   /* ── PROJECTS UI ──────────────────────────────────────────────── */
   function updateProjCount() {
-    var n = loadProjects().length;
-    projCount.textContent = n;
+    projCount.textContent = loadProjects().length;
   }
 
   /* ── SAVE FLOW ────────────────────────────────────────────────── */
@@ -116,8 +114,7 @@
     modalTitle.textContent = name || 'Preview';
     modalFrame.srcdoc = buildHTML(c);
     previewModal.classList.add('open');
-    // store config for export
-    modalFrame._cfg = c;
+    modalFrame._cfg = c; // store config for export
   }
   modalClose.addEventListener('click', function () {
     previewModal.classList.remove('open');
@@ -126,24 +123,25 @@
   modalExport.addEventListener('click', function () {
     var c = modalFrame._cfg;
     if (!c) return;
-    var html = buildHTML(c);
-    var name = (c.logoName || 'page').toLowerCase().replace(/\s+/g, '-');
-    var blob = new Blob([html], { type: 'text/html' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob); a.download = name + '.html'; a.click();
-    URL.revokeObjectURL(a.href);
+    download(buildHTML(c), c.logoName);
   });
-  // close modal on backdrop click
   previewModal.addEventListener('click', function (e) {
     if (e.target === previewModal) modalClose.click();
   });
-  // ESC closes modal or dialog
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       if (previewModal.classList.contains('open')) modalClose.click();
       if (saveDialog.classList.contains('open')) saveDialog.classList.remove('open');
     }
   });
+
+  function download(html, logoName) {
+    var name = (logoName || 'page').toLowerCase().replace(/\s+/g, '-');
+    var blob = new Blob([html], { type: 'text/html' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name + '.html'; a.click();
+    URL.revokeObjectURL(a.href);
+  }
 
   /* ── THEME ────────────────────────────────────────────────────── */
   document.getElementById('btn-dark').addEventListener('click', function () {
@@ -183,16 +181,31 @@
   });
 
   /* ── PREVIEW ──────────────────────────────────────────────────── */
+  var frameLive = false;
+  previewFrame.addEventListener('load', function () { frameLive = true; });
+
   function schedulePreview() {
     clearTimeout(previewTimer);
     previewTimer = setTimeout(doPreview, 280);
   }
+  // First call loads the page; later calls update it in place (keeps scroll, no flicker)
   function doPreview() {
     if (!cfg) return;
-    previewFrame.srcdoc = buildHTML(cfg);
     previewEmpty.style.display = 'none';
     previewFrame.style.display = 'block';
+    if (frameLive && previewFrame.contentWindow) {
+      previewFrame.contentWindow.postMessage({ dtdCfg: DTD.migrate(cfg) }, '*');
+    } else {
+      previewFrame.srcdoc = buildHTML(cfg, true);
+    }
   }
+
+  if (deviceBtn) deviceBtn.addEventListener('click', function () {
+    var m = previewFrame.classList.toggle('m');
+    deviceBtn.innerHTML = m
+      ? '<i class="fas fa-desktop"></i> Desktop'
+      : '<i class="fas fa-mobile-screen"></i> Mobile';
+  });
 
   /* ── WIRE SIMPLE INPUTS (once) ────────────────────────────────── */
   function wireSimpleInputs() {
@@ -211,6 +224,7 @@
         schedulePreview();
       });
     }
+    // Old key names are kept on purpose: DTD.buildHTML maps them to 0.1.0 names
     w('e-logoName',       'logoName');
     w('e-logoUrl',        'logo');
     w('e-heroTag',        'heroTag');
@@ -247,38 +261,37 @@
   }
 
   /* ── HTML ESCAPE ──────────────────────────────────────────────── */
-  function esc(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
+  var esc = DTD.esc;
 
   /* ── RENDER LISTS ─────────────────────────────────────────────── */
   function renderNavLinks() {
-  var el = document.getElementById('navLinksList');
-  if (!el || !cfg) return;
-  el.innerHTML = (cfg.navLinks || []).map(function (lnk, i) {
-    return '<div class="list-item"><div class="li-row">' +
-      '<input type="text" value="' + esc(lnk.label) + '" data-nll="' + i + '" placeholder="Label">' +
-      '<input type="text" value="' + esc(lnk.href)  + '" data-nlh="' + i + '" placeholder="#section">' +
-      '<button class="btn-rm" data-rnl="' + i + '" title="Remove"><i class="fas fa-times"></i></button>' +
-      '</div></div>';
-  }).join('');
-  el.querySelectorAll('[data-nll]').forEach(function (inp) {
-    inp.addEventListener('input', function () { cfg.navLinks[+inp.dataset.nll].label = inp.value; schedulePreview(); });
-  });
-  el.querySelectorAll('[data-nlh]').forEach(function (inp) {
-    inp.addEventListener('input', function () { cfg.navLinks[+inp.dataset.nlh].href = inp.value; schedulePreview(); });
-  });
-  el.querySelectorAll('[data-rnl]').forEach(function (btn) {
-    btn.addEventListener('click', function () { cfg.navLinks.splice(+btn.dataset.rnl, 1); renderNavLinks(); schedulePreview(); });
-  });
-}
-  
+    var el = document.getElementById('navLinksList');
+    if (!el || !cfg) return;
+    el.innerHTML = (cfg.navLinks || []).map(function (lnk, i) {
+      return '<div class="list-item"><div class="li-row">' +
+        '<input type="text" value="' + esc(lnk.label) + '" data-nll="' + i + '" placeholder="Label">' +
+        '<input type="text" value="' + esc(lnk.href)  + '" data-nlh="' + i + '" placeholder="#section">' +
+        '<button class="btn-rm" data-rnl="' + i + '" title="Remove"><i class="fas fa-times"></i></button>' +
+        '</div></div>';
+    }).join('');
+    el.querySelectorAll('[data-nll]').forEach(function (inp) {
+      inp.addEventListener('input', function () { cfg.navLinks[+inp.dataset.nll].label = inp.value; schedulePreview(); });
+    });
+    el.querySelectorAll('[data-nlh]').forEach(function (inp) {
+      inp.addEventListener('input', function () { cfg.navLinks[+inp.dataset.nlh].href = inp.value; schedulePreview(); });
+    });
+    el.querySelectorAll('[data-rnl]').forEach(function (btn) {
+      btn.addEventListener('click', function () { cfg.navLinks.splice(+btn.dataset.rnl, 1); renderNavLinks(); schedulePreview(); });
+    });
+  }
+
   document.getElementById('addNavLinkBtn').addEventListener('click', function () {
-  if (!cfg) return;
-  cfg.navLinks.push({ label: 'New link', href: '#' });
-  renderNavLinks();
-  schedulePreview();
-});
+    if (!cfg) return;
+    if (!cfg.navLinks) cfg.navLinks = [];
+    cfg.navLinks.push({ label: 'New link', href: '#' });
+    renderNavLinks();
+    schedulePreview();
+  });
 
   function renderBrands() {
     var el = document.getElementById('brandsList');
@@ -301,7 +314,6 @@
         '<div class="li-row"><input type="text" value="' + esc(f.icon)  + '" data-fi="' + i + '" placeholder="Icon HTML"></div>' +
         '</div>';
     }).join('');
-    
     el.querySelectorAll('[data-ft]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.features[+inp.dataset.ft].title = inp.value; schedulePreview(); }); });
     el.querySelectorAll('[data-fd]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.features[+inp.dataset.fd].desc  = inp.value; schedulePreview(); }); });
     el.querySelectorAll('[data-fi]').forEach(function (inp) { inp.addEventListener('input', function () { cfg.features[+inp.dataset.fi].icon  = inp.value; schedulePreview(); }); });
@@ -380,17 +392,15 @@
     el.querySelectorAll('[data-rl]').forEach(function (btn) { btn.addEventListener('click', function () { cfg.footer.legal.splice(+btn.dataset.rl,1); renderLegal(); schedulePreview(); }); });
   }
 
-
-
   function renderAllLists() {
-  renderNavLinks(); // added
-  renderBrands();
-  renderFeatures();
-  renderPanels();
-  renderFooterCols();
-  renderSocial();
-  renderLegal();
-}
+    renderNavLinks();
+    renderBrands();
+    renderFeatures();
+    renderPanels();
+    renderFooterCols();
+    renderSocial();
+    renderLegal();
+  }
 
   /* ── ADD BUTTONS ──────────────────────────────────────────────── */
   document.getElementById('addBrandBtn').addEventListener('click',   function () { if (!cfg) return; cfg.brands.push('New Brand'); renderBrands(); schedulePreview(); });
@@ -488,7 +498,8 @@
     }
     return {
       template: tmpl, logo: 'https://fscss.devtem.org/assets/images/fscss.png', logoName: brand,
-      navLinks: [{ label: 'Work', href: '#work' }, { label: 'Services', href: '#services' }, { label: 'About', href: '#about' }, { label: 'Contact', href: '#contact' }],
+      // 0.1.0 anchors: the features section renders as #features
+      navLinks: [{ label: 'Features', href: '#features' }, { label: 'Contact', href: '#' }],
       ctaText: 'Get started', heroTag: heroTag, heroTitleLine1: heroLine1, heroTitleLine2: heroLine2,
       heroSubtitle: short, primaryBtnText: 'Learn more', secondaryBtnText: 'Contact us',
       brands: brands, brandsSubtitle: 'technologies & platforms I work with daily',
@@ -505,11 +516,6 @@
         legal: [{ label: 'Privacy', href: '#' }, { label: 'Terms', href: '#' }]
       }
     };
-  }
-
-  /* ── BUILD HTML ───────────────────────────────────────────────── */
-  function buildHTML(c) {
-    return '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n  <title>' + (c.logoName || 'devtem') + '</title>\n  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">\n  <script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"><\/script>\n</head>\n<body>\n  <div id="app"></div>\n  <script>devtemDesign("app", ' + JSON.stringify(c, null, 2) + ');<\/script>\n</body>\n</html>';
   }
 
   /* ── GENERATE ─────────────────────────────────────────────────── */
@@ -551,12 +557,7 @@
   /* ── EXPORT ───────────────────────────────────────────────────── */
   exportBtn.addEventListener('click', function () {
     if (!cfg) return;
-    var html = buildHTML(cfg);
-    var name = (cfg.logoName || 'page').toLowerCase().replace(/\s+/g, '-');
-    var blob = new Blob([html], { type: 'text/html' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob); a.download = name + '.html'; a.click();
-    URL.revokeObjectURL(a.href);
+    download(buildHTML(cfg), cfg.logoName);
   });
 
   /* ── INIT: URL PARAM LOAD ─────────────────────────────────────── */
@@ -565,24 +566,19 @@
     var params = new URLSearchParams(window.location.search);
     var id = params.get('id');
     if (!id) return;
-    var list = loadProjects();
-    var p = list.find(function (x) { return x.id === id; });
+    var p = loadProjects().find(function (x) { return x.id === id; });
     if (!p) return;
-    // Load the project into editor
     activeId = p.id;
     cfg = JSON.parse(JSON.stringify(p.config));
     template = cfg.template || 'figsh';
-    // Sync template buttons
     document.querySelectorAll('.tpl-btn').forEach(function (b) {
       b.classList.toggle('active', b.dataset.tpl === template);
     });
-    // Update generate btn label
     generateBtn.innerHTML = '<i class="fas fa-rotate"></i> Regenerate';
     generateBtn.disabled = false;
-    // Open editor
     openEditor(true);
-    // Update browser title
     document.title = 'Editing: ' + p.name + ' · devtemDesign';
   }());
 
 })();
+
