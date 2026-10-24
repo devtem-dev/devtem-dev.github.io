@@ -746,4 +746,4 @@ textarea:focus, input[type=text]:focus {
   }
 }
 
-
+#preview-frame.m { max-width: 390px; margin: 0 auto; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
