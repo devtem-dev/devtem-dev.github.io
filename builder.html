@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Builder | devtemDesign Visual Page Builder</title><meta name="description" content="Create landing pages, portfolios, SaaS websites, documentation sites, and custom layouts visually with devtemDesign Builder. Design, preview, customize, and export production-ready configurations and code."><meta name="keywords" content="devtemDesign builder, visual page builder, landing page builder, portfolio website builder, website generator, frontend builder, configuration builder, UI builder, website designer, export HTML, export configuration, no code builder, low code website builder"><meta name="author" content="DevTemple">
-<meta name="robots" content="index, follow">
-<meta name="theme-color" content="#00ffff"><link rel="canonical" href="https://design.devtem.org/builder"><!-- Open Graph --><meta property="og:type" content="website">
-<meta property="og:site_name" content="devtemDesign">
-<meta property="og:title" content="Builder | devtemDesign Visual Page Builder">
-<meta property="og:description" content="Design landing pages, portfolios, SaaS websites, and custom layouts visually. Export production-ready configurations and code instantly.">
-<meta property="og:url" content="https://design.devtem.org/builder">
-<meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg"><!-- Twitter --><meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Builder | devtemDesign">
-<meta name="twitter:description" content="Visual builder for creating landing pages, portfolios, documentation sites, and custom web experiences.">
-<meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg"><!-- Structured Data --><script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "devtemDesign Builder",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Web",
-  "url": "https://design.devtem.org/builder",
-  "image": "https://design.devtem.org/assets/images/og.jpg",
-  "description": "Visual page builder for generating landing pages, portfolios, SaaS websites, and exportable devtemDesign configurations.",
-  "creator": {
-    "@type": "Organization",
-    "name": "DevTemple"
+  <title>Builder | devtemDesign Visual Page Builder</title>
+  <meta name="description" content="Create landing pages, portfolios, SaaS websites, documentation sites, and custom layouts visually with devtemDesign Builder. Design, preview, customize, and export production-ready configurations and code.">
+  <meta name="keywords" content="devtemDesign builder, visual page builder, landing page builder, portfolio website builder, website generator, frontend builder, configuration builder, UI builder, website designer, export HTML, export configuration, no code builder, low code website builder">
+  <meta name="author" content="DevTemple">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#00ffff">
+  <link rel="canonical" href="https://design.devtem.org/builder">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="devtemDesign">
+  <meta property="og:title" content="Builder | devtemDesign Visual Page Builder">
+  <meta property="og:description" content="Design landing pages, portfolios, SaaS websites, and custom layouts visually. Export production-ready configurations and code instantly.">
+  <meta property="og:url" content="https://design.devtem.org/builder">
+  <meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Builder | devtemDesign">
+  <meta name="twitter:description" content="Visual builder for creating landing pages, portfolios, documentation sites, and custom web experiences.">
+  <meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "devtemDesign Builder",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web",
+    "url": "https://design.devtem.org/builder",
+    "image": "https://design.devtem.org/assets/images/og.jpg",
+    "description": "Visual page builder for generating landing pages, portfolios, SaaS websites, and exportable devtemDesign configurations.",
+    "creator": { "@type": "Organization", "name": "DevTemple" }
   }
-}
-</script>
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="/css/builder.css">
 </head>
@@ -37,7 +46,7 @@
 
 <!-- HEADER -->
 <header class="app-header">
-  <a class="brand" style="text-decoration: none;" href="/"><i><img src="https://fscss.devtem.org/assets/images/fscss.png" alt="FSCSS" width="30px" height="30px"></i> devtemDesign</a>
+  <a class="brand" style="text-decoration: none;" href="/"><i><img src="https://fscss.devtem.org/assets/images/fscss.png" alt="FSCSS" width="30" height="30"></i> devtemDesign</a>
   <span class="sep">/</span>
   <span class="sub">Builder</span>
   <div class="header-right">
@@ -78,6 +87,9 @@
       <button class="tpl-btn" data-tpl="cyber"><span class="tpl-name">Cyber</span><span class="tpl-desc">Neon · cyan/magenta</span></button>
       <button class="tpl-btn" data-tpl="aurora"><span class="tpl-name">Aurora</span><span class="tpl-desc">Organic · emerald/violet</span></button>
       <button class="tpl-btn" data-tpl="monochrome"><span class="tpl-name">Mono</span><span class="tpl-desc">Minimal grayscale</span></button>
+      <button class="tpl-btn" data-tpl="sunset"><span class="tpl-name">Sunset</span><span class="tpl-desc">Warm · orange/rose</span></button>
+      <button class="tpl-btn" data-tpl="ocean"><span class="tpl-name">Ocean</span><span class="tpl-desc">Cool · sky/teal</span></button>
+      <button class="tpl-btn" data-tpl="paper"><span class="tpl-name">Paper</span><span class="tpl-desc">Light · indigo/pink</span></button>
     </div>
   </div>
   <div class="gen-btn-wrap">
@@ -100,7 +112,6 @@
     <div class="editor-sidebar">
       <div class="sidebar-toolbar">
         <span class="st-label">Editor</span>
-        <!-- save btn shown once cfg exists -->
         <button class="btn-save" id="save-btn" style="display:none;" title="Save project">
           <i class="fas fa-floppy-disk"></i> Save project
         </button>
@@ -119,7 +130,7 @@
           <div class="ed-body">
             <div class="f-row"><label>Logo name</label><input id="e-logoName" type="text"></div>
             <div class="f-row"><label>Logo URL</label><input id="e-logoUrl" type="text" placeholder="https://..."></div>
-            <div class="f-row"><label>Tagline</label><input id="e-heroTag" type="text"></div>
+            <div class="f-row"><label>Badge</label><input id="e-heroTag" type="text"></div>
             <div class="f-row"><label>Title line 1</label><input id="e-heroLine1" type="text"></div>
             <div class="f-row"><label>Title line 2</label><input id="e-heroLine2" type="text"></div>
             <div class="f-row"><label>Subtitle</label><textarea id="e-heroSubtitle" rows="2"></textarea></div>
@@ -128,17 +139,19 @@
             <div class="f-row"><label>Nav CTA</label><input id="e-ctaText" type="text"></div>
           </div>
         </div>
-<!-- NAV LINKS -->
-<div class="ed-section" id="sec-nav">
-  <div class="ed-head"><div class="ed-title"><i class="fas fa-bars"></i> Nav links</div><i class="fas fa-chevron-down ed-chevron"></i></div>
-  <div class="ed-body">
-    <div class="f-row">
-      <label>Links</label>
-      <div class="list-wrap" id="navLinksList"></div>
-      <button class="btn-add" id="addNavLinkBtn"><i class="fas fa-plus"></i> Add link</button>
-    </div>
-  </div>
-</div>
+
+        <!-- NAV LINKS -->
+        <div class="ed-section" id="sec-nav">
+          <div class="ed-head"><div class="ed-title"><i class="fas fa-bars"></i> Nav links</div><i class="fas fa-chevron-down ed-chevron"></i></div>
+          <div class="ed-body">
+            <div class="f-row">
+              <label>Links</label>
+              <div class="list-wrap" id="navLinksList"></div>
+              <button class="btn-add" id="addNavLinkBtn"><i class="fas fa-plus"></i> Add link</button>
+            </div>
+          </div>
+        </div>
+
         <!-- BRANDS -->
         <div class="ed-section" id="sec-brands">
           <div class="ed-head"><div class="ed-title"><i class="fas fa-building"></i> Brands</div><i class="fas fa-chevron-down ed-chevron"></i></div>
@@ -207,6 +220,7 @@
       <div class="preview-toolbar">
         <span class="pt-label"><i class="fas fa-eye"></i> Live preview</span>
         <div class="pt-actions">
+          <button class="btn-ghost" id="device-btn" type="button"><i class="fas fa-mobile-screen"></i> Mobile</button>
           <button class="btn-ghost" id="copy-btn"><i class="fas fa-copy"></i> Copy HTML</button>
           <button class="btn-solid" id="export-btn"><i class="fas fa-download"></i> Export</button>
         </div>
@@ -258,6 +272,7 @@
   <a href="https://devtem.org" target="_blank" rel="noreferrer"><i class="fas fa-store"></i> DevTemple</a>
 </footer>
 
+<script src="/js/shared.js"></script>
 <script src="/js/builder.js"></script>
 </body>
 </html>
