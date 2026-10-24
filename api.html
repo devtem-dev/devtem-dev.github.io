@@ -1,973 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Schema API | devtemDesign Configuration Reference</title>
-
-<meta name="description" content="Complete devtemDesign Schema API reference. Explore every configuration property, object structure, templates, sections, features, panels, navigation options, and customization settings.">
-
-<meta name="keywords" content="devtemDesign schema, devtemDesign API, devtemDesign configuration, devtemDesign schema reference, JavaScript UI engine API, declarative UI schema, devtemDesign config object, frontend framework API">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Schema API | devtemDesign 0.1.0 Configuration Reference</title>
+<meta name="description" content="Complete devtemDesign 0.1.0 Schema API reference: every config property, object shape, return handle, 7 templates and theme tokens, with copyable examples.">
+<meta name="keywords" content="devtemDesign schema, devtemDesign API, devtemDesign configuration, config object reference, declarative UI schema, JavaScript UI engine API, theme tokens">
 <meta name="author" content="DevTemple">
-<meta name="robots" content="index, follow">
-<meta name="theme-color" content="#00ffff">
-
-<link rel="canonical" href="https://design.devtem.org/schema">
-
-<!-- Open Graph -->
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#050b14">
+<link rel="canonical" href="https://design.devtem.org/api">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="devtemDesign">
-<meta property="og:title" content="Schema API | devtemDesign">
-<meta property="og:description" content="Complete configuration schema reference for devtemDesign. Learn every available property, option, and object structure.">
-<meta property="og:url" content="https://design.devtem.org/schema">
+<meta property="og:title" content="Schema API | devtemDesign 0.1.0">
+<meta property="og:description" content="Every configuration property, object structure and theme token for devtemDesign.">
+<meta property="og:url" content="https://design.devtem.org/api">
 <meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg">
-
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Schema API | devtemDesign">
-<meta name="twitter:description" content="Full configuration schema reference and object documentation for devtemDesign.">
+<meta name="twitter:title" content="Schema API | devtemDesign 0.1.0">
+<meta name="twitter:description" content="Full configuration schema reference for devtemDesign.">
 <meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg">
-
-<!-- Structured Data -->
+<link rel="icon" href="https://design.devtem.org/assets/images/logo.png">
 <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "TechArticle",
-    "headline": "devtemDesign Schema API",
-    "description": "Complete configuration schema reference for devtemDesign.",
-    "author": {
-      "@type": "Organization",
-      "name": "DevTemple"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "DevTemple"
-    },
-    "url": "https://design.devtem.org/schema",
-    "image": "https://design.devtem.org/assets/images/og.jpg"
-  }
+{"@context":"https://schema.org","@graph":[
+{"@type":"TechArticle","headline":"devtemDesign Schema API","description":"Complete configuration schema reference for devtemDesign 0.1.0.","url":"https://design.devtem.org/schema","image":"https://design.devtem.org/assets/images/og.jpg","dateModified":"2026-10-24","author":{"@type":"Organization","name":"DevTemple"},"publisher":{"@type":"Organization","name":"DevTemple"}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"devtemDesign","item":"https://design.devtem.org/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://design.devtem.org/docs"},{"@type":"ListItem","position":3,"name":"Schema API","item":"https://design.devtem.org/api"}]}]}
 </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<!--- <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">-->
-  <script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"></script>
-
-  <style>
-    /* ── FONT OVERRIDES ──────────────────────────────────────── */
-    body    { font-family: 'JetBrains Mono', monospace; }
-    h1, h2, h3, .nav-logo, .hero-title { font-family: 'Syne', sans-serif !important; }
-
-    /* ── SUPPRESS ENGINE HERO CONTENT ───────────────────────── */
-    .hero-tag, .hero-title, .hero-sub,
-    .hero-buttons, .hero-inline-brands,
-    .features, .panels-section, .marquee-section { display: none !important; }
-
-    .hero {
-      min-height: unset;
-      padding: 0;
-    }
-
-    /* ── API PAGE SHELL ──────────────────────────────────────── */
-    .api-page {
-      position: relative;
-      z-index: 2;
-      padding-top: 80px; /* nav height */
-    }
-
-    /* ── PAGE HEADER ─────────────────────────────────────────── */
-    .api-header {
-      padding: 80px 48px 60px;
-      border-bottom: 1px solid var(--glass-border);
-      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 100%);
-    }
-    .api-header-inner {
-      max-width: 900px;
-    }
-    .api-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.65rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 20px;
-    }
-    .api-eyebrow::before {
-      content: '';
-      width: 28px; height: 1px;
-      background: var(--accent);
-    }
-    .api-header h1 {
-      font-size: clamp(2.2rem, 6vw, 4rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: 18px;
-    }
-    .api-header h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .api-header-desc {
-      font-size: 0.88rem;
-      color: var(--muted);
-      max-width: 560px;
-      line-height: 1.75;
-      margin-bottom: 36px;
-    }
-    .api-version-strip {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .api-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 5px 14px;
-      border-radius: 100px;
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.03);
-      color: var(--muted);
-    }
-    .api-badge i { color: var(--accent); }
-    .api-badge.accent { border-color: var(--accent); color: var(--accent); }
-
-    /* ── LAYOUT: sidebar + content ───────────────────────────── */
-    .api-body {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      max-width: 1100px;
-      margin: 0 auto;
-      min-height: 60vh;
-    }
-
-    /* ── SIDEBAR NAV ─────────────────────────────────────────── */
-    .api-sidebar {
-      padding: 40px 0 40px 48px;
-      position: sticky;
-      top: 80px;
-      align-self: start;
-      max-height: calc(100vh - 80px);
-      overflow-y: auto;
-      scrollbar-width: none;
-    }
-    .api-sidebar::-webkit-scrollbar { display: none; }
-
-    .sidebar-group { margin-bottom: 32px; }
-    .sidebar-group-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
-      margin-bottom: 10px;
-      padding-left: 2px;
-    }
-    .sidebar-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s, background 0.2s;
-      margin-bottom: 2px;
-    }
-    .sidebar-link:hover  { color: white; background: rgba(255,255,255,0.05); }
-    .sidebar-link.active { color: var(--accent); background: rgba(122,244,255,0.06); }
-    .sidebar-link i { width: 14px; text-align: center; font-size: 0.7rem; opacity: 0.7; }
-
-    /* ── MAIN CONTENT ────────────────────────────────────────── */
-    .api-content {
-      padding: 48px 48px 80px 40px;
-      min-width: 0;
-    }
-
-    /* Sections */
-    .api-section {
-      margin-bottom: 72px;
-      scroll-margin-top: 96px;
-    }
-    .section-heading {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--glass-border);
-    }
-    .section-heading .s-icon {
-      width: 32px; height: 32px;
-      border-radius: 10px;
-      border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.03);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent); font-size: 0.8rem; flex-shrink: 0;
-    }
-    .section-intro {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.75;
-      margin-bottom: 28px;
-      max-width: 640px;
-    }
-
-    /* ── SIGNATURE BOX ───────────────────────────────────────── */
-    .sig-box {
-      background: rgba(0,0,0,0.35);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 22px 28px;
-      font-size: 0.82rem;
-      line-height: 1.8;
-      margin-bottom: 32px;
-      overflow-x: auto;
-    }
-    .sig-fn   { color: var(--accent2); }
-    .sig-param{ color: var(--accent);  }
-    .sig-type { color: var(--accent3); font-style: italic; }
-    .sig-opt  { color: rgba(255,255,255,0.3); }
-
-    /* ── PROP TABLE ──────────────────────────────────────────── */
-    .prop-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.78rem;
-      margin-bottom: 16px;
-    }
-    .prop-table thead th {
-      text-align: left;
-      padding: 8px 14px;
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
-      border-bottom: 1px solid var(--glass-border);
-    }
-    .prop-table tbody tr {
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      transition: background 0.15s;
-    }
-    .prop-table tbody tr:hover { background: rgba(255,255,255,0.025); }
-    .prop-table td { padding: 12px 14px; vertical-align: top; line-height: 1.55; }
-    .prop-table td:first-child {
-      color: var(--accent);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .td-type {
-      color: var(--accent3) !important;
-      font-style: italic;
-    }
-    .td-default { color: rgba(255,255,255,0.35) !important; }
-    .td-desc    { color: var(--muted) !important; }
-
-    /* ── CODE BLOCKS ─────────────────────────────────────────── */
-    .code-block {
-      position: relative;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 24px 28px;
-      font-size: 0.78rem;
-      line-height: 1.85;
-      overflow-x: auto;
-      margin-bottom: 28px;
-    }
-    .code-block pre { margin: 0; white-space: pre; }
-    .code-label {
-      position: absolute;
-      top: -1px; right: -1px;
-      font-size: 0.58rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #000;
-      background: var(--accent);
-      padding: 3px 12px;
-      border-radius: 0 14px 0 8px;
-      font-weight: 700;
-    }
-    .copy-btn {
-      position: absolute;
-      bottom: 12px; right: 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--glass-border);
-      color: var(--muted);
-      padding: 4px 12px;
-      border-radius: 40px;
-      font-size: 0.62rem;
-      cursor: pointer;
-      font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.08em;
-      transition: 0.2s;
-    }
-    .copy-btn:hover { color: white; border-color: var(--accent); }
-
-    /* Syntax colors inside code blocks */
-    .kw  { color: var(--accent2); }   /* keyword / key  */
-    .str { color: #a8ff78; }          /* string value   */
-    .num { color: var(--accent3); }   /* number         */
-    .cmt { color: rgba(255,255,255,0.28); font-style: italic; }
-    .fn  { color: var(--accent);  }   /* function name  */
-    .obj { color: rgba(255,255,255,0.6); }
-
-    /* ── CALLOUTS ────────────────────────────────────────────── */
-    .callout {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      padding: 16px 20px;
-      border-radius: 12px;
-      font-size: 0.78rem;
-      line-height: 1.65;
-      margin-bottom: 20px;
-    }
-    .callout.info {
-      background: rgba(122,244,255,0.06);
-      border: 1px solid rgba(122,244,255,0.2);
-      word-break: break-all;
-    }
-    .callout.warn {
-      background: rgba(255,170,0,0.06);
-      border: 1px solid rgba(255,170,0,0.2);
-    }
-    .callout i { margin-top: 1px; flex-shrink: 0; }
-    .callout.info i { color: var(--accent); }
-    .callout.warn i { color: #ffaa00; }
-
-    /* ── OBJECT SCHEMA CARDS ─────────────────────────────────── */
-    .schema-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-    .schema-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 20px 22px;
-    }
-    .schema-card-title {
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent2);
-      margin-bottom: 12px;
-    }
-    .schema-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      font-size: 0.72rem;
-    }
-    .schema-row:last-child { border-bottom: none; }
-    .schema-key   { color: var(--accent); }
-    .schema-vtype { color: var(--accent3); font-style: italic; }
-
-    /* ── TEMPLATE PALETTE ────────────────────────────────────── */
-    .template-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-    .template-swatch {
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 18px 20px;
-      cursor: default;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .template-swatch:hover { border-color: var(--glass-border); transform: translateY(-2px); }
-    .swatch-dots {
-      display: flex; gap: 6px; margin-bottom: 14px;
-    }
-    .swatch-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-    }
-    .swatch-name {
-      font-size: 0.7rem; letter-spacing: 0.12em;
-      text-transform: uppercase; font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .swatch-vibe {
-      font-size: 0.68rem; color: var(--muted); line-height: 1.5;
-    }
-
-    /* ── MOBILE ──────────────────────────────────────────────── */
-    @media (max-width: 860px) {
-      .api-body { grid-template-columns: 1fr; }
-      .api-sidebar { display: none; }
-      .api-header, .api-content { padding-left: 20px; padding-right: 20px; }
-    }
-    @media (max-width: 680px) {
-      .api-header { padding: 48px 20px 36px; }
-      .prop-table { display: block; overflow-x: auto; }
-    }
-  </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/style.min.css">
+<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/script.min.js"></script>
+<style>
+/* the engine supplies nav, orbs, footer and tokens; its hero is hidden here */
+.hero,.marquee-section{display:none!important}
+:root{--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface);border:1px solid var(--line);padding:1px 6px;border-radius:6px}
+.api-page{position:relative;z-index:2}
+.api-header{padding:64px 24px 44px;border-bottom:1px solid var(--glass-border)}
+.api-header-inner{max-width:1100px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font:.68rem var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--accent)}
+.api-header h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
+.api-header h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lede{color:var(--muted);max-width:600px;margin-bottom:24px}
+.badges{display:flex;gap:10px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:99px;font:.7rem var(--mono);border:1px solid var(--glass-border);background:var(--surface);color:var(--muted)}
+.badge.on{border-color:var(--accent);color:var(--accent)}
+.api-body{display:grid;grid-template-columns:230px minmax(0,1fr);max-width:1100px;margin:0 auto;padding:0 24px;gap:40px}
+.side{position:sticky;top:calc(var(--nav-h) + 16px);align-self:start;max-height:calc(100vh - var(--nav-h) - 32px);overflow-y:auto;padding:32px 0;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+.side h4{font:.62rem var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);opacity:.7;margin:20px 0 8px 10px}.side h4:first-child{margin-top:0}
+.side a{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;font-size:.82rem;color:var(--muted);transition:.2s}
+.side a:hover{color:var(--text);background:var(--surface)}
+.side a.active{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.side i{width:14px;text-align:center;font-size:.72rem}
+.content{padding:40px 0 80px;min-width:0}
+.sec{margin-bottom:64px;scroll-margin-top:calc(var(--nav-h) + 56px)}
+.sec h2{display:flex;align-items:center;gap:12px;font-size:1.45rem;font-weight:700;padding-bottom:12px;border-bottom:1px solid var(--glass-border);margin-bottom:12px}
+.sec h2 .ic{width:32px;height:32px;border-radius:10px;border:1px solid var(--glass-border);background:var(--surface);display:grid;place-items:center;color:var(--accent);font-size:.8rem;flex:none}
+.intro{color:var(--muted);font-size:.92rem;max-width:660px;margin-bottom:20px}
+.tw{overflow-x:auto;border:1px solid var(--glass-border);border-radius:14px;margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:600px}
+th{text-align:left;padding:10px 14px;font:.62rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--glass-border);background:var(--surface)}
+td{padding:11px 14px;vertical-align:top;border-bottom:1px solid var(--line);color:var(--muted)}
+tr:last-child td{border:0}
+td:first-child{font:600 .8rem var(--mono);color:var(--accent);white-space:nowrap}
+td.t{font:italic .78rem var(--mono);color:var(--accent3);white-space:nowrap}
+td.d{font:.76rem var(--mono);opacity:.8}
+.code{position:relative;border:1px solid var(--glass-border);border-radius:14px;background:var(--surface);margin-bottom:20px}
+.code .lb{position:absolute;top:-1px;left:16px;transform:translateY(-50%);font:700 .58rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--bg-deep);background:var(--accent);padding:3px 12px;border-radius:99px}
+.code pre{margin:0;padding:24px 20px 20px;overflow-x:auto;font:.78rem/1.75 var(--mono);color:var(--text);white-space:pre}
+.cp{position:absolute;top:10px;right:12px;padding:4px 12px;border-radius:99px;border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--muted);font:.62rem var(--mono);cursor:pointer}
+.cp:hover{color:var(--text);border-color:var(--accent)}
+.kw{color:var(--accent2)}.str{color:var(--accent3)}.cm{color:var(--muted);opacity:.7;font-style:italic}.fn{color:var(--accent)}
+.call{display:flex;gap:12px;padding:14px 18px;border-radius:12px;font-size:.84rem;margin-bottom:18px;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);background:color-mix(in srgb,var(--accent) 7%,transparent);color:var(--muted)}
+.call.warn{border-color:rgba(255,170,0,.35);background:rgba(255,170,0,.07)}.call.warn i{color:#ffaa00}.call i{color:var(--accent);margin-top:3px}
+.sw{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.swatch{text-align:left;border:1px solid var(--glass-border);border-radius:14px;padding:16px 18px;background:var(--surface);cursor:pointer;color:inherit;font:inherit;transition:.2s}
+.swatch:hover{transform:translateY(-2px);border-color:var(--accent)}
+.swatch .dots{display:flex;gap:6px;margin-bottom:12px}.swatch .dots b{width:11px;height:11px;border-radius:50%}
+.swatch strong{display:block;font:700 .75rem var(--mono);letter-spacing:.08em;margin-bottom:4px}
+.swatch span{font-size:.74rem;color:var(--muted)}
+@media(max-width:900px){
+ .api-header{padding:44px 18px 32px}
+ .api-body{display:block;padding:0 18px}
+ .side{position:sticky;top:var(--nav-h);z-index:50;display:flex;gap:6px;overflow-x:auto;max-height:none;padding:10px 18px;margin:0 -18px;background:var(--nav-bg);backdrop-filter:blur(14px);border-bottom:1px solid var(--glass-border)}
+ .side h4{display:none}.side a{flex:none;border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:.76rem}.side i{display:none}
+ .content{padding-top:28px}.sec{scroll-margin-top:calc(var(--nav-h) + 64px)}
+}
+</style>
 </head>
 <body>
-
 <div id="app-root"></div>
+<noscript><p style="padding:24px">The schema reference needs JavaScript. See the <a href="/docs">documentation</a> for the same options in plain HTML.</p></noscript>
 
 <script>
-// Engine renders nav + orbs + footer; hero content is suppressed via CSS
-devtemDesign("app-root", {
-  template: "figsh",
-  logoName: "DEVTEM",
-  logo: "https://fscss.devtem.org/assets/images/fscss.png",
+const page = devtemDesign("app-root", {
+  template: "figsh", themeSwitcher: true, cursor: false,
+  logoName: "DEVTEM", logo: "https://fscss.devtem.org/assets/images/fscss.png",
   navLinks: [
-    { label: "Docs",       href: "/docs"    },
-    { label: "Sandbox",    href: "/sandbox" },
-    { label: "Schema API", href: "/api"     },
-    { label: "npm Package",href: "https://www.npmjs.com/package/devtemdesign" }, 
-    { label: "templates", href: "https://devtem.org/home?q=@devtemDesign"}
+    { label: "Docs", href: "/docs" }, { label: "Sandbox", href: "/sandbox" },
+    { label: "Schema API", href: "/api" }, { label: "Examples", href: "/examples" },
+    { label: "npm Package", href: "https://www.npmjs.com/package/devtemdesign" }
   ],
-  ctaText: "CDN →",
-  heroTag: "", heroTitleLine1: "", heroTitleLine2: "",
-  heroSubtitle: "", primaryBtnText: "", secondaryBtnText: "",
-  brands: [], features: [], panels: [],
+  ctaText: "CDN →", ctaHref: "/docs#install",
   footer: {
     tagline: "Declarative UI engine for the modern web. Zero config. Full motion.",
     columns: [
-      {
-        heading: "Product",
-        links: [
-          { label: "Documentation", href: "/docs"    },
-          { label: "Sandbox",       href: "/sandbox" },
-          { label: "Schema API",    href: "/api"     },
-          { label: "Changelog",     href: "https://github.com/devtem-dev/devtemDesign" }
-        ]
-      },
-      {
-        heading: "Resources",
-        links: [
-          { label: "npm Package",   href: "https://www.npmjs.com/package/devtemdesign" },
-          { label: "GitHub",        href: "https://github.com/devtem-dev" },
-          { label: "DevTemple",     href: "https://devtem.org"       },
-          { label: "FSCSS Engine",  href: "https://fscss.devtem.org" }
-        ]
-      },
-      {
-        heading: "Company",
-        links: [
-          { label: "About DevTemple",   href: "https://devtem.org"   },
-          { label: "Templates",          href: "https://devtem.org/home"    },
-          { label: "Contact",       href: "https://devtem.org/contact" }
-        ]
-      }
+      { heading: "Product", links: [{ label: "Documentation", href: "/docs" }, { label: "Examples", href: "/examples" }, { label: "Schema API", href: "/api" }, { label: "Changelog", href: "https://github.com/devtem-dev/devtemDesign" }] },
+      { heading: "Resources", links: [{ label: "npm Package", href: "https://www.npmjs.com/package/devtemdesign" }, { label: "GitHub", href: "https://github.com/devtem-dev" }, { label: "FSCSS Engine", href: "https://fscss.devtem.org" }] },
+      { heading: "Company", links: [{ label: "About DevTemple", href: "https://devtem.org" }, { label: "Templates", href: "https://devtem.org/home?q=@devtemDesign" }, { label: "Contact", href: "https://devtem.org/contact" }] }
     ],
     social: [
-      { icon: "fab fa-github",   href: "https://github.com/devtem-dev/devtemDesign",       label: "GitHub"   },
-      { icon: "fab fa-twitter",  href: "https://twitter.com/fscss_ttr",  label: "Twitter"  },
-      { icon: "fab fa-npm",      href: "https://npmjs.com/package/devtemdesign", label: "npm" },
-      { icon: "fab fa-dev",      href: "https://dev.to/fscss",       label: "DEV"      }
+      { icon: "fab fa-github", href: "https://github.com/devtem-dev/devtemDesign", label: "GitHub" },
+      { icon: "fab fa-twitter", href: "https://twitter.com/fscss_ttr", label: "Twitter" },
+      { icon: "fab fa-npm", href: "https://npmjs.com/package/devtemdesign", label: "npm" },
+      { icon: "fab fa-dev", href: "https://dev.to/fscss", label: "DEV" }
     ],
-    legal: [
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Use",   href: "/terms"   },
-      { label: "License (MIT)",  href: "/license" }
-    ],
-    copy: `© ${new Date().getFullYear()} Figsh Digital · devtemDesign is open source`
+    legal: [{ label: "Privacy Policy", href: "/privacy" }, { label: "Terms of Use", href: "/terms" }, { label: "License (MIT)", href: "/license" }],
+    copy: `© ${new Date().getFullYear()} Figsh · devtemDesign is open source`
   }
 });
-document.querySelector(".nav-logo").onclick = () =>{
-    location.href = "/";
-}
-// Inject API page content into hero shell after engine renders
-setTimeout(() => {
-  const hero = document.querySelector('.hero');
-  if (!hero) return;
 
-  hero.insertAdjacentHTML('afterend', `
-  <div class="api-page">
+/* ---------- schema data ---------- */
+const H = ["Property", "Type", "Default", "Description"];
+const S = [
+{ id:"quickstart", ic:"bolt", t:"Quick Start", intro:"Add two tags, a container, and one call.",
+  code:["HTML",`<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/style.min.css">
+<script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/script.min.js"><\/script>
 
-    <!-- PAGE HEADER -->
-    <div class="api-header">
-      <div class="api-header-inner">
-        <div class="api-eyebrow"><i class="fas fa-code"></i> Reference</div>
-        <h1>Schema <em>API</em></h1>
-        <p class="api-header-desc">
-          Complete configuration reference for <code>devtemDesign()</code>.
-          One function call. One config object. The engine handles everything else.
-        </p>
-        <div class="api-version-strip">
-          <span class="api-badge accent"><i class="fas fa-tag"></i> v0.0.2</span>
-          <span class="api-badge"><i class="fab fa-npm"></i> devtemdesign</span>
-          <span class="api-badge"><i class="fas fa-circle" style="color:#22c55e;font-size:0.5rem;"></i> Stable</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- BODY -->
-    <div class="api-body">
-
-      <!-- SIDEBAR -->
-      <aside class="api-sidebar">
-        <div class="sidebar-group">
-          <div class="sidebar-group-label">Getting Started</div>
-          <a href="#quickstart" class="sidebar-link"><i class="fas fa-bolt"></i> Quick Start</a>
-          <a href="#signature"  class="sidebar-link"><i class="fas fa-terminal"></i> Function Signature</a>
-        </div>
-        <div class="sidebar-group">
-          <div class="sidebar-group-label">Config Schema</div>
-          <a href="#core"      class="sidebar-link"><i class="fas fa-cube"></i> Core</a>
-          <a href="#nav"       class="sidebar-link"><i class="fas fa-bars"></i> Navigation</a>
-          <a href="#hero"      class="sidebar-link"><i class="fas fa-star"></i> Hero</a>
-          <a href="#features"  class="sidebar-link"><i class="fas fa-th"></i> Features Grid</a>
-          <a href="#panels"    class="sidebar-link"><i class="fas fa-layer-group"></i> Panels</a>
-          <a href="#footer"    class="sidebar-link"><i class="fas fa-align-bottom"></i> Footer</a>
-        </div>
-        <div class="sidebar-group">
-          <div class="sidebar-group-label">Reference</div>
-          <a href="#templates" class="sidebar-link"><i class="fas fa-palette"></i> Templates</a>
-          <a href="#fullexample" class="sidebar-link"><i class="fas fa-file-code"></i> Full Example</a>
-        </div>
-      </aside>
-
-      <!-- CONTENT -->
-      <main class="api-content">
-
-        <!-- QUICK START -->
-        <section class="api-section" id="quickstart">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-bolt"></i></span>
-            Quick Start
-          </div>
-          <p class="section-intro">Add the CDN links to your HTML, create a container element, and call the engine with your config.</p>
-
-          <div class="code-block">
-            <span class="code-label">HTML</span>
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre><span class="cmt">&lt;!-- 1. Add to &lt;head&gt; --&gt;</span>
-<span class="obj">&lt;link</span> <span class="kw">rel</span>=<span class="str">"stylesheet"</span> <span class="kw">href</span>=<span class="str">"https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css"</span><span class="obj">&gt;</span>
-<span class="obj">&lt;script</span> <span class="kw">src</span>=<span class="str">"https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"</span><span class="obj">&gt;&lt;/script&gt;</span>
-
-<span class="cmt">&lt;!-- 2. Add a container --&gt;</span>
-<span class="obj">&lt;div</span> <span class="kw">id</span>=<span class="str">"app-root"</span><span class="obj">&gt;&lt;/div&gt;</span>
-
-<span class="cmt">&lt;!-- 3. Call the engine --&gt;</span>
-<span class="obj">&lt;script&gt;</span>
-  <span class="fn">devtemDesign</span>(<span class="str">"app-root"</span>, {
-    <span class="kw">template</span>: <span class="str">"cyber"</span>,
-    <span class="kw">logoName</span>: <span class="str">"MYAPP"</span>,
-    <span class="kw">heroTitleLine1</span>: <span class="str">"Hello"</span>,
-    <span class="kw">heroTitleLine2</span>: <span class="str">"World"</span>
+<div id="app-root"></div>
+<script>
+  devtemDesign("app-root", {
+    template: "cyber",
+    logoName: "MYAPP",
+    heroTitleLine1: "Hello",
+    heroTitleLine2: "World"
   });
-<span class="obj">&lt;/script&gt;</span></pre>
-          </div>
+<\/script>`],
+  note:["info","Font Awesome is optional. It is only needed for `icon` fields and footer social icons."] },
 
-          <div class="callout info ">
-            <i class="fas fa-circle-info"></i>
-            <div>Font Awesome is optional but required for <code>icon</code> fields in features, footer socials, and nav CTA.
-            Add <code>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;</code> to unlock icon support.</div>
-          </div>
-        </section>
+{ id:"signature", ic:"terminal", t:"Function Signature", intro:"One global function. It returns a handle you can use at runtime.",
+  code:["TypeScript",`devtemDesign(containerId: string, config?: DevtemConfig): DevtemHandle | null
 
-        <!-- SIGNATURE -->
-        <section class="api-section" id="signature">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-terminal"></i></span>
-            Function Signature
-          </div>
-          <p class="section-intro">The engine exposes a single global function.</p>
-
-          <div class="sig-box">
-            <span class="sig-fn">devtemDesign</span>(<span class="sig-param">containerId</span>: <span class="sig-type">string</span>, <span class="sig-param">config</span>: <span class="sig-type">DevtemConfig</span>): <span class="sig-type">void</span>
-          </div>
-
-          <table class="prop-table">
-            <thead><tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>containerId</td>
-                <td class="td-type">string</td>
-                <td class="td-default">"app-root"</td>
-                <td class="td-desc">ID of the DOM element to render into. The engine clears and rebuilds this element on every call.</td>
-              </tr>
-              <tr>
-                <td>config</td>
-                <td class="td-type">DevtemConfig</td>
-                <td class="td-default">—</td>
-                <td class="td-desc">Configuration object. All fields are optional — the engine falls back to sensible defaults for anything omitted.</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="callout warn">
-            <i class="fas fa-triangle-exclamation"></i>
-            <div>Calling <code>devtemDesign()</code> is destructive — it wipes the container's <code>innerHTML</code> on each call. Use a single dedicated wrapper element and never nest other persistent UI inside it.</div>
-          </div>
-        </section>
-
-        <!-- CORE -->
-        <section class="api-section" id="core">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-cube"></i></span>
-            Core
-          </div>
-          <p class="section-intro">Top-level identity and theme fields.</p>
-          <table class="prop-table">
-            <thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>template</td><td class="td-type">string</td><td class="td-default">"figsh"</td><td class="td-desc">Visual theme token. Options: <code>"figsh"</code> <code>"cyber"</code> <code>"aurora"</code> <code>"monochrome"</code>. Applies the full color palette via CSS custom properties.</td></tr>
-              <tr><td>logo</td><td class="td-type">string (URL)</td><td class="td-default">fscss logo</td><td class="td-desc">URL for the brand image shown in the navbar and footer.</td></tr>
-              <tr><td>logoName</td><td class="td-type">string</td><td class="td-default">"CORE"</td><td class="td-desc">Brand name text rendered beside the logo in both navbar and footer.</td></tr>
-            </tbody>
-          </table>
-        </section>
-
-        <!-- NAVIGATION -->
-        <section class="api-section" id="nav">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-bars"></i></span>
-            Navigation
-          </div>
-          <p class="section-intro">
-            Controls the fixed glass navbar. On mobile (&lt;780px) links collapse into an animated hamburger menu.
-          </p>
-          <table class="prop-table">
-            <thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>navLinks</td><td class="td-type">string[] | NavItem[]</td><td class="td-default">["Discover",…]</td><td class="td-desc">Navigation items. Pass plain strings (href defaults to <code>#</code>) or <code>{ label, href }</code> objects for real routing.</td></tr>
-              <tr><td>ctaText</td><td class="td-type">string (HTML)</td><td class="td-default">"Launch →"</td><td class="td-desc">CTA button text in the navbar. Accepts raw HTML — use <code>&lt;i&gt;</code> tags for Font Awesome icons.</td></tr>
-            </tbody>
-          </table>
-
-          <div class="callout info">
-            <i class="fas fa-circle-info"></i>
-            <div>Both string and object formats are valid in the same array:<br>
-            <code>navLinks: [{ label: "Docs", href: "/docs" }, "Sandbox"]</code></div>
-          </div>
-
-          <div class="code-block">
-            <span class="code-label">NavItem</span>
-            <pre><span class="cmt">// NavItem shape</span>
-{
-  <span class="kw">label</span>: <span class="str">"Docs"</span>,      <span class="cmt">// display text</span>
-  <span class="kw">href</span>:  <span class="str">"/docs"</span>     <span class="cmt">// link destination (absolute or relative)</span>
-}</pre>
-          </div>
-        </section>
-
-        <!-- HERO -->
-        <section class="api-section" id="hero">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-star"></i></span>
-            Hero
-          </div>
-          <p class="section-intro">The full-viewport hero section. All text fields accept raw HTML for icon and styling support.</p>
-          <table class="prop-table">
-            <thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>heroTag</td><td class="td-type">string (HTML)</td><td class="td-default">"design engine active"</td><td class="td-desc">Eyebrow label above the H1. Rendered inside a pill chip.</td></tr>
-              <tr><td>heroTitleLine1</td><td class="td-type">string (HTML)</td><td class="td-default">"Generative"</td><td class="td-desc">First word/line of the main H1. Renders in plain text color.</td></tr>
-              <tr><td>heroTitleLine2</td><td class="td-type">string (HTML)</td><td class="td-default">"Page Weaver"</td><td class="td-desc">Second word/line of the H1. Rendered with the gradient accent treatment.</td></tr>
-              <tr><td>heroSubtitle</td><td class="td-type">string (HTML)</td><td class="td-default">—</td><td class="td-desc">Supporting paragraph beneath the H1.</td></tr>
-              <tr><td>primaryBtnText</td><td class="td-type">string (HTML)</td><td class="td-default">"Explore Templates"</td><td class="td-desc">Primary CTA button. Accepts HTML for icons.</td></tr>
-              <tr><td>secondaryBtnText</td><td class="td-type">string (HTML)</td><td class="td-default">"Docs →"</td><td class="td-desc">Ghost/secondary CTA button.</td></tr>
-              <tr><td>brands</td><td class="td-type">string[]</td><td class="td-default">[]</td><td class="td-desc">Brand name strings. Populates both the inline hero brand chips and the marquee ticker. Pass an empty array to hide both.</td></tr>
-              <tr><td>brandsSubtitle</td><td class="td-type">string</td><td class="td-default">"global innovators…"</td><td class="td-desc">Caption text displayed below the brand chips inside the hero.</td></tr>
-            </tbody>
-          </table>
-        </section>
-
-        <!-- FEATURES -->
-        <section class="api-section" id="features">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-th"></i></span>
-            Features Grid
-          </div>
-          <p class="section-intro">Responsive card grid section. Hidden entirely when <code>features</code> is an empty array.</p>
-          <table class="prop-table">
-            <thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>featuresSectionLabel</td><td class="td-type">string (HTML)</td><td class="td-default">"core modules"</td><td class="td-desc">Small uppercase label above the section title. Accepts HTML.</td></tr>
-              <tr><td>featuresSectionTitle</td><td class="td-type">string (HTML)</td><td class="td-default">—</td><td class="td-desc">Section heading rendered as an H2.</td></tr>
-              <tr><td>features</td><td class="td-type">Feature[]</td><td class="td-default">[]</td><td class="td-desc">Array of feature card objects. Renders an auto-fit grid. Pass <code>[]</code> to suppress the entire section.</td></tr>
-            </tbody>
-          </table>
-
-          <div class="code-block">
-            <span class="code-label">Feature</span>
-            <pre>{
-  <span class="kw">title</span>: <span class="str">"Zero Config"</span>,              <span class="cmt">// card heading</span>
-  <span class="kw">desc</span>:  <span class="str">"Pass JSON, get a page."</span>,    <span class="cmt">// card body text</span>
-  <span class="kw">icon</span>:  <span class="str">"&lt;i class='fas fa-cube'&gt;&lt;/i&gt;"</span>  <span class="cmt">// HTML or emoji (optional)</span>
-}</pre>
-          </div>
-        </section>
-
-        <!-- PANELS -->
-        <section class="api-section" id="panels">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-layer-group"></i></span>
-            Panels
-          </div>
-          <p class="section-intro">Additional numbered content blocks below the features grid. Hidden when <code>panels</code> is empty.</p>
-          <table class="prop-table">
-            <thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
-            <tbody>
-              <tr><td>panels</td><td class="td-type">Panel[]</td><td class="td-default">[]</td><td class="td-desc">Array of panel objects rendered in a responsive row. Auto-numbered 01, 02…</td></tr>
-            </tbody>
-          </table>
-
-          <div class="code-block">
-            <span class="code-label">Panel</span>
-            <pre>{
-  <span class="kw">tag</span>:   <span class="str">"PERFORMANCE"</span>,             <span class="cmt">// small monospace label</span>
-  <span class="kw">title</span>: <span class="str">"Passive Inertia"</span>,          <span class="cmt">// panel heading</span>
-  <span class="kw">desc</span>:  <span class="str">"CSS vars + IntersectionObserver."</span>
-}</pre>
-          </div>
-        </section>
-
-        <!-- FOOTER -->
-        <section class="api-section" id="footer">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-align-bottom"></i></span>
-            Footer
-          </div>
-          <p class="section-intro">
-            Fully declarable professional footer with brand column, link columns, social icons, and a legal strip.
-            All sub-fields are optional — omit any you don't need.
-          </p>
-
-          <div class="schema-grid">
-            <div class="schema-card">
-              <div class="schema-card-title">footer object</div>
-              <div class="schema-row"><span class="schema-key">tagline</span><span class="schema-vtype">string</span></div>
-              <div class="schema-row"><span class="schema-key">copy</span><span class="schema-vtype">string</span></div>
-              <div class="schema-row"><span class="schema-key">columns</span><span class="schema-vtype">Column[]</span></div>
-              <div class="schema-row"><span class="schema-key">social</span><span class="schema-vtype">SocialLink[]</span></div>
-              <div class="schema-row"><span class="schema-key">legal</span><span class="schema-vtype">Link[]</span></div>
-            </div>
-            <div class="schema-card">
-              <div class="schema-card-title">Column</div>
-              <div class="schema-row"><span class="schema-key">heading</span><span class="schema-vtype">string</span></div>
-              <div class="schema-row"><span class="schema-key">links</span><span class="schema-vtype">Link[]</span></div>
-            </div>
-            <div class="schema-card">
-              <div class="schema-card-title">SocialLink</div>
-              <div class="schema-row"><span class="schema-key">icon</span><span class="schema-vtype">string (FA class)</span></div>
-              <div class="schema-row"><span class="schema-key">href</span><span class="schema-vtype">string</span></div>
-              <div class="schema-row"><span class="schema-key">label</span><span class="schema-vtype">string (aria)</span></div>
-            </div>
-            <div class="schema-card">
-              <div class="schema-card-title">Link</div>
-              <div class="schema-row"><span class="schema-key">label</span><span class="schema-vtype">string</span></div>
-              <div class="schema-row"><span class="schema-key">href</span><span class="schema-vtype">string</span></div>
-            </div>
-          </div>
-
-          <div class="callout info">
-            <i class="fas fa-circle-info"></i>
-            <div><strong>Legacy fallback:</strong> <code>config.footerCopy</code> (plain string) is still accepted as a copyright line when <code>config.footer</code> is absent. No breaking change.</div>
-          </div>
-
-          <div class="code-block">
-            <span class="code-label">Example</span>
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre><span class="kw">footer</span>: {
-  <span class="kw">tagline</span>: <span class="str">"Declarative UI engine for the modern web."</span>,
-  <span class="kw">copy</span>:    <span class="str">"© 2025 Figsh Digital · MIT"</span>,
-  <span class="kw">columns</span>: [
-    {
-      <span class="kw">heading</span>: <span class="str">"Product"</span>,
-      <span class="kw">links</span>: [
-        { <span class="kw">label</span>: <span class="str">"Docs"</span>,     <span class="kw">href</span>: <span class="str">"/docs"</span>     },
-        { <span class="kw">label</span>: <span class="str">"Sandbox"</span>,  <span class="kw">href</span>: <span class="str">"/sandbox"</span>  }
-      ]
-    }
-  ],
-  <span class="kw">social</span>: [
-    { <span class="kw">icon</span>: <span class="str">"fab fa-github"</span>, <span class="kw">href</span>: <span class="str">"https://github.com/…"</span>, <span class="kw">label</span>: <span class="str">"GitHub"</span> }
-  ],
-  <span class="kw">legal</span>: [
-    { <span class="kw">label</span>: <span class="str">"Privacy"</span>, <span class="kw">href</span>: <span class="str">"/privacy"</span> }
-  ]
-}</pre>
-          </div>
-        </section>
-
-        <!-- TEMPLATES -->
-        <section class="api-section" id="templates">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-palette"></i></span>
-            Templates
-          </div>
-          <p class="section-intro">Pass the token string to <code>config.template</code>. Each template injects a full set of CSS custom properties onto <code>:root</code>.</p>
-
-          <div class="template-grid">
-            <div class="template-swatch">
-              <div class="swatch-dots">
-                <span class="swatch-dot" style="background:#7af4ff;"></span>
-                <span class="swatch-dot" style="background:#b77cff;"></span>
-                <span class="swatch-dot" style="background:#ff7096;"></span>
-              </div>
-              <div class="swatch-name" style="color:#7af4ff;">"figsh"</div>
-              <div class="swatch-vibe">Futuristic glass — cyan / purple / pink on a deep midnight field.</div>
-            </div>
-            <div class="template-swatch">
-              <div class="swatch-dots">
-                <span class="swatch-dot" style="background:#0ff;"></span>
-                <span class="swatch-dot" style="background:#f0f;"></span>
-                <span class="swatch-dot" style="background:#ff3366;"></span>
-              </div>
-              <div class="swatch-name" style="color:#0ff;">"cyber"</div>
-              <div class="swatch-vibe">Neon cyberpunk — raw cyan / magenta on near-black.</div>
-            </div>
-            <div class="template-swatch">
-              <div class="swatch-dots">
-                <span class="swatch-dot" style="background:#48bb78;"></span>
-                <span class="swatch-dot" style="background:#8b5cf6;"></span>
-                <span class="swatch-dot" style="background:#3b82f6;"></span>
-              </div>
-              <div class="swatch-name" style="color:#48bb78;">"aurora"</div>
-              <div class="swatch-vibe">Organic nature — emerald / violet / blue on a deep teal ground.</div>
-            </div>
-            <div class="template-swatch">
-              <div class="swatch-dots">
-                <span class="swatch-dot" style="background:#fff;"></span>
-                <span class="swatch-dot" style="background:#b0b0b0;"></span>
-                <span class="swatch-dot" style="background:#7a7a7a;"></span>
-              </div>
-              <div class="swatch-name" style="color:#fff;">"monochrome"</div>
-              <div class="swatch-vibe">Minimalist grayscale — white / silver on near-black.</div>
-            </div>
-          </div>
-
-          <div class="code-block">
-            <span class="code-label">CSS Variables</span>
-            <pre><span class="cmt">/* Variables set on :root for each template */</span>
-<span class="kw">--glass-bg</span>      <span class="cmt">/* card/panel background */</span>
-<span class="kw">--glass-border</span>  <span class="cmt">/* border color with opacity */</span>
-<span class="kw">--glass-blur</span>    <span class="cmt">/* backdrop-filter value */</span>
-<span class="kw">--accent</span>        <span class="cmt">/* primary accent */</span>
-<span class="kw">--accent2</span>       <span class="cmt">/* secondary accent */</span>
-<span class="kw">--accent3</span>       <span class="cmt">/* tertiary accent */</span>
-<span class="kw">--text</span>          <span class="cmt">/* primary text color */</span>
-<span class="kw">--muted</span>         <span class="cmt">/* secondary / dimmed text */</span>
-<span class="kw">--bg-deep</span>       <span class="cmt">/* page background */</span></pre>
-          </div>
-        </section>
-
-        <!-- FULL EXAMPLE -->
-        <section class="api-section" id="fullexample">
-          <div class="section-heading">
-            <span class="s-icon"><i class="fas fa-file-code"></i></span>
-            Full Example
-          </div>
-          <p class="section-intro">All config fields together — copy and customise.</p>
-
-          <div class="code-block">
-            <span class="code-label">JS</span>
-            <button class="copy-btn" onclick="copyCode(this)">copy</button>
-            <pre><span class="fn">devtemDesign</span>(<span class="str">"app-root"</span>, {
-  <span class="cmt">// Core</span>
-  <span class="kw">template</span>:  <span class="str">"cyber"</span>,
-  <span class="kw">logo</span>:      <span class="str">"https://yoursite.com/logo.svg"</span>,
-  <span class="kw">logoName</span>:  <span class="str">"MYAPP"</span>,
-
-  <span class="cmt">// Navigation</span>
-  <span class="kw">navLinks</span>: [
-    { <span class="kw">label</span>: <span class="str">"Docs"</span>,  <span class="kw">href</span>: <span class="str">"/docs"</span>  },
-    { <span class="kw">label</span>: <span class="str">"API"</span>,   <span class="kw">href</span>: <span class="str">"/api"</span>   },
-    { <span class="kw">label</span>: <span class="str">"Blog"</span>,  <span class="kw">href</span>: <span class="str">"/blog"</span>  }
-  ],
-  <span class="kw">ctaText</span>: <span class="str">"Get Started →"</span>,
-
-  <span class="cmt">// Hero</span>
-  <span class="kw">heroTag</span>:          <span class="str">"✦ Now in beta"</span>,
-  <span class="kw">heroTitleLine1</span>:   <span class="str">"Ship faster"</span>,
-  <span class="kw">heroTitleLine2</span>:   <span class="str">"with less code"</span>,
-  <span class="kw">heroSubtitle</span>:     <span class="str">"One config schema. Full animated layout."</span>,
-  <span class="kw">primaryBtnText</span>:  <span class="str">"&lt;i class='fas fa-bolt'&gt;&lt;/i&gt; Get Started"</span>,
-  <span class="kw">secondaryBtnText</span>:<span class="str">"View on GitHub"</span>,
-  <span class="kw">brands</span>:          [<span class="str">"DEVTEMPLE"</span>, <span class="str">"FSCSS"</span>, <span class="str">"FIGSH"</span>],
-  <span class="kw">brandsSubtitle</span>:  <span class="str">"trusted by builders"</span>,
-
-  <span class="cmt">// Features</span>
-  <span class="kw">featuresSectionLabel</span>: <span class="str">"core mechanics"</span>,
-  <span class="kw">featuresSectionTitle</span>: <span class="str">"Pass data. The engine paints itself."</span>,
-  <span class="kw">features</span>: [
-    { <span class="kw">title</span>: <span class="str">"Zero Config"</span>,  <span class="kw">desc</span>: <span class="str">"One function call."</span>,       <span class="kw">icon</span>: <span class="str">"&lt;i class='fas fa-cube'&gt;&lt;/i&gt;"</span>   },
-    { <span class="kw">title</span>: <span class="str">"4 Themes"</span>,      <span class="kw">desc</span>: <span class="str">"Switch with one token."</span>,   <span class="kw">icon</span>: <span class="str">"&lt;i class='fas fa-palette'&gt;&lt;/i&gt;"</span> },
-    { <span class="kw">title</span>: <span class="str">"Pure CSS/JS"</span>,   <span class="kw">desc</span>: <span class="str">"No bundler. No framework."</span>, <span class="kw">icon</span>: <span class="str">"&lt;i class='fas fa-feather'&gt;&lt;/i&gt;"</span> }
-  ],
-
-  <span class="cmt">// Panels</span>
-  <span class="kw">panels</span>: [
-    { <span class="kw">tag</span>: <span class="str">"API"</span>,        <span class="kw">title</span>: <span class="str">"devtemDesign({…})"</span>, <span class="kw">desc</span>: <span class="str">"One handler."</span>    },
-    { <span class="kw">tag</span>: <span class="str">"PERF"</span>,       <span class="kw">title</span>: <span class="str">"Passive Inertia"</span>,   <span class="kw">desc</span>: <span class="str">"CSS vars only."</span> }
-  ],
-
-  <span class="cmt">// Footer</span>
-  <span class="kw">footer</span>: {
-    <span class="kw">tagline</span>: <span class="str">"Declarative UI engine."</span>,
-    <span class="kw">columns</span>: [
-      { <span class="kw">heading</span>: <span class="str">"Product"</span>, <span class="kw">links</span>: [{ <span class="kw">label</span>: <span class="str">"Docs"</span>, <span class="kw">href</span>: <span class="str">"/docs"</span> }] }
-    ],
-    <span class="kw">social</span>: [
-      { <span class="kw">icon</span>: <span class="str">"fab fa-github"</span>, <span class="kw">href</span>: <span class="str">"https://github.com/…"</span>, <span class="kw">label</span>: <span class="str">"GitHub"</span> }
-    ],
-    <span class="kw">legal</span>: [{ <span class="kw">label</span>: <span class="str">"MIT License"</span>, <span class="kw">href</span>: <span class="str">"/license"</span> }],
-    <span class="kw">copy</span>:  <span class="str">"© 2026 Your Name"</span>
-  }
-});</pre>
-          </div>
-        </section>
-
-      </main>
-    </div>
-  </div>
-  `);
-
-  // Sidebar active highlight on scroll
-  const sections = document.querySelectorAll('.api-section');
-  const sidebarLinks = document.querySelectorAll('.sidebar-link');
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        sidebarLinks.forEach(l => l.classList.remove('active'));
-        const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
-  sections.forEach(s => obs.observe(s));
-
-}, 80);
-
-// ── COPY CODE HELPER ─────────────────────────────────────────────
-function copyCode(btn) {
-  const block = btn.closest('.code-block');
-  const pre   = block.querySelector('pre');
-  // Strip HTML tags to get plain text
-  const text  = pre.innerText || pre.textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.textContent;
-    btn.textContent = 'copied!';
-    setTimeout(() => { btn.textContent = orig; }, 1600);
-  });
+interface DevtemHandle {
+  version: string;
+  setTemplate(name: TemplateName): void;  // switch theme, no re-render
+  destroy(): void;                        // remove listeners, observers, markup
 }
+
+devtemDesign.version;    // "0.1.0"
+devtemDesign.templates;  // ["figsh", "cyber", "aurora", ...]`],
+  head:["Parameter","Type","Default","Description"],
+  rows:[["containerId","string",'"app-root"',"ID of the element to render into. Returns `null` if it is not found."],
+        ["config","DevtemConfig","{}","Configuration object. Every field is optional."]],
+  note:["warn","Rendering replaces the container's contents. Calling it again on the same container destroys the previous instance first, so nothing leaks."] },
+
+{ id:"core", ic:"cube", t:"Core", intro:"Identity, theme and behavior switches.",
+  rows:[["template","TemplateName",'"figsh"',"`figsh` `cyber` `aurora` `monochrome` `sunset` `ocean` `paper`."],
+        ["theme","object","{}","Token overrides, with or without the `--` prefix. See Theme Tokens."],
+        ["themeSwitcher","boolean | string[]","false","Adds a navbar theme button. An array limits the cycle. Choice is saved in `localStorage`."],
+        ["cursor","boolean","true","Set `false` to disable the custom cursor."],
+        ["logo","string (URL)","fscss logo","Brand image for navbar and footer."],
+        ["logoName","string","\"CORE\"","Brand name in navbar and footer."],
+        ["logoHref","string",'"/"',"Where the navbar brand links to."]] },
+
+{ id:"nav", ic:"bars", t:"Navigation", intro:"Sticky glass navbar. Below 860px it becomes an animated hamburger with a slide-in drawer.",
+  rows:[["navLinks","(string | NavItem)[]","Features, How it works, Pricing","Strings (href `#`) or `{ label, href }`. Both can be mixed."],
+        ["ctaText","string (HTML)",'"Get started"',"Navbar button text. Repeated at the end of the drawer."],
+        ["ctaHref","string",'"#"',"Navbar button link."]],
+  code:["NavItem",`{ label: "Docs", href: "/docs" }`],
+  note:["info","Links to on-page sections get an active underline while that section is in view."] },
+
+{ id:"hero", ic:"star", t:"Hero", intro:"Full-height hero. Text fields accept HTML.",
+  rows:[["heroBadge","string (HTML)","none","Pill above the title."],
+        ["heroTitleLine1","string (HTML)",'"Declarative UI,"',"First line of the H1."],
+        ["heroTitleLine2","string (HTML)",'"Zero-Config Motion"',"Second line, animated gradient."],
+        ["heroSubtitle","string (HTML)","default copy","Paragraph under the H1."],
+        ["primaryBtnText / primaryBtnHref","string",'"Get started" / "#"',"Main button."],
+        ["secondaryBtnText / secondaryBtnHref","string","none","Ghost button, rendered only when text is set."],
+        ["brands","string[]","[]","Feeds hero chips and the seamless marquee (pauses on hover)."],
+        ["brandsSubtitle","string","default","Caption under the chips."]] },
+
+{ id:"stats", ic:"chart-simple", t:"Stats", intro:"Numbers that count up the first time they scroll into view.",
+  rows:[["stats","Stat[]","none","`{ value, label }`. Prefix, suffix, commas and decimals are kept."],
+        ["statsId","string",'"stats"',"Anchor id for the section."]],
+  code:["Stat",`{ value: "12k+", label: "Developers" }   // also "$1,200", "99.9%"`] },
+
+{ id:"features", ic:"table-cells", t:"Features", intro:"Auto-fit card grid with a cursor spotlight. Anchor `#features`.",
+  rows:[["featuresLabel","string (HTML)",'"Features"',"Small label above the title."],
+        ["featuresTitle","string (HTML)","default","Section H2."],["featuresSub","string","none","Optional subtitle."],
+        ["features","Feature[]","none","Pass an array to render the section."]],
+  code:["Feature",`{
+  title: "Zero Config",
+  desc:  "Pass JSON, get a page.",
+  icon:  "<i class='fas fa-cube'></i>"   // HTML or emoji, optional
+}`] },
+
+{ id:"steps", ic:"list-ol", t:"Steps", intro:"Numbered process section. Anchor `#how`.",
+  rows:[["stepsLabel / stepsTitle / stepsSub","string","defaults","Section heading."],
+        ["steps","Step[]","none","`{ title, desc }`, numbered automatically."]] },
+
+{ id:"panels", ic:"layer-group", t:"Panels", intro:"Numbered content blocks.",
+  rows:[["panelsLabel / panelsTitle / panelsSub","string","none","Optional heading above the panels."],
+        ["panels","Panel[]","none","`{ tag, title, desc }`, numbered 01, 02, ..."]] },
+
+{ id:"pricing", ic:"tags", t:"Pricing", intro:"Plan cards with an optional Monthly/Yearly toggle. Anchor `#pricing`.",
+  rows:[["pricingLabel / pricingTitle / pricingSub","string","defaults","Section heading."],
+        ["yearlyBadge","string","none","Label on the Yearly toggle, e.g. `Save 20%`."],
+        ["pricing","Plan[]","none","Plans, see below. The toggle appears when any plan has `yearly`."]],
+  code:["Plan",`{
+  tier: "Pro", amount: "$12", period: "/mo", desc: "For product landings.",
+  features: ["Everything in Free", "Priority support"],
+  cta: "Go Pro", href: "/signup",
+  featured: true, badge: "Most popular",
+  yearly: { amount: "$115", period: "/yr" }   // optional
+}`] },
+
+{ id:"faq", ic:"circle-question", t:"FAQ and CTA", intro:"Accordion (one open at a time) and a closing call to action. Anchor `#faq`.",
+  rows:[["faqLabel / faqTitle / faqSub","string","defaults","Section heading."],
+        ["faq","FaqItem[]","none","`{ q, a }`. Uses native `<details>`."],
+        ["cta","Cta","none","`{ title, sub, text, href }` renders a full-width band."]] },
+
+{ id:"footer", ic:"table-columns", t:"Footer", intro:"Brand column, link columns, socials and a legal strip. Every field is optional.",
+  rows:[["footer.tagline","string","none","Text under the footer logo."],
+        ["footer.copy","string","© year","Copyright line. `config.footerCopy` still works as a fallback."],
+        ["footer.columns","Column[]","none","`{ heading, links: Link[] }`."],
+        ["footer.social","SocialLink[]","none","`{ icon, href, label }`. `icon` is a Font Awesome class."],
+        ["footer.legal","Link[]","none","`{ label, href }`."]],
+  code:["Example",`footer: {
+  tagline: "Declarative UI engine.",
+  copy: "© 2026 Figsh Digital",
+  columns: [{ heading: "Product", links: [{ label: "Docs", href: "/docs" }] }],
+  social:  [{ icon: "fab fa-github", href: "https://github.com/...", label: "GitHub" }],
+  legal:   [{ label: "Privacy", href: "/privacy" }]
+}`] },
+
+{ id:"templates", ic:"palette", t:"Templates", intro:"Seven built-in themes. Click a swatch to preview it on this page with `setTemplate()`.", swatches:true },
+
+{ id:"tokens", ic:"sliders", t:"Theme Tokens", intro:"Each template sets these CSS custom properties on `:root`. Override any of them with `theme`.",
+  head:["Token","Type","Default","Purpose"],
+  rows:[["--accent / --accent2 / --accent3","color","per template","Brand colors and gradients."],
+        ["--text / --muted","color","per template","Primary and secondary text."],
+        ["--bg-deep","color","per template","Page background, and text color on filled buttons."],
+        ["--glass-bg / --glass-border / --glass-blur","css","per template","Card surfaces."],
+        ["--surface / --line","color","per template","Subtle fills and dividers."],
+        ["--orb","number","0.22","Ambient orb opacity."]],
+  code:["JS",`theme: { accent: "#ff4d6d", accent2: "#ffb703", "bg-deep": "#0b0710" }`] },
+
+{ id:"example", ic:"file-code", t:"Full Example", intro:"A compact config touching every section.",
+  code:["JS",`const page = devtemDesign("app-root", {
+  template: "ocean", themeSwitcher: true,
+  logoName: "MYAPP",
+  navLinks: [{ label: "Docs", href: "/docs" }, "Pricing"],
+  ctaText: "Get Started", ctaHref: "/signup",
+
+  heroBadge: "Now in beta",
+  heroTitleLine1: "Ship faster", heroTitleLine2: "with less code",
+  heroSubtitle: "One config schema. Full animated layout.",
+  primaryBtnText: "Get Started", primaryBtnHref: "/signup",
+  brands: ["DEVTEMPLE", "FSCSS", "FIGSH"],
+
+  stats: [{ value: "12k+", label: "Developers" }],
+  features: [{ title: "Zero Config", desc: "One function call.", icon: "<i class='fas fa-cube'></i>" }],
+  steps: [{ title: "Describe", desc: "Fill the config." }],
+  panels: [{ tag: "API", title: "devtemDesign({...})", desc: "One handler." }],
+  pricing: [{ tier: "Free", amount: "$0", features: ["All templates"], cta: "Start", href: "#" }],
+  faq: [{ q: "Need a build step?", a: "No." }],
+  cta: { title: "Ready?", text: "Read the docs", href: "/docs" },
+  footer: { tagline: "Declarative UI engine.", copy: "© 2026 Your Name" }
+});
+
+page.setTemplate("sunset");`] }
+];
+
+const TPL = [["figsh","Futuristic glass","#7af4ff #b77cff #ff7096"],["cyber","Neon cyberpunk","#00f0ff #ff2bd6 #ff3366"],["aurora","Organic nature","#48bb78 #8b5cf6 #3b82f6"],["monochrome","Minimal grayscale","#ffffff #b0b0b0 #7a7a7a"],["sunset","Warm dusk","#ff9a5a #ff5c8a #ffd166"],["ocean","Cool depth","#38bdf8 #2dd4bf #818cf8"],["paper","Light mode","#4f46e5 #db2777 #0891b2"]];
+
+/* ---------- renderers ---------- */
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const md = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
+const hl = s => esc(s).replace(/(\/\/.*|\/\*[\s\S]*?\*\/)|("(?:[^"\\\n]|\\.)*"|'[^'\n]*')|\b(devtemDesign|setTemplate)\b|\b([A-Za-z_][\w-]*)(?=\s*:)/g,
+  (m,c,st,fn,k) => c ? `<span class="cm">${c}</span>` : st ? `<span class="str">${st}</span>` : fn ? `<span class="fn">${fn}</span>` : `<span class="kw">${k}</span>`);
+
+function table(head, rows) {
+  return `<div class="tw"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${
+    rows.map(r=>`<tr><td>${esc(r[0])}</td><td class="t">${esc(r[1])}</td><td class="d">${esc(r[2])}</td><td>${md(r[3])}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function sec(s) {
+  let h = `<section class="sec" id="${s.id}"><h2><span class="ic"><i class="fas fa-${s.ic}"></i></span>${s.t}</h2><p class="intro">${md(s.intro)}</p>`;
+  if (s.swatches) h += `<div class="sw">${TPL.map(t=>`<button class="swatch" type="button" data-t="${t[0]}"><div class="dots">${t[2].split(" ").map(c=>`<b style="background:${c}"></b>`).join("")}</div><strong style="color:${t[2].split(" ")[0]}">"${t[0]}"</strong><span>${t[1]}</span></button>`).join("")}</div>`;
+  if (s.rows) h += table(s.head || H, s.rows);
+  if (s.code) h += `<div class="code"><span class="lb">${s.code[0]}</span><button class="cp" type="button">copy</button><pre><code>${hl(s.code[1])}</code></pre></div>`;
+  if (s.note) h += `<div class="call ${s.note[0]==="warn"?"warn":""}"><i class="fas fa-${s.note[0]==="warn"?"triangle-exclamation":"circle-info"}"></i><div>${md(s.note[1])}</div></div>`;
+  return h + "</section>";
+}
+
+const groups = [["Getting Started", ["quickstart","signature"]], ["Config Schema", ["core","nav","hero","stats","features","steps","panels","pricing","faq","footer"]], ["Reference", ["templates","tokens","example"]]];
+const side = groups.map(g => `<h4>${g[0]}</h4>` + g[1].map(id => { const s = S.find(x=>x.id===id); return `<a href="#${id}"><i class="fas fa-${s.ic}"></i>${s.t}</a>`; }).join("")).join("");
+
+const el = document.createElement("div");
+el.className = "api-page";
+el.innerHTML = `
+<header class="api-header"><div class="api-header-inner">
+  <div class="eyebrow"><i class="fas fa-code"></i> Reference</div>
+  <h1>Schema <em>API</em></h1>
+  <p class="lede">Complete configuration reference for <code>devtemDesign()</code>. One function call, one config object. Everything else is handled by the engine.</p>
+  <div class="badges"><span class="badge on"><i class="fas fa-tag"></i> v0.1.0</span><span class="badge"><i class="fab fa-npm"></i> devtemdesign</span><span class="badge"><i class="fas fa-circle" style="color:#22c55e;font-size:.5rem"></i> Stable</span><a class="badge" href="/docs">Docs</a><a class="badge" href="/examples">Examples</a></div>
+</div></header>
+<div class="api-body"><nav class="side" aria-label="Schema sections">${side}</nav><main class="content">${S.map(sec).join("")}</main></div>`;
+document.querySelector(".site-footer").before(el);
+
+/* ---------- interactions ---------- */
+el.addEventListener("click", e => {
+  const sw = e.target.closest(".swatch");
+  if (sw) { page.setTemplate(sw.dataset.t); return; }
+  const b = e.target.closest(".cp");
+  if (b) navigator.clipboard.writeText(b.parentNode.querySelector("pre").textContent).then(
+    () => { b.textContent = "copied!"; setTimeout(() => b.textContent = "copy", 1600); },
+    () => { b.textContent = "failed"; setTimeout(() => b.textContent = "copy", 1600); });
+});
+
+const links = {};
+el.querySelectorAll(".side a").forEach(a => links[a.hash.slice(1)] = a);
+const io = new IntersectionObserver(es => es.forEach(en => {
+  if (!en.isIntersecting) return;
+  Object.values(links).forEach(l => l.classList.remove("active"));
+  const a = links[en.target.id]; if (!a) return;
+  a.classList.add("active");
+  a.scrollIntoView({ block: "nearest", inline: "nearest" });
+}), { rootMargin: "-25% 0px -65% 0px" });
+el.querySelectorAll(".sec").forEach(s => io.observe(s));
+if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
 </script>
 </body>
 </html>
