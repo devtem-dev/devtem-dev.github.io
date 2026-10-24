@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>devtemDesign Examples | Live SaaS, Portfolio & Open Source Landing Pages</title>
+<meta name="description" content="Live devtemDesign examples: a SaaS landing page, a portfolio and an open source project page. Preview on desktop and mobile, switch between 7 templates, and copy the full code.">
+<meta name="keywords" content="devtemDesign examples, landing page examples, SaaS landing page template, portfolio template, open source project page, JavaScript page generator, glassmorphism templates">
+<meta name="author" content="DevTemple">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#050b14">
+<link rel="canonical" href="https://design.devtem.org/examples">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="devtemDesign">
+<meta property="og:title" content="devtemDesign Examples">
+<meta property="og:description" content="Live landing page examples with a template switcher and copyable code.">
+<meta property="og:url" content="https://design.devtem.org/examples">
+<meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="devtemDesign Examples">
+<meta name="twitter:description" content="Live landing page examples with a template switcher and copyable code.">
+<meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg">
+<link rel="icon" href="https://design.devtem.org/assets/images/logo.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"CollectionPage","name":"devtemDesign Examples","url":"https://design.devtem.org/examples","description":"Live landing page examples built with devtemDesign.","publisher":{"@type":"Organization","name":"DevTemple"},"hasPart":[
+{"@type":"CreativeWork","name":"SaaS landing page","description":"Stats, features, yearly pricing, FAQ and CTA using the ocean template."},
+{"@type":"CreativeWork","name":"Portfolio","description":"Process steps, selected work and a closing CTA using the sunset template."},
+{"@type":"CreativeWork","name":"Open source project page","description":"Install steps, brand marquee and FAQ using the cyber template."}]},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"devtemDesign","item":"https://design.devtem.org/"},{"@type":"ListItem","position":2,"name":"Examples","item":"https://design.devtem.org/examples"}]}]}
+</script>
+<style>
+:root{--bg:#050b14;--fg:#f4f9ff;--mut:#9fb0c8;--line:rgba(255,255,255,.1);--card:#0c1524;--acc:#7af4ff;--acc2:#b77cff}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:6px}
+button,select{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;background:rgba(5,11,20,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;color:var(--fg)}.logo b{color:var(--acc)}.logo:hover{text-decoration:none}
+.top nav{display:flex;gap:16px;font-size:.88rem}.top nav a{color:var(--mut)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+.hd{padding:48px 0 24px}
+.hd h1{font-size:clamp(1.9rem,6vw,3rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:12px}
+.hd h1 span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hd p{color:var(--mut);max-width:620px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 16px}
+.tab{padding:9px 16px;border-radius:99px;border:1px solid var(--line);background:none;cursor:pointer;color:var(--mut);transition:.2s}
+.tab:hover{color:var(--fg);border-color:var(--acc)}
+.tab[aria-selected=true]{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#050b14;border-color:transparent;font-weight:700}
+.desc{color:var(--mut);margin-bottom:16px;max-width:720px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.bar .sp{flex:1}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;overflow:hidden}
+.seg button{padding:7px 14px;background:none;border:0;cursor:pointer;color:var(--mut);font-size:.85rem}
+.seg button[aria-pressed=true]{background:rgba(255,255,255,.1);color:var(--fg)}
+select{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:.85rem}
+.btn{padding:7px 16px;border-radius:99px;border:1px solid var(--line);background:none;cursor:pointer;font-size:.85rem}
+.btn:hover{border-color:var(--acc);color:var(--acc)}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;display:flex;justify-content:center}
+.frame{width:100%;max-width:100%;height:70vh;min-height:460px;border:0;border-radius:10px;background:#000;transition:max-width .3s}
+.frame.m{max-width:390px}
+pre{display:none;width:100%;max-height:70vh;overflow:auto;background:#060b16;border-radius:12px;padding:16px;font:.8rem/1.55 ui-monospace,Menlo,monospace;color:#d6e2f5;white-space:pre}
+.code .frame{display:none}.code pre{display:block}.code .stage{padding:0;border:0;background:none}
+.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:56px 0}
+.list div{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--card)}
+.list h3{font-size:1rem;margin-bottom:6px}.list p{color:var(--mut);font-size:.9rem}
+footer{border-top:1px solid var(--line);padding:24px 18px;text-align:center;color:var(--mut);font-size:.85rem}
+noscript{display:block;padding:16px;color:var(--mut)}
+@media(max-width:640px){.top nav a:nth-child(1){display:none}.bar .sp{display:none}.frame{height:62vh}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="/">devtem<b>Design</b></a>
+  <nav aria-label="Site"><a href="/">Home</a><a href="/docs">Docs</a><a href="/examples" aria-current="page">Examples</a><a href="https://github.com/devtem-dev/devtemDesign">GitHub</a></nav>
+</header>
+
+<main class="wrap">
+  <section class="hd">
+    <h1>Real pages, <span>one config object</span></h1>
+    <p>Every preview below is a live page built with devtemDesign 0.1.0. Switch templates, check the mobile layout, then copy the full code.</p>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Examples" id="tabs"></div>
+  <p class="desc" id="desc"></p>
+
+  <div class="bar">
+    <div class="seg" role="group" aria-label="View"><button type="button" id="vPrev" aria-pressed="true">Preview</button><button type="button" id="vCode" aria-pressed="false">Code</button></div>
+    <div class="seg" role="group" aria-label="Device"><button type="button" id="dDesk" aria-pressed="true">Desktop</button><button type="button" id="dMob" aria-pressed="false">Mobile</button></div>
+    <label><span style="position:absolute;left:-9999px">Template</span><select id="tpl"></select></label>
+    <span class="sp"></span>
+    <button class="btn" type="button" id="copy">Copy code</button>
+    <button class="btn" type="button" id="open">Open full page</button>
+  </div>
+
+  <div id="view">
+    <div class="stage"><iframe class="frame" id="frame" title="Live example preview" loading="lazy"></iframe><pre id="code" tabindex="0"></pre></div>
+  </div>
+  <noscript>Examples need JavaScript. See the <a href="/docs">documentation</a> for the config reference.</noscript>
+
+  <section class="list" aria-label="What each example shows">
+    <div><h3>SaaS landing page</h3><p>Count-up stats, three features, a Monthly/Yearly pricing toggle, FAQ accordion and a closing CTA band.</p></div>
+    <div><h3>Portfolio</h3><p>Hero with brand marquee, a process in three steps, selected work as panels and a contact CTA.</p></div>
+    <div><h3>Open source project</h3><p>Install steps, tooling marquee, feature cards, FAQ and a full footer with social links.</p></div>
+  </section>
+  <p style="color:var(--mut);margin-bottom:56px">Need every option? Read the <a href="/docs">configuration reference</a>.</p>
+</main>
+<footer>&copy; 2026 Figsh &middot; MIT licensed &middot; <a href="https://devtem.org">DevTemple</a></footer>
+
+<script>
+var V="0.1.0",CSS="https://cdn.jsdelivr.net/npm/devtemdesign@"+V+"/style.min.css",JS="https://cdn.jsdelivr.net/npm/devtemdesign@"+V+"/script.min.js",FA="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css";
+var TEMPLATES=["figsh","cyber","aurora","monochrome","sunset","ocean","paper"];
+var ft=function(n){return{tagline:"Built with devtemDesign.",copy:"\u00a9 2026 "+n,legal:[{label:"Privacy",href:"#"},{label:"Terms",href:"#"}]}};
+
+var EXAMPLES=[
+{id:"saas",name:"SaaS landing",desc:"A product page with stats, features, yearly pricing, FAQ and a closing CTA.",cfg:{
+  template:"ocean",logoName:"ORBIT",
+  navLinks:[{label:"Features",href:"#features"},{label:"Pricing",href:"#pricing"},{label:"FAQ",href:"#faq"}],
+  ctaText:"Start free",ctaHref:"#pricing",
+  heroBadge:"New: team workspaces",heroTitleLine1:"Ship analytics,",heroTitleLine2:"not dashboards",
+  heroSubtitle:"Orbit turns raw events into answers your whole team can read.",
+  primaryBtnText:"Start free",primaryBtnHref:"#pricing",secondaryBtnText:"See features",secondaryBtnHref:"#features",
+  stats:[{value:"12k+",label:"Teams"},{value:"99.9%",label:"Uptime"},{value:"4.8",label:"Average rating"}],
+  featuresTitle:"Everything in one place",
+  features:[{title:"Live metrics",desc:"Streams update in under a second.",icon:"\u26a1"},{title:"Shared boards",desc:"One link for the whole team.",icon:"\ud83d\udcca"},{title:"Alerts",desc:"Get pinged before customers notice.",icon:"\ud83d\udd14"}],
+  yearlyBadge:"Save 20%",
+  pricing:[{tier:"Starter",amount:"$0",desc:"For side projects.",features:["3 boards","7 day history"],cta:"Start free",href:"#"},
+    {tier:"Team",amount:"$19",period:"/mo",yearly:{amount:"$182",period:"/yr"},featured:true,badge:"Most popular",desc:"For growing teams.",features:["Unlimited boards","1 year history","Priority support"],cta:"Go Team",href:"#"}],
+  faq:[{q:"Is there a free plan?",a:"Yes. Starter is free forever."},{q:"Can I cancel anytime?",a:"Yes, from the billing page in two clicks."}],
+  cta:{title:"See your data differently",text:"Create account",href:"#"},footer:ft("Orbit")}},
+{id:"portfolio",name:"Portfolio",desc:"A designer portfolio with a process section, work panels and a contact CTA.",cfg:{
+  template:"sunset",logoName:"AMARA",
+  navLinks:[{label:"Work",href:"#work"},{label:"Process",href:"#how"},{label:"Contact",href:"#contact"}],
+  ctaText:"Hire me",ctaHref:"#contact",
+  heroBadge:"Available for projects",heroTitleLine1:"Product design",heroTitleLine2:"with a point of view",
+  heroSubtitle:"Independent designer helping startups launch interfaces people enjoy.",
+  primaryBtnText:"See my work",primaryBtnHref:"#work",
+  brands:["Figma","Webflow","Notion","Stripe","Linear"],brandsSubtitle:"Tools and clients",
+  stepsTitle:"How we work",
+  steps:[{title:"Discover",desc:"Goals, users and constraints."},{title:"Design",desc:"Flows, then polished screens."},{title:"Deliver",desc:"Handoff and launch support."}],
+  panelsLabel:"Selected work",panelsTitle:"Recent projects",
+  panels:[{tag:"fintech",title:"Pocket Bank",desc:"Mobile onboarding redesign."},{tag:"health",title:"Calm Clinic",desc:"Booking flow for 40 clinics."},{tag:"saas",title:"Tidy CRM",desc:"Design system from scratch."}],
+  cta:{title:"Have a project in mind?",sub:"I reply within one working day.",text:"Email me",href:"mailto:hello@example.com"},footer:ft("Amara Okoye")}},
+{id:"oss",name:"Open source",desc:"A project page for a developer library with install steps and FAQ.",cfg:{
+  template:"cyber",logoName:"TINYQ",
+  navLinks:[{label:"Install",href:"#how"},{label:"Features",href:"#features"},{label:"FAQ",href:"#faq"}],
+  ctaText:"GitHub \u2192",ctaHref:"#",
+  heroBadge:"v2.1.0 // MIT",heroTitleLine1:"A 2kb query",heroTitleLine2:"library for the browser",
+  heroSubtitle:"Tiny, typed and tree-shakable. No dependencies.",
+  primaryBtnText:"Get started",primaryBtnHref:"#how",secondaryBtnText:"Star on GitHub",secondaryBtnHref:"#",
+  brands:["TypeScript","ESM","Vite","Deno","Bun"],brandsSubtitle:"Works everywhere",
+  featuresTitle:"Small on purpose",
+  features:[{title:"2kb gzipped",desc:"Smaller than most icons.",icon:"\ud83d\udce6"},{title:"Fully typed",desc:"Inference all the way down.",icon:"\ud83e\udde0"},{title:"Tree-shakable",desc:"Only ship what you import.",icon:"\ud83c\udf32"}],
+  stepsTitle:"Up and running",
+  steps:[{title:"Install",desc:"npm i tinyq"},{title:"Import",desc:"import { q } from 'tinyq'"},{title:"Query",desc:"q('.btn').on('click', run)"}],
+  faq:[{q:"Does it support IE11?",a:"No. It targets modern browsers."},{q:"How do I contribute?",a:"Open an issue or send a pull request."}],
+  footer:{tagline:"Tiny tools for the web.",copy:"\u00a9 2026 tinyq",
+    social:[{icon:"fab fa-github",href:"#",label:"GitHub"},{icon:"fab fa-npm",href:"#",label:"npm"}],legal:[{label:"License (MIT)",href:"#"}]}}}
+];
+
+function build(cfg){
+  return "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>"+cfg.logoName+"</title>\n"+
+  "<link rel=\"stylesheet\" href=\""+FA+"\">\n<link rel=\"stylesheet\" href=\""+CSS+"\">\n<script src=\""+JS+"\"><\/script>\n</head>\n<body>\n<div id=\"app-root\"></div>\n<script>\ndevtemDesign(\"app-root\", "+JSON.stringify(cfg,null,2)+");\n<\/script>\n</body>\n</html>";
+}
+
+var $=function(i){return document.getElementById(i)};
+var cur=0,tpl=EXAMPLES[0].cfg.template,mobile=false,code=false;
+var tabs=$("tabs"),sel=$("tpl");
+
+EXAMPLES.forEach(function(e,i){var b=document.createElement("button");b.className="tab";b.type="button";b.setAttribute("role","tab");b.textContent=e.name;b.onclick=function(){pick(i,true)};tabs.appendChild(b)});
+TEMPLATES.forEach(function(t){var o=document.createElement("option");o.value=t;o.textContent="Template: "+t;sel.appendChild(o)});
+
+function html(){var c=JSON.parse(JSON.stringify(EXAMPLES[cur].cfg));c.template=tpl;return build(c)}
+function render(){
+  var h=html();
+  $("code").textContent=h;
+  $("frame").srcdoc=h;
+}
+function pick(i,keepTpl){
+  cur=i;if(!keepTpl||true)tpl=EXAMPLES[i].cfg.template;
+  sel.value=tpl;$("desc").textContent=EXAMPLES[i].desc;
+  Array.prototype.forEach.call(tabs.children,function(b,j){b.setAttribute("aria-selected",j===i)});
+  render();
+  history.replaceState(null,"","#"+EXAMPLES[i].id);
+}
+sel.onchange=function(){tpl=sel.value;render()};
+function seg(a,b,on){$(a).setAttribute("aria-pressed",on);$(b).setAttribute("aria-pressed",!on)}
+$("vPrev").onclick=function(){code=false;$("view").classList.remove("code");seg("vPrev","vCode",true)};
+$("vCode").onclick=function(){code=true;$("view").classList.add("code");seg("vCode","vPrev",true);$("vPrev").setAttribute("aria-pressed",false)};
+$("dDesk").onclick=function(){mobile=false;$("frame").classList.remove("m");seg("dDesk","dMob",true)};
+$("dMob").onclick=function(){mobile=true;$("frame").classList.add("m");seg("dMob","dDesk",true);$("dDesk").setAttribute("aria-pressed",false)};
+$("copy").onclick=function(){var b=$("copy");navigator.clipboard.writeText(html()).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy code"},1500)},function(){b.textContent="Copy failed";setTimeout(function(){b.textContent="Copy code"},1500)})};
+$("open").onclick=function(){var u=URL.createObjectURL(new Blob([html()],{type:"text/html"}));window.open(u,"_blank");setTimeout(function(){URL.revokeObjectURL(u)},60000)};
+
+var start=EXAMPLES.findIndex(function(e){return "#"+e.id===location.hash});
+pick(start>-1?start:0);
+</script>
+</body>
+</html>
