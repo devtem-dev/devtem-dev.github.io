@@ -1,478 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  
-  <title>devtemDesign Documentation | API Reference, Configuration & Examples</title>
-  
-  <meta name="description" content="Official devtemDesign documentation. Learn installation, configuration, templates, components, API usage, customization, and deployment with practical examples.">
-  
-  <meta name="keywords" content="devtemDesign docs, devtemDesign documentation, devtemDesign API, JavaScript UI engine documentation, declarative UI framework, devtemDesign examples, devtemDesign guide, devtemDesign configuration, frontend framework docs">
-  
-  <meta name="author" content="DevTemple">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#00ffff">
-  
-  <link rel="canonical" href="https://design.devtem.org/docs">
-  
-  <!-- Open Graph -->
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="devtemDesign">
-  <meta property="og:title" content="devtemDesign Documentation">
-  <meta property="og:description" content="Official documentation for devtemDesign. Installation guides, API references, configuration options, and examples.">
-  <meta property="og:url" content="https://design.devtem.org/docs">
-  <meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg">
-  
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="devtemDesign Documentation">
-  <meta name="twitter:description" content="Installation guides, API references, examples, templates, and customization options for devtemDesign.">
-  <meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg">
-  
-  <!-- Search -->
-  <meta name="googlebot" content="index,follow,max-image-preview:large">
-  
-  <!-- Icons -->
-  <link rel="icon" href="https://design.devtem.org/assets/images/logo.png">
-  <link rel="apple-touch-icon" href="https://design.devtem.org/assets/images/logo.png">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "headline": "devtemDesign Documentation",
-      "description": "Official documentation for devtemDesign.",
-      "author": {
-        "@type": "Organization",
-        "name": "DevTemple"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "DevTemple"
-      },
-      "url": "https://design.devtem.org/docs",
-      "image": "https://design.devtem.org/assets/images/og.jpg"
-    }
-  </script>
-  <style>
-    /* ===== DOCUMENTATION STYLES (independent, clean, readable) ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #f8fafc;
-      color: #0f172a;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      line-height: 1.6;
-      scroll-behavior: smooth;
-    }
-
-    /* Container & layout */
-    .docs-container {
-      display: flex;
-      max-width: 1400px;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    /* Sidebar navigation */
-    .docs-sidebar {
-      width: 280px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      padding: 2rem 1.5rem;
-      border-right: 1px solid #e2e8f0;
-      background: #ffffff;
-      z-index: 10;
-    }
-
-    .sidebar-logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid #0f172a;
-      display: inline-block;
-    }
-    .sidebar-logo span {
-      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .sidebar-nav {
-      list-style: none;
-    }
-    .sidebar-nav li {
-      margin-bottom: 0.5rem;
-    }
-    .sidebar-nav a {
-      display: block;
-      padding: 0.5rem 0.75rem;
-      color: #334155;
-      text-decoration: none;
-      border-radius: 0.5rem;
-      transition: all 0.2s ease;
-      font-size: 0.9rem;
-    }
-    .sidebar-nav a:hover {
-      background: #f1f5f9;
-      color: #0f172a;
-    }
-    .sidebar-nav .nav-section {
-      font-weight: 700;
-      margin-top: 1.25rem;
-      margin-bottom: 0.5rem;
-      padding-left: 0.5rem;
-      color: #0f172a;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .sidebar-nav .nav-section:first-of-type {
-      margin-top: 0;
-    }
-
-    /* Main content area */
-    .docs-content {
-      flex: 1;
-      padding: 3rem 4rem;
-      max-width: calc(100% - 280px);
-      background: #ffffff;
-    }
-
-    /* Typography */
-    .docs-content h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid #e2e8f0;
-    }
-    .docs-content h2 {
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-      letter-spacing: -0.01em;
-    }
-    .docs-content h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-top: 1.75rem;
-      margin-bottom: 0.75rem;
-    }
-    .docs-content p {
-      margin-bottom: 1rem;
-      color: #334155;
-    }
-    .docs-content a {
-      color: #0ea5e9;
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s;
-    }
-    .docs-content a:hover {
-      border-bottom-color: #0ea5e9;
-    }
-    .docs-content code {
-      background: #f1f5f9;
-      padding: 0.2rem 0.4rem;
-      border-radius: 0.375rem;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.875em;
-      color: #0f172a;
-    }
-    .docs-content pre {
-      background: #0f172a;
-      color: #e2e8f0;
-      padding: 1.25rem;
-      border-radius: 0.75rem;
-      overflow-x: auto;
-      margin: 1.5rem 0;
-      font-size: 0.875rem;
-      line-height: 1.5;
-    }
-    pre code {
-      background: transparent;
-      padding: 0;
-      color: inherit;
-    }
-    .docs-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1.5rem 0;
-      font-size: 0.875rem;
-    }
-    .docs-content th,
-    .docs-content td {
-      border: 1px solid #e2e8f0;
-      padding: 0.75rem 1rem;
-      text-align: left;
-    }
-    .docs-content th {
-      background: #f8fafc;
-      font-weight: 600;
-    }
-    .docs-content .badge {
-      display: inline-block;
-      background: #e2e8f0;
-      padding: 0.2rem 0.5rem;
-      border-radius: 12px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      margin-right: 0.5rem;
-      color: #334155;
-    }
-    .docs-content .note {
-      background: #fef9c3;
-      border-left: 4px solid #eab308;
-      padding: 1rem 1.25rem;
-      border-radius: 0.5rem;
-      margin: 1.5rem 0;
-    }
-    hr {
-      margin: 2rem 0;
-      border: 0;
-      height: 1px;
-      background: #e2e8f0;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .docs-container {
-        flex-direction: column;
-      }
-      .docs-sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        border-right: none;
-        border-bottom: 1px solid #e2e8f0;
-        padding: 1rem;
-      }
-      .docs-content {
-        padding: 2rem 1.5rem;
-        max-width: 100%;
-      }
-      .sidebar-nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
-      .sidebar-nav .nav-section {
-        width: 100%;
-        margin-top: 1rem;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>devtemDesign Docs | Installation, Config Reference, Templates & API (v0.1.0)</title>
+<meta name="description" content="Official devtemDesign 0.1.0 documentation: install from npm or CDN, full configuration reference, 7 templates, theme tokens, pricing, FAQ and stats sections, and the JavaScript API.">
+<meta name="keywords" content="devtemDesign docs, devtemDesign API, declarative UI engine, landing page generator, fscss, JavaScript config schema, glassmorphism templates, devtemdesign npm, CDN">
+<meta name="author" content="DevTemple">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0284c7">
+<link rel="canonical" href="https://design.devtem.org/docs">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="devtemDesign">
+<meta property="og:title" content="devtemDesign Documentation (v0.1.0)">
+<meta property="og:description" content="Install, configure and theme animated landing pages from a single config object.">
+<meta property="og:url" content="https://design.devtem.org/docs">
+<meta property="og:image" content="https://design.devtem.org/assets/images/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="devtemDesign Documentation (v0.1.0)">
+<meta name="twitter:description" content="Install, configure and theme animated landing pages from a single config object.">
+<meta name="twitter:image" content="https://design.devtem.org/assets/images/og.jpg">
+<link rel="icon" href="https://design.devtem.org/assets/images/logo.png">
+<link rel="apple-touch-icon" href="https://design.devtem.org/assets/images/logo.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"TechArticle","headline":"devtemDesign Documentation","description":"Installation, configuration reference, templates and API for devtemDesign 0.1.0.","url":"https://design.devtem.org/docs","image":"https://design.devtem.org/assets/images/og.jpg","dateModified":"2026-10-24","author":{"@type":"Organization","name":"DevTemple"},"publisher":{"@type":"Organization","name":"DevTemple"}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"devtemDesign","item":"https://design.devtem.org/"},{"@type":"ListItem","position":2,"name":"Docs","item":"https://design.devtem.org/docs"}]},
+{"@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Does devtemDesign need a build step?","acceptedAnswer":{"@type":"Answer","text":"No. Add one stylesheet and one script tag, then call devtemDesign() with a config object."}},
+{"@type":"Question","name":"Can I change the colors of a template?","acceptedAnswer":{"@type":"Answer","text":"Yes. Pass a theme object such as { accent: '#ff4d6d' } to override any design token."}},
+{"@type":"Question","name":"Can I switch templates at runtime?","acceptedAnswer":{"@type":"Answer","text":"Yes. devtemDesign() returns an object with setTemplate(name), so you can change the theme without re-rendering."}}]}
+]}
+</script>
+<style>
+:root{--bg:#fff;--fg:#0f172a;--mut:#475569;--line:#e2e8f0;--soft:#f8fafc;--acc:#0284c7;--pre:#0f172a;--h:56px}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1220;--fg:#e6edf7;--mut:#94a3b8;--line:#1e293b;--soft:#111a2e;--acc:#38bdf8;--pre:#060b16}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px}
+.top{position:sticky;top:0;z-index:30;height:var(--h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;font-size:1.15rem;color:var(--fg)}.logo b{color:var(--acc)}.logo:hover{text-decoration:none}
+.top nav{display:flex;gap:16px;font-size:.88rem;align-items:center}.top nav a{color:var(--mut)}
+#menu{display:none;width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:none;color:var(--fg);font-size:1.2rem;cursor:pointer}
+.wrap{display:flex;max-width:1280px;margin:0 auto}
+aside{width:270px;flex:none;position:sticky;top:var(--h);height:calc(100vh - var(--h));overflow-y:auto;padding:24px 16px;border-right:1px solid var(--line)}
+aside h4{margin:18px 0 6px 10px;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}aside h4:first-child{margin-top:0}
+aside a{display:block;padding:6px 10px;border-radius:8px;color:var(--mut);font-size:.9rem}
+aside a:hover{background:var(--soft);text-decoration:none;color:var(--fg)}
+aside a.on{background:var(--soft);color:var(--acc);font-weight:600}
+main{flex:1;min-width:0;max-width:860px;padding:40px 40px 80px}
+h1{font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.15;letter-spacing:-.02em;margin-bottom:12px}
+h2{font-size:1.6rem;margin:56px 0 14px;padding-top:8px;border-top:1px solid var(--line);scroll-margin-top:72px;letter-spacing:-.01em}
+h3{font-size:1.1rem;margin:26px 0 8px;scroll-margin-top:72px}
+p,ul,ol{margin-bottom:14px;color:var(--mut)}ul,ol{padding-left:22px}li{margin-bottom:4px}
+strong{color:var(--fg)}
+code{background:var(--soft);border:1px solid var(--line);padding:1px 6px;border-radius:6px;font:.86em ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--fg)}
+pre{position:relative;background:var(--pre);color:#e2e8f0;border-radius:12px;padding:16px;margin:16px 0;overflow-x:auto;font-size:.84rem;line-height:1.55}
+pre code{background:none;border:0;padding:0;color:inherit}
+.cp{position:absolute;top:8px;right:8px;padding:4px 10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:.72rem;cursor:pointer}
+.tw{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:560px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--soft);color:var(--fg);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}tr:last-child td{border:0}
+td:first-child{white-space:nowrap}
+.note{border-left:4px solid var(--acc);background:var(--soft);padding:12px 16px;border-radius:0 10px 10px 0;margin:16px 0;color:var(--mut);font-size:.92rem}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 24px}.meta span{border:1px solid var(--line);border-radius:99px;padding:3px 12px;font-size:.78rem;color:var(--mut)}
+.pn{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-top:56px}.pn a{border:1px solid var(--line);border-radius:12px;padding:12px 18px}
+footer{border-top:1px solid var(--line);padding:24px 16px;text-align:center;font-size:.85rem;color:var(--mut)}
+@media(max-width:900px){
+ #menu{display:block}.top nav{display:none}
+ aside{position:fixed;z-index:25;top:var(--h);left:0;bottom:0;height:auto;width:min(300px,86vw);background:var(--bg);transform:translateX(-102%);transition:transform .25s}
+ aside.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.45)}
+ main{padding:28px 18px 64px}h2{margin-top:44px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
 <body>
-<div class="docs-container">
-  <aside class="docs-sidebar">
-    <div class="sidebar-logo" onclick="window.location.href='/'">
-      devtem<span>Design</span>
-    </div>
-    <ul class="sidebar-nav">
-      <div class="nav-section">Getting Started</div>
-      <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#quick-start">Quick Start</a></li>
-      <li><a href="#cdn-usage">CDN Usage</a></li>
-      
-      <div class="nav-section">Configuration</div>
-      <li><a href="#core-config">Core Options</a></li>
-      <li><a href="#navigation">Navigation</a></li>
-      <li><a href="#hero">Hero Section</a></li>
-      <li><a href="#features-panels">Features & Panels</a></li>
-      <li><a href="#footer-config">Footer Configuration</a></li>
-      
-      <div class="nav-section">Themes</div>
-      <li><a href="#templates">Built-in Templates</a></li>
-      
-      <div class="nav-section">Advanced</div>
-      <li><a href="#customization">Customization</a></li>
-      <li><a href="#browser-support">Browser Support</a></li>
-      <li><a href="#contributing">Contributing</a></li>
-    </ul>
-  </aside>
+<header class="top">
+  <a class="logo" href="/">devtem<b>Design</b></a>
+  <nav aria-label="Site"><a href="/">Home</a><a href="/docs">Docs</a><a href="/examples">Examples</a><a href="https://github.com/devtem-dev/devtemDesign">GitHub</a></nav>
+  <button id="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="side">&#9776;</button>
+</header>
+<div class="wrap">
+<aside id="side" aria-label="Documentation">
+  <h4>Getting started</h4>
+  <a href="#introduction">Introduction</a><a href="#install">Installation</a><a href="#quick-start">Quick start</a>
+  <h4>Configuration</h4>
+  <a href="#core">Core options</a><a href="#navigation">Navigation</a><a href="#hero">Hero</a><a href="#stats">Stats</a><a href="#content">Features, steps, panels</a><a href="#pricing">Pricing</a><a href="#faq-cta">FAQ and CTA</a><a href="#footer">Footer</a>
+  <h4>Themes</h4>
+  <a href="#templates">Templates</a><a href="#theming">Theme tokens</a>
+  <h4>Reference</h4>
+  <a href="#api">JavaScript API</a><a href="#a11y">Accessibility</a><a href="#support">Browser support</a><a href="#upgrading">Upgrading</a><a href="#faq">FAQ</a><a href="#contributing">Contributing</a>
+</aside>
 
-  <main class="docs-content">
-    <h1 id="introduction">devtemDesign Documentation</h1>
-    <p><strong>One configuration schema. Infinite animated synthesis.</strong> <code>devtemDesign</code> is a lightweight, zero-configuration animated page engine. Stop building standard UI boilerplate — let the engine paint the viewport with dynamic templates, glassmorphism, ambient motion, and a reactive component schema.</p>
-    
-    <div class="note">
-      <strong>Version:</strong> 0.0.2 &nbsp;|&nbsp; 
-      <strong>License:</strong> MIT &nbsp;|&nbsp;
-      <strong>Live Demo:</strong> <a href="https://design.devtem.org">design.devtem.org</a>
-    </div>
+<main>
+<h1 id="introduction">devtemDesign Documentation</h1>
+<p><strong>One configuration schema. Infinite animated synthesis.</strong> devtemDesign is a lightweight page engine. Pass one config object and it builds a complete landing page with glass cards, ambient motion, reveal animations, a mobile drawer, pricing, FAQ and footer. Plain HTML, CSS and JS, no framework and no build step.</p>
+<div class="meta"><span>Version 0.1.0</span><span>MIT license</span><span>7 templates</span><span>0 dependencies</span></div>
+<div class="note">See it running on the <a href="/examples">examples page</a>, or open the <a href="https://design.devtem.org">live demo</a>.</div>
 
-    <h2 id="quick-start">Quick Start</h2>
-    <p>Add the CDN links to your HTML and call the engine with your content.</p>
-    <pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css"&gt;
-  &lt;script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;div id="app-root"&gt;&lt;/div&gt;
-  &lt;script&gt;
-    devtemDesign("app-root", {
-      template: "cyber",
-      logoName: "MyBrand",
-      navLinks: ["Home", "Docs", "About"],
-      heroTitleLine1: "Hello",
-      heroTitleLine2: "World"
-    });
-  &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+<h2 id="install">Installation</h2>
+<h3>CDN</h3>
+<pre><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/style.min.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.1.0/script.min.js"&gt;&lt;/script&gt;</code></pre>
+<p>Pin a version in production. Dropping <code>@0.1.0</code> always serves the latest release, which may change.</p>
+<h3>npm</h3>
+<pre><code>npm i devtemdesign</code></pre>
+<p>Then load <code>node_modules/devtemdesign/style.css</code> and <code>script.js</code> with your own tags, or import the function: <code>const devtemDesign = require("devtemdesign")</code>.</p>
+<h3>Icons</h3>
+<p>Font Awesome is optional. It is only needed for feature icons and footer social icons. The menu, checkmarks and accordions are pure CSS.</p>
+<pre><code>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"&gt;</code></pre>
 
-    <h2 id="cdn-usage">CDN Usage</h2>
-    <p>Use <strong>jsDelivr</strong> for fast, reliable delivery. We recommend pinning a specific version for production.</p>
-    <pre><code>&lt;!-- Pinned version (stable) --&gt;
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/style.css"&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/devtemdesign@0.0.2/script.js"&gt;&lt;/script&gt;
+<h2 id="quick-start">Quick start</h2>
+<pre><code>&lt;div id="app-root"&gt;&lt;/div&gt;
+&lt;script&gt;
+  devtemDesign("app-root", {
+    template: "cyber",
+    logoName: "MyBrand",
+    navLinks: ["Home", "Docs", "About"],
+    heroTitleLine1: "Hello",
+    heroTitleLine2: "World",
+    primaryBtnText: "Get started",
+    primaryBtnHref: "/signup"
+  });
+&lt;/script&gt;</code></pre>
+<p>Every section except the hero is optional. A section renders only when its config key is present.</p>
+<div class="note">Text fields are inserted as HTML so you can add icons and markup. Only pass trusted content.</div>
 
-&lt;!-- Always latest (use with caution) --&gt;
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/devtemdesign/style.css"&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/devtemdesign/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>Font Awesome is required for icons (features, social links, etc.):</p>
-    <pre><code>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;</code></pre>
+<h2 id="core">Core options</h2>
+<div class="tw"><table><thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>template</code></td><td>string</td><td><code>"figsh"</code></td><td>One of the 7 templates.</td></tr>
+<tr><td><code>theme</code></td><td>object</td><td><code>{}</code></td><td>Token overrides, with or without the <code>--</code> prefix.</td></tr>
+<tr><td><code>themeSwitcher</code></td><td>boolean | string[]</td><td><code>false</code></td><td>Adds a theme button to the navbar. An array limits the cycle. The choice is saved in <code>localStorage</code>.</td></tr>
+<tr><td><code>cursor</code></td><td>boolean</td><td><code>true</code></td><td>Set <code>false</code> to disable the custom cursor.</td></tr>
+<tr><td><code>logo</code></td><td>string</td><td>fscss logo</td><td>Logo image URL for navbar and footer.</td></tr>
+<tr><td><code>logoName</code></td><td>string</td><td><code>"CORE"</code></td><td>Brand name.</td></tr>
+<tr><td><code>logoHref</code></td><td>string</td><td><code>"/"</code></td><td>Navbar brand link.</td></tr>
+</tbody></table></div>
 
-    <h2 id="core-config">Core Configuration Options</h2>
-    <table>
-      <thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td><code>template</code></td><td>string</td><td><code>"figsh"</code></td><td>Visual theme: <code>figsh</code>, <code>cyber</code>, <code>aurora</code>, <code>monochrome</code></td></tr>
-        <tr><td><code>logo</code></td><td>string</td><td>—</td><td>URL for navbar/footer logo image (optional)</td></tr>
-        <tr><td><code>logoName</code></td><td>string</td><td><code>"CORE"</code></td><td>Brand name displayed in navbar & footer</td></tr>
-      </tbody>
-    </table>
+<h2 id="navigation">Navigation</h2>
+<div class="tw"><table><thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>navLinks</code></td><td>(string | object)[]</td><td>Features, How it works, Pricing</td><td>Strings (href <code>#</code>) or <code>{ label, href }</code>.</td></tr>
+<tr><td><code>ctaText</code></td><td>string</td><td><code>"Get started"</code></td><td>Navbar button text. Also shown at the end of the mobile drawer.</td></tr>
+<tr><td><code>ctaHref</code></td><td>string</td><td><code>"#"</code></td><td>Navbar button link.</td></tr>
+</tbody></table></div>
+<p>Links that point to an on-page section (<code>#features</code>, <code>#how</code>, <code>#pricing</code>, <code>#faq</code>, <code>#stats</code>) get an active underline as you scroll. The drawer closes on link tap, on <kbd>Esc</kbd>, and when the window grows past 860px.</p>
 
-    <h2 id="navigation">Navigation</h2>
-    <table>
-      <thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
-      <tbody>
-        <tr><td><code>navLinks</code></td><td>array</td><td><code>["Discover","Studio","Archive","Journal"]</code></td><td>Accepts plain strings or objects <code>{ label, href }</code></td></tr>
-        <tr><td><code>ctaText</code></td><td>string</td><td><code>"Launch →"</code></td><td>Button text (supports HTML, e.g., <code>"&lt;i class='fab fa-npm'&gt;&lt;/i&gt; npm"</code>)</td></tr>
-      </tbody>
-    </table>
-    <p><strong>Example with hrefs:</strong></p>
-    <pre><code>navLinks: [
-  { label: "Docs",    href: "/docs"    },
-  { label: "Sandbox", href: "/sandbox" },
-  { label: "GitHub",  href: "https://github.com/devtem-dev" }
+<h2 id="hero">Hero</h2>
+<div class="tw"><table><thead><tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>heroBadge</code></td><td>string</td><td>none</td><td>Pill above the title.</td></tr>
+<tr><td><code>heroTitleLine1</code></td><td>string</td><td><code>"Declarative UI,"</code></td><td>First line of the H1.</td></tr>
+<tr><td><code>heroTitleLine2</code></td><td>string</td><td><code>"Zero-Config Motion"</code></td><td>Second line, animated gradient text.</td></tr>
+<tr><td><code>heroSubtitle</code></td><td>string</td><td>default copy</td><td>Paragraph under the H1.</td></tr>
+<tr><td><code>primaryBtnText</code>, <code>primaryBtnHref</code></td><td>string</td><td><code>"Get started"</code>, <code>"#"</code></td><td>Main button.</td></tr>
+<tr><td><code>secondaryBtnText</code>, <code>secondaryBtnHref</code></td><td>string</td><td>none</td><td>Ghost button. Rendered only when text is set.</td></tr>
+<tr><td><code>brands</code></td><td>string[]</td><td><code>[]</code></td><td>Feeds the hero chips and the seamless marquee, which pauses on hover.</td></tr>
+<tr><td><code>brandsSubtitle</code></td><td>string</td><td>default</td><td>Caption under the chips.</td></tr>
+</tbody></table></div>
+
+<h2 id="stats">Stats</h2>
+<pre><code>stats: [
+  { value: "12k+",   label: "Developers" },
+  { value: "99.9%",  label: "Uptime" },
+  { value: "$1,200", label: "Saved per launch" }
+]</code></pre>
+<p>Values count up the first time they scroll into view. Prefix, suffix, commas and decimals are preserved. Use <code>statsId</code> to change the anchor id (default <code>stats</code>). With reduced motion enabled, the final value shows immediately.</p>
+
+<h2 id="content">Features, steps and panels</h2>
+<div class="tw"><table><thead><tr><th>Property</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>featuresLabel</code>, <code>featuresTitle</code>, <code>featuresSub</code></td><td>Section heading. Anchor <code>#features</code>.</td></tr>
+<tr><td><code>features</code></td><td><code>{ title, desc, icon }</code>. <code>icon</code> accepts HTML or emoji. Cards get a cursor spotlight.</td></tr>
+<tr><td><code>stepsLabel</code>, <code>stepsTitle</code>, <code>stepsSub</code></td><td>Section heading. Anchor <code>#how</code>.</td></tr>
+<tr><td><code>steps</code></td><td><code>{ title, desc }</code>, numbered automatically.</td></tr>
+<tr><td><code>panelsLabel</code>, <code>panelsTitle</code>, <code>panelsSub</code></td><td>Optional heading above panels.</td></tr>
+<tr><td><code>panels</code></td><td><code>{ tag, title, desc }</code>.</td></tr>
+</tbody></table></div>
+<pre><code>features: [
+  { title: "Single schema", desc: "Pass JSON, get a page.", icon: "&lt;i class='fas fa-cube'&gt;&lt;/i&gt;" }
 ]</code></pre>
 
-    <h2 id="hero">Hero Section</h2>
-    <table>
-      <thead><tr><th>Property</th><th>Type</th><th>Default</th></tr></thead>
-      <tbody>
-        <tr><td><code>heroTag</code></td><td>string</td><td><code>"design engine active"</code></td></tr>
-        <tr><td><code>heroTitleLine1</code></td><td>string</td><td><code>"Generative"</code></td></tr>
-        <tr><td><code>heroTitleLine2</code></td><td>string</td><td><code>"Page Weaver"</code></td></tr>
-        <tr><td><code>heroSubtitle</code></td><td>string</td><td>Default description</td></tr>
-        <tr><td><code>primaryBtnText</code></td><td>string</td><td><code>"Explore Templates"</code></td></tr>
-        <tr><td><code>secondaryBtnText</code></td><td>string</td><td><code>"Docs →"</code></td></tr>
-        <tr><td><code>brands</code></td><td>string[]</td><td><code>[]</code></td></tr>
-        <tr><td><code>brandsSubtitle</code></td><td>string</td><td><code>"global innovators, design pioneers"</code></td></tr>
-      </tbody>
-    </table>
+<h2 id="pricing">Pricing</h2>
+<p>Set <code>pricingLabel</code>, <code>pricingTitle</code>, <code>pricingSub</code> and a <code>pricing</code> array. Anchor <code>#pricing</code>.</p>
+<pre><code>yearlyBadge: "Save 20%",
+pricing: [
+  { tier: "Free", amount: "$0", desc: "For experiments.", features: ["All templates"], cta: "Start free", href: "/signup" },
+  { tier: "Pro", amount: "$12", period: "/mo", yearly: { amount: "$115", period: "/yr" },
+    featured: true, badge: "Most popular", features: ["Everything in Free", "Priority support"], cta: "Go Pro", href: "/pro" }
+]</code></pre>
+<div class="tw"><table><thead><tr><th>Plan field</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>tier</code>, <code>amount</code>, <code>period</code>, <code>desc</code></td><td>Name, price, suffix and one-line pitch.</td></tr>
+<tr><td><code>features</code></td><td>String list with checkmarks.</td></tr>
+<tr><td><code>cta</code>, <code>href</code></td><td>Button label and link.</td></tr>
+<tr><td><code>featured</code>, <code>badge</code></td><td>Highlights the card with a ribbon.</td></tr>
+<tr><td><code>yearly</code></td><td>Optional <code>{ amount, period }</code>. A Monthly/Yearly toggle appears when any plan has it. Plans without it keep their price in both views.</td></tr>
+</tbody></table></div>
 
-    <h2 id="features-panels">Features & Panels</h2>
-    <p>Define <code>features</code> (grid cards) and <code>panels</code> (supplemental blocks). Both are arrays of objects.</p>
-    <pre><code>features: [
-  { 
-    title: "Deterministic Schema", 
-    desc: "Map JSON to hardware-accelerated layouts.", 
-    icon: "&lt;i class='fas fa-cube'&gt;&lt;/i&gt;" 
-  }
+<h2 id="faq-cta">FAQ and closing CTA</h2>
+<pre><code>faq: [
+  { q: "Do I need a build step?", a: "No. Two tags and one call." }
 ],
-panels: [
-  { tag: "API", title: "devtemDesign({...})", desc: "Single handler." }
-]</code></pre>
-    <p>Section labels are customizable:</p>
-    <ul>
-      <li><code>featuresSectionLabel</code> — text or HTML above the features grid</li>
-      <li><code>featuresSectionTitle</code> — main heading for the features section</li>
-    </ul>
+cta: { title: "Ready to build?", sub: "Free for open source.", text: "Read the docs", href: "/docs" }</code></pre>
+<p>FAQ items use native <code>&lt;details&gt;</code>, so they work with the keyboard and one stays open at a time. Heading keys: <code>faqLabel</code>, <code>faqTitle</code>, <code>faqSub</code>. Anchor <code>#faq</code>.</p>
 
-    <h2 id="footer-config">Footer Configuration (v0.0.2+)</h2>
-    <p>The footer is fully declarative via a <code>footer</code> object. All fields are optional.</p>
-    <pre><code>footer: {
+<h2 id="footer">Footer</h2>
+<pre><code>footer: {
   tagline: "Declarative UI engine for the modern web.",
-  copy: "© 2025 Figsh Digital · MIT License",
-  columns: [
-    {
-      heading: "Product",
-      links: [
-        { label: "Documentation", href: "/docs" },
-        { label: "Sandbox", href: "/sandbox" }
-      ]
-    }
-  ],
-  social: [
-    { icon: "fab fa-github", href: "https://github.com/devtem-dev", label: "GitHub" }
-  ],
-  legal: [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms", href: "/terms" }
-  ]
+  copy: "&copy; 2026 devtem-dev",
+  columns: [{ heading: "Product", links: [{ label: "Docs", href: "/docs" }] }],
+  social:  [{ icon: "fab fa-github", href: "https://github.com/devtem-dev", label: "GitHub" }],
+  legal:   [{ label: "Privacy", href: "/privacy" }]
 }</code></pre>
-    <p><span class="badge">Legacy</span> The simple <code>footerCopy</code> string is still supported as a fallback.</p>
+<p>All fields are optional. The older <code>footerCopy</code> string still works as a fallback copyright line.</p>
 
-    <h2 id="templates">Built-in Templates</h2>
-    <table>
-      <thead><tr><th>Template</th><th>Vibe</th><th>Accent Colors</th></tr></thead>
-      <tbody>
-        <tr><td><code>figsh</code></td><td>Futuristic glass</td><td>Cyan / Purple / Pink</td></tr>
-        <tr><td><code>cyber</code></td><td>Neon cyberpunk</td><td>Cyan / Magenta / Red</td></tr>
-        <tr><td><code>aurora</code></td><td>Organic nature</td><td>Emerald / Violet / Blue</td></tr>
-        <tr><td><code>monochrome</code></td><td>Minimalist grayscale</td><td>White / Silver</td></tr>
-      </tbody>
-    </table>
+<h2 id="templates">Templates</h2>
+<div class="tw"><table><thead><tr><th>Template</th><th>Vibe</th><th>Accents</th></tr></thead><tbody>
+<tr><td><code>figsh</code></td><td>Futuristic glass</td><td>Cyan, purple, pink</td></tr>
+<tr><td><code>cyber</code></td><td>Neon cyberpunk</td><td>Cyan, magenta, red</td></tr>
+<tr><td><code>aurora</code></td><td>Organic nature</td><td>Emerald, violet, blue</td></tr>
+<tr><td><code>monochrome</code></td><td>Minimal grayscale</td><td>White, silver</td></tr>
+<tr><td><code>sunset</code></td><td>Warm dusk</td><td>Orange, rose, gold</td></tr>
+<tr><td><code>ocean</code></td><td>Cool depth</td><td>Sky, teal, indigo</td></tr>
+<tr><td><code>paper</code></td><td>Light mode</td><td>Indigo, pink, cyan</td></tr>
+</tbody></table></div>
 
-    <h2 id="customization">Customization</h2>
-    <p>All visual variables (accent colors, glass effects) are CSS custom properties. Override them after including the engine stylesheet:</p>
-    <pre><code>&lt;style&gt;
-  :root {
-    --accent: #ff7b2c;
-    --accent2: #ff2c7b;
-    --glass-bg: rgba(20, 20, 40, 0.5);
-  }
-&lt;/style&gt;</code></pre>
+<h2 id="theming">Theme tokens</h2>
+<p>Override any token with the <code>theme</code> option. Tokens are CSS custom properties on <code>:root</code>, so you can also use them in your own CSS.</p>
+<pre><code>theme: { accent: "#ff4d6d", accent2: "#ffb703", "bg-deep": "#0b0710" }</code></pre>
+<div class="tw"><table><thead><tr><th>Token</th><th>Purpose</th></tr></thead><tbody>
+<tr><td><code>--accent</code>, <code>--accent2</code>, <code>--accent3</code></td><td>Brand colors and gradients.</td></tr>
+<tr><td><code>--text</code>, <code>--muted</code></td><td>Primary and secondary text.</td></tr>
+<tr><td><code>--bg-deep</code></td><td>Page background. Also the text color on filled buttons.</td></tr>
+<tr><td><code>--glass-bg</code>, <code>--glass-border</code>, <code>--glass-blur</code></td><td>Card surfaces.</td></tr>
+<tr><td><code>--surface</code>, <code>--line</code></td><td>Subtle fills and dividers.</td></tr>
+<tr><td><code>--orb</code></td><td>Ambient orb opacity.</td></tr>
+</tbody></table></div>
 
-    <h2 id="browser-support">Browser Support</h2>
-    <p>Modern browsers: Chrome, Firefox, Safari, Edge (latest 2 versions). Internet Explorer is not supported due to <code>backdrop-filter</code> and CSS Grid requirements.</p>
+<h2 id="api">JavaScript API</h2>
+<pre><code>const page = devtemDesign("app-root", config);
 
-    <h2 id="contributing">Contributing & Repository</h2>
-    <p><code>devtemDesign</code> is open source on <strong>GitHub</strong>: <a href="https://github.com/devtem-dev/devtemDesign">github.com/devtem-dev/devtemDesign</a></p>
-    <p>We welcome contributions! Fork the repo, create a branch, and submit a pull request. Ideas:</p>
-    <ul>
-      <li>New templates (pastel, dark-mono, etc.)</li>
-      <li>Extra config options (<code>enableParallax</code>, <code>marqueeSpeed</code>)</li>
-      <li>Accessibility improvements (ARIA labels, focus management)</li>
-      <li>Mobile touch gesture enhancements</li>
-    </ul>
-    <hr>
-    <p><strong>Live examples & interactive playground:</strong> <a href="https://design.devtem.org">design.devtem.org</a><br>
-    <strong>npm:</strong> <code>npm i devtemdesign</code><br>
-    <strong>License:</strong> MIT © devtem-dev</p>
-  </main>
+page.setTemplate("sunset");   // switch theme without re-rendering
+page.destroy();               // remove listeners, observers and markup
+
+devtemDesign.version;         // "0.1.0"
+devtemDesign.templates;       // ["figsh", "cyber", "aurora", ...]</code></pre>
+<p>Calling <code>devtemDesign()</code> again on the same container destroys the previous instance first, so there are no leaked listeners. It returns <code>null</code> if the container id is not found.</p>
+
+<h2 id="a11y">Accessibility</h2>
+<ul><li>Skip link, visible focus rings and a labelled menu button with <code>aria-expanded</code>.</li><li>The active nav link gets <code>aria-current</code>.</li><li><code>prefers-reduced-motion</code> turns off orbs, cursor, reveals, count-ups and smooth scroll.</li><li>Hover-only effects run only on devices that support hover.</li></ul>
+
+<h2 id="support">Browser support</h2>
+<p>Current Chrome, Edge, Firefox and Safari. Theming uses <code>color-mix()</code>, which needs Chrome 111+, Safari 16.2+ or Firefox 113+. Older browsers still render the page but lose some tinted surfaces. Internet Explorer is not supported.</p>
+
+<h2 id="upgrading">Upgrading from 0.0.2</h2>
+<div class="tw"><table><thead><tr><th>Old</th><th>Use now</th></tr></thead><tbody>
+<tr><td><code>heroTag</code></td><td><code>heroBadge</code></td></tr>
+<tr><td><code>featuresSectionLabel</code></td><td><code>featuresLabel</code></td></tr>
+<tr><td><code>featuresSectionTitle</code></td><td><code>featuresTitle</code></td></tr>
+</tbody></table></div>
+<p>New in 0.1.0: three templates, <code>theme</code>, <code>themeSwitcher</code>, <code>stats</code>, <code>faq</code>, <code>cta</code>, yearly pricing, <code>ctaHref</code>, <code>logoHref</code>, <code>cursor</code>, and the returned <code>{ setTemplate, destroy }</code> handle.</p>
+
+<h2 id="faq">FAQ</h2>
+<h3>Does devtemDesign need a build step?</h3><p>No. Add one stylesheet and one script tag, then call <code>devtemDesign()</code> with a config object.</p>
+<h3>Can I change the colors of a template?</h3><p>Yes. Pass a <code>theme</code> object such as <code>{ accent: "#ff4d6d" }</code> to override any token.</p>
+<h3>Can I switch templates at runtime?</h3><p>Yes. <code>devtemDesign()</code> returns an object with <code>setTemplate(name)</code>, so the theme changes without re-rendering.</p>
+
+<h2 id="contributing">Contributing</h2>
+<p>devtemDesign is open source at <a href="https://github.com/devtem-dev/devtemDesign">github.com/devtem-dev/devtemDesign</a>. Fork the repo, create a branch and open a pull request. Ideas: more templates, a <code>marqueeSpeed</code> option, a testimonials section, RTL support.</p>
+
+<div class="pn"><a href="/">&larr; Home</a><a href="/examples">Examples &rarr;</a></div>
+</main>
 </div>
+<footer>&copy; Figsh &middot; devtemDesign is MIT licensed &middot; <a href="https://devtem.org">DevTemple</a></footer>
+
+<script>
+(function(){
+  var side=document.getElementById("side"),btn=document.getElementById("menu");
+  function set(o){side.classList.toggle("open",o);btn.setAttribute("aria-expanded",o);document.body.style.overflow=o?"hidden":""}
+  btn.onclick=function(){set(!side.classList.contains("open"))};
+  side.addEventListener("click",function(e){if(e.target.closest("a"))set(false)});
+  document.addEventListener("click",function(e){if(side.classList.contains("open")&&!side.contains(e.target)&&e.target!==btn)set(false)});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+  matchMedia("(min-width:901px)").addEventListener("change",function(){set(false)});
+
+  document.querySelectorAll("table").forEach(function(t){if(!t.parentNode.classList.contains("tw")){var w=document.createElement("div");w.className="tw";t.parentNode.insertBefore(w,t);w.appendChild(t)}});
+
+  document.querySelectorAll("pre").forEach(function(p){
+    var b=document.createElement("button");b.className="cp";b.type="button";b.textContent="Copy";
+    b.onclick=function(){navigator.clipboard.writeText(p.innerText.replace(/Copy$/,"").trim()).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy"},1500)},function(){b.textContent="Failed"})};
+    p.appendChild(b);
+  });
+
+  var links={};side.querySelectorAll("a").forEach(function(a){links[a.getAttribute("href").slice(1)]=a});
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){Object.keys(links).forEach(function(k){links[k].classList.toggle("on",k===e.target.id)});var a=links[e.target.id];if(a&&side.scrollHeight>side.clientHeight)a.scrollIntoView({block:"nearest"})}})},{rootMargin:"-70px 0px -75% 0px"});
+  document.querySelectorAll("main [id]").forEach(function(h){if(links[h.id])io.observe(h)});
+})();
+</script>
 </body>
 </html>
